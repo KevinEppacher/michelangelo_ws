@@ -1,0 +1,3 @@
+Ausführen:
+kevin@Kevin:~/michelangelo_ws/build$ make
+kevin@Kevin:~/michelangelo_ws/build$ ./main
