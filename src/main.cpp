@@ -22,6 +22,8 @@ int main()
         std::cerr << "Fehler beim Erzeugen des Sockets" << std::endl;
         return 1;
     }
+    
+    ///Hier war hüdai
 
     
     return 0;
