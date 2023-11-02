@@ -10,6 +10,9 @@ cd ../src
 g++ -c main.cpp
 g++ -o main main.o Robot.o
 
+gcc TCPEchoClient.c DieWithError.c -o TCPEchoClient
+
+
 # Führe die ausführbare Datei aus
 ./main
 
