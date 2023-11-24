@@ -6,9 +6,29 @@
 
 #IncludeRegexTransform: 
 
+/home/kevin/michelangelo_ws/src/Robot.cpp
+Robot.h
+/home/kevin/michelangelo_ws/src/Robot.h
+
 /home/kevin/michelangelo_ws/src/Robot.h
 iostream
 -
+vector
+-
+thread
+-
+chrono
+-
+iostream
+-
+vector
+-
+thread
+-
+chrono
+-
+matplotlibcpp.h
+/home/kevin/michelangelo_ws/src/matplotlibcpp.h
 
 /home/kevin/michelangelo_ws/src/main.cpp
 iostream
