@@ -7,7 +7,8 @@
 
 #define MAXRECVSTRING 255  /* Longest string to receive */
 
-void DieWithError(char *errorMessage);  /* External error handling function */
+void DieWithError(char *errorMessage)
+;
 
 int main(int argc, char *argv[])
 {

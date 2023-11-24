@@ -10,11 +10,11 @@
 
 #define RCVBUFSIZE 32   /* Size of receive buffer */
 
-void DieWithError(char *errorMessage)
+void DieWithError(const char *errorMessage)
 {
     perror(errorMessage);
     exit(1);
-}
+};
 
 int main(int argc, char *argv[])
 {
@@ -44,6 +44,8 @@ int main(int argc, char *argv[])
     else
         echoServPort = 7;  /* 7 is the well-known port for the echo service */
 
+    if ((sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
+        DieWithError("socket() failed");
 
     /* Construct the server address structure */
     memset(&echoServAddr, 0, sizeof(echoServAddr));     /* Zero out structure */
@@ -51,7 +53,13 @@ int main(int argc, char *argv[])
     echoServAddr.sin_addr.s_addr = inet_addr(servIP);   /* Server IP address */
     echoServAddr.sin_port        = htons(echoServPort); /* Server port */
 
+    if (connect(sock, (struct sockaddr *) &echoServAddr, sizeof(echoServAddr)) < 0)
+        DieWithError("connect() failed");
+
     echoStringLen = strlen(echoString);          /* Determine input length */
+
+    if (send(sock, echoString, echoStringLen, 0) != echoStringLen)
+        DieWithError("send() sent a different number of bytes than expected");
 
     /* Receive the same string back from the server */
     totalBytesRcvd = 0;

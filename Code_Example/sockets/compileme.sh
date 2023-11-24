@@ -1,6 +1,6 @@
-gcc TCPEchoClient.c DieWithError.c -o TCPEchoClient
+gcc TCPEchoClient.c DieWithError.c -o TCPEchoClient 
 
-gcc TCPEchoServer.c DieWithError.c HandleTCPClient.c -o TCPEchoServer
+gcc TCPEchoServer.c DieWithError.c HandleTCPClient.c -o TCPEchoServer 
 
 gcc TCPEchoServer-Fork.c DieWithError.c HandleTCPClient.c AcceptTCPConnection.c CreateTCPServerSocket.c -o TCPEchoServer-Fork
 

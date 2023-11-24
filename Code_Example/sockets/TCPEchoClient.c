@@ -18,9 +18,8 @@ int main(int argc, char *argv[])
     char *echoString;                /* String to send to echo server */
     char echoBuffer[RCVBUFSIZE];     /* Buffer for echo string */
     unsigned int echoStringLen;      /* Length of string to echo */
-    int bytesRcvd, totalBytesRcvd;   /* Bytes read in single recv() 
-                                        and total bytes read */
-
+    int bytesRcvd, totalBytesRcvd;   /* Bytes read in single recv() and total bytes read */
+    
     if ((argc < 3) || (argc > 4))    /* Test for correct number of arguments */
     {
        fprintf(stderr, "Usage: %s <Server IP> <Echo Word> [<Echo Port>]\n",

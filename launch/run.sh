@@ -7,14 +7,14 @@ cd "$(dirname "$0")"
 cd ../src
 
 # Kompiliere den Code
-g++ -c main.cpp
-g++ -o main main.o Robot.o
+g++ -o test2 -c main.cpp
+#g++ -o main main.o Robot.o
 
-gcc TCPEchoClient.c DieWithError.c -o TCPEchoClient
+#gcc TCPEchoClient.c DieWithError.c -o TCPEchoClient
 
 
 # Führe die ausführbare Datei aus
-./main
+#./main
 
 # optional: Aufräumen (lösche die erzeugten Objektdateien und die ausführbare Datei)
 rm -f main main.o Robot.o
