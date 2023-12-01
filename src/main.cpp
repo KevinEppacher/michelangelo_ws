@@ -18,6 +18,9 @@ void DieWithError(const char *errorMessage)
 
 int main(int argc, char *argv[])
 {
+
+/* 
+    
     int sock;                        /* Socket descriptor */
     struct sockaddr_in echoServAddr; /* Echo server address */
     unsigned short echoServPort;     /* Echo server port */
@@ -79,7 +82,9 @@ int main(int argc, char *argv[])
 
     close(sock);
     exit(0);
-
     
+
+*/
+
     return 0;
 }
