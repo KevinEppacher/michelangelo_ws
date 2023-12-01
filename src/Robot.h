@@ -2,7 +2,6 @@
 #include <vector>
 #include <thread>
 #include <chrono>
-#include <boost/asio.hpp>
 //#include "matplotlibcpp.h"
 
 namespace Robot
@@ -33,17 +32,8 @@ namespace Robot
 
     };
 
-    class TCP_Client boost::asio::io_context& io_context, const std::string& IP, const std::string& port)
-        : io_context_(io_context), socket_(io_context)
+    class TCP_Client ()
     {
-        public:
-            TCP_Client();
-            ~TCP_Client();
-            string read();
-
-        private:
-            tcp::socket socket_;
-            boost:asio:io_context& msg_content_;
     };
 
     

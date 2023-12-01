@@ -10,11 +10,13 @@
 
 #define RCVBUFSIZE 1000   /* Size of receive buffer */
 
+/*
 void DieWithError(const char *errorMessage)
 {
     perror(errorMessage);
     exit(1);
 };
+*/
 
 int main(int argc, char *argv[])
 {
@@ -82,9 +84,12 @@ int main(int argc, char *argv[])
 
     close(sock);
     exit(0);
-    
+
 
 */
+
+    Robot::TCP_Client
+
 
     return 0;
 }
