@@ -32,8 +32,15 @@ namespace Robot
 
     };
 
-    class TCP_Client ()
+    class TCP_Client
     {
+    public:
+        TCP_Client();
+        ~TCP_Client();
+
+    private:
+
+
     };
 
     

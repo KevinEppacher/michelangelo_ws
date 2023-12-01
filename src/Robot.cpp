@@ -1,9 +1,5 @@
 #include "Robot.h"
 
-Robot::TCP_Client
-{
-    
-}
 
 Robot::MobileRobot::MobileRobot()
 {
@@ -13,6 +9,11 @@ Robot::MobileRobot::MobileRobot()
 Robot::MobileRobot::~MobileRobot()
 {
 
+}
+
+Robot::TCP_Client::TCP_Client()
+{
+    
 }
 
 void Robot::Socket::getCmdVelData()
@@ -29,3 +30,5 @@ void Robot::Socket::getScanData()
 {
 
 }
+
+
