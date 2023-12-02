@@ -34,6 +34,10 @@ namespace Robot
         unsigned int getEchoStringLen() const;
         int getSock() const;
         char *getEchoBuffer();
+        void sendData();
+        void receiveData();
+        //const int totalBytesRcvd = 0;
+        //int bytesRcvd, totalBytesRcvd; /* Bytes read in single recv() and total bytes read */
 
     private:
         int sock;                        /* Socket descriptor */
@@ -48,7 +52,10 @@ namespace Robot
         unsigned short scanPort = 9997;     /* Echo server port */
 
 
+
     };
+
+
 }
 
 #endif // ROBOT_H

@@ -47,14 +47,22 @@ namespace Robot
 
     void Socket::sendAndReceiveData()
     {
+        sendData();
+
         echoStringLen = strlen(echoString); /* Determine input length */
 
-        /* Send the string to the server */
-        if (send(sock, echoString, echoStringLen, 0) != static_cast<ssize_t>(echoStringLen))
+        /* Receive up to the buffer size (minus 1 to leave space for
+        a null terminator) bytes from the sender */
+        bytesRcvd = recv(getSock(), getEchoBuffer(), RCVBUFSIZE - 1, 0);
+        if (bytesRcvd <= 0)
         {
-            perror("send() sent a different number of bytes than expected");
+            perror("recv() failed or connection closed prematurely");
             exit(1);
         }
+
+        totalBytesRcvd += bytesRcvd;               /* Keep tally of total bytes */
+        getEchoBuffer()[bytesRcvd] = '\0'; /* Terminate the string! */
+        std::cout << getEchoBuffer()<<std::endl;      /* Print the echo buffer */
     }
 
     unsigned int Socket::getEchoStringLen() const
@@ -70,5 +78,17 @@ namespace Robot
     char *Socket::getEchoBuffer()
     {
         return echoBuffer;
+    }
+
+    void Socket::sendData()
+    {
+        /* Send the string to the server */
+        echoString = "1.0,0.0";
+
+        if (send(sock, echoString, echoStringLen, 0) != static_cast<ssize_t>(echoStringLen))
+        {
+            perror("send() sent a different number of bytes than expected");
+            exit(1);
+        }
     }
 }
