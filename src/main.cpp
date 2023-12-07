@@ -24,6 +24,13 @@ int main(int argc, char *argv[])
     unsigned int echoStringLen;      /* Length of string to echo */
     int bytesRcvd, totalBytesRcvd;   /* Bytes read in single recv() and total bytes read */
 
+    //Memory Sh*t
+    Memories RobotBrain;
+
+    pid_t child_pid = fork();
+
+
+
     if ((argc < 3) || (argc > 4)) /* Test for correct number of arguments */
     {
         std::cerr << "Usage: " << argv[0] << " <Server IP> <Echo Word> [<Echo Port>]\n";

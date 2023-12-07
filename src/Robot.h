@@ -6,6 +6,15 @@
 #include <thread>
 #include <chrono>
 #include <boost/asio.hpp>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <iostream>
+#include <ctime>
 
 namespace Robot
 {
@@ -28,18 +37,37 @@ namespace Robot
 
     class Memories{
         public:
-        struct Message           // Format of the messages
-            {
-            long type;            // message type, required
-            int data;             // item is an int, can by anything
-            };
                     
         private:
         int msgqid;                // Message queue id
         pid_t child_pid;  
 
+        struct Message           // Format of the messages
+            {
+            long type;            // message type, required
+            int data;             // item is an int, can by anything
+            };
+
+    Memories::Memory(){
+        msqid = msget(IPC_PRIVATE, 0660);
+
+    }
+
+    void Memories::sendMessage(int type, int data){
+        Message sndMsg;
+        sndMsg.type = type;
+        sndMsg.data = data;
+
+        msgsnd(msqid, &sndMsg, sizeof(int), 0);
+        cout << "The message: " << sndMsg.data << " was sent! \n";
+    }
 
 
+    void Memories::receiveMessage(int type){
+        Message rcvMsg;
+        msgrcv(msqid, &rcvMsg, sizeof(int), type, 0);
+        cout << "The message: " << rcvMsg.data << " was received! \n";
+    }
 
     class Socket : public MobileRobot
     {
