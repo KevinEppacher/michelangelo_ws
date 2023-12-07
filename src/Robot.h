@@ -49,24 +49,24 @@ namespace Robot
             };
 
     Memories::Memory(){
-        msqid = msget(IPC_PRIVATE, 0660);
+        msqid = msget(IPC_PRIVATE, 0660);   //init die Que
 
     }
 
-    void Memories::sendMessage(int type, int data){
-        Message sndMsg;
-        sndMsg.type = type;
+    void Memories::sendMessage(int type, int data){     
+        Message sndMsg;             //erstellt Message Instanz
+        sndMsg.type = type;         //befüllt Msg Inhalt
         sndMsg.data = data;
 
-        msgsnd(msqid, &sndMsg, sizeof(int), 0);
-        cout << "The message: " << sndMsg.data << " was sent! \n";
+        msgsnd(msqid, &sndMsg, sizeof(int), 0); //sendet die Msg
+        cout << "The message: " << sndMsg.data << " was sent! \n";  //DEBUG
     }
 
 
-    void Memories::receiveMessage(int type){
-        Message rcvMsg;
-        msgrcv(msqid, &rcvMsg, sizeof(int), type, 0);
-        cout << "The message: " << rcvMsg.data << " was received! \n";
+    void Memories::receiveMessage(int type){    
+        Message rcvMsg;             //erstellt eine Message Instanz
+        msgrcv(msqid, &rcvMsg, sizeof(int), type, 0);   //empfängt Message
+        cout << "The message: " << rcvMsg.data << " was received! \n";  //DEBUG
     }
 
     class Socket : public MobileRobot
