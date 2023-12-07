@@ -84,6 +84,7 @@ namespace Robot
     {
         /* Send the string to the server */
         echoString = "1.0,0.0";
+        
 
         if (send(sock, echoString, echoStringLen, 0) != static_cast<ssize_t>(echoStringLen))
         {

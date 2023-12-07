@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 
         std::cout<<i<<std::endl;
 
-        Robot::TCPClient client("192.168.100.55", 9999);
+        Robot::TCPClient client("192.168.100.51", 9999);
         client.sendData(echoString.c_str());
         client.receiveData(buffer, sizeof(buffer));  
         //client.closeTCPconnection();

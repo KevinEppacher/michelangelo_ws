@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/hudai/michelangelo_ws/src/Robot.h
+iostream
+-
+cstring
+-
+cstdlib
+-
+unistd.h
+-
+arpa/inet.h
+-
+sys/socket.h
+-
+
+/home/hudai/michelangelo_ws/src/main.cpp
+Robot.h
+/home/hudai/michelangelo_ws/src/Robot.h
+iostream
+-
+sstream
+-
+tcpHandler.h
+/home/hudai/michelangelo_ws/src/tcpHandler.h
+
