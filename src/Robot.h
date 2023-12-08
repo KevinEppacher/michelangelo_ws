@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <nlohmann/json.hpp>
 
 #define RCVBUFSIZE 100000   /* Size of receive buffer */
 
@@ -54,6 +55,24 @@ namespace Robot
 
 
     };
+
+    //COCO//
+
+    class JsonHandler
+    {
+        public:
+            JsonHandler(std::string rawData);
+            ~JsonHandler();
+
+            std::string JsonOutputter(const std::string key);
+            std::string StringtoRaw(std::string normalString);
+
+        private:
+            nlohmann::json jsonData;
+
+    };
+
+    //COCO//
 
 
 }
