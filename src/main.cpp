@@ -7,7 +7,7 @@ int main(int argc, char *argv[]) {
     char buffer[1024] = {0};
 
     //Robot::TCPClient client("127.0.0.1", 8080);
-        double i = 0;
+    double i = 0;
 
     while(true)
     {

@@ -11,85 +11,56 @@ namespace Robot
     {
     }
 
-    Socket::Socket(const char *serverIP, const char *echoString, unsigned short echoServPort)
-        : servIP(serverIP), echoString(echoString), echoServPort(echoServPort)
-    {
-        establishConnection();
-    }
 
-    Socket::~Socket()
+    TCPClient::TCPClient(const char* serverIP, int port) 
     {
-        close(sock);
-    }
-
-    void Socket::establishConnection()
-    {
-        /* Create a reliable, stream socket using TCP */
-        if ((sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
-        {
-            perror("socket() failed");
-            exit(1);
+        client_fd = socket(AF_INET, SOCK_STREAM, 0);
+        if (client_fd < 0) {
+            printf("\n Socket creation error \n");
+            exit(EXIT_FAILURE);
         }
 
-        /* Construct the server address structure */
-        memset(&echoServAddr, 0, sizeof(echoServAddr));   /* Zero out structure */
-        echoServAddr.sin_family = AF_INET;                /* Internet address family */
-        echoServAddr.sin_addr.s_addr = inet_addr(servIP); /* Server IP address */
-        echoServAddr.sin_port = htons(echoServPort);      /* Server port */
+        serv_addr.sin_family = AF_INET;
+        serv_addr.sin_port = htons(port);
 
-        /* Establish the connection to the echo server */
-        if (connect(sock, reinterpret_cast<struct sockaddr *>(&echoServAddr), sizeof(echoServAddr)) < 0)
-        {
-            perror("connect() failed");
-            exit(1);
+        if (inet_pton(AF_INET, serverIP, &serv_addr.sin_addr) <= 0) {
+            printf("\nInvalid address/ Address not supported \n");
+            exit(EXIT_FAILURE);
+        }
+
+        if (connect(client_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0) {
+            printf("\nConnection Failed \n");
+            exit(EXIT_FAILURE);
         }
     }
 
-    void Socket::sendAndReceiveData()
+    TCPClient::~TCPClient() 
     {
-        sendData();
-
-        echoStringLen = strlen(echoString); /* Determine input length */
-
-        /* Receive up to the buffer size (minus 1 to leave space for
-        a null terminator) bytes from the sender */
-        bytesRcvd = recv(getSock(), getEchoBuffer(), RCVBUFSIZE - 1, 0);
-        if (bytesRcvd <= 0)
-        {
-            perror("recv() failed or connection closed prematurely");
-            exit(1);
-        }
-
-        totalBytesRcvd += bytesRcvd;               /* Keep tally of total bytes */
-        getEchoBuffer()[bytesRcvd] = '\0'; /* Terminate the string! */
-        std::cout << getEchoBuffer()<<std::endl;      /* Print the echo buffer */
+        std::cout<<"Client wurde geschlossen111"<<std::endl;
+        close(client_fd);
     }
 
-    unsigned int Socket::getEchoStringLen() const
+    void TCPClient::closeTCPconnection()
     {
-        return echoStringLen;
+        close(client_fd);
     }
 
-    int Socket::getSock() const
+    void TCPClient::sendData(const char* data) 
     {
-        return sock;
+        send(client_fd, data, strlen(data), 0);
+        std::cout << "Message sent: " << data << std::endl;
+        close(client_fd);
     }
 
-    char *Socket::getEchoBuffer()
+    void TCPClient::receiveData(char* buffer, ssize_t size) 
     {
-        return echoBuffer;
+        valread = read(client_fd, buffer, size - 1);
+        buffer[valread] = '\0'; // Null-terminator hinzufügen
+        std::cout << buffer << std::endl;
     }
 
-    void Socket::sendData()
-    {
-        /* Send the string to the server */
-        echoString = "1.0,0.0";
-        
 
-        if (send(sock, echoString, echoStringLen, 0) != static_cast<ssize_t>(echoStringLen))
-        {
-            perror("send() sent a different number of bytes than expected");
-            exit(1);
-        }
-    }
+
+
+
 }
