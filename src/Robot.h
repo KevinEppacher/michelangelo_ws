@@ -28,7 +28,8 @@ namespace Robot
     };
 
 
-    class TCPClient {
+    class TCPClient: public MobileRobot
+    {
     public:
         TCPClient(const char* serverIP, int port);
         
@@ -44,6 +45,7 @@ namespace Robot
         int client_fd;
         ssize_t valread;
         struct sockaddr_in serv_addr;
+
     };
 
 
@@ -51,6 +53,7 @@ namespace Robot
     {
         public:
             JsonHandler(std::string rawData);
+            JsonHandler();
             ~JsonHandler();
 
             std::string JsonOutputter(const std::string key);

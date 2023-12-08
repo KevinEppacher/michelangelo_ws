@@ -12,7 +12,7 @@ namespace Robot
     }
 
 
-    TCPClient::TCPClient(const char* serverIP, int port) 
+    TCPClient::TCPClient(const char* serverIP, int port)
     {
         client_fd = socket(AF_INET, SOCK_STREAM, 0);
         if (client_fd < 0) {
@@ -32,6 +32,7 @@ namespace Robot
             printf("\nConnection Failed \n");
             exit(EXIT_FAILURE);
         }
+
     }
 
     TCPClient::~TCPClient() 
@@ -57,6 +58,8 @@ namespace Robot
         valread = read(client_fd, buffer, size - 1);
         buffer[valread] = '\0'; // Null-terminator hinzufügen
         std::cout << buffer << std::endl;
+
+
     }
 
         //COCO//
