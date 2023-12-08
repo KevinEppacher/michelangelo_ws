@@ -59,8 +59,58 @@ namespace Robot
         std::cout << buffer << std::endl;
     }
 
+        //COCO//
+
+    JsonHandler::JsonHandler(std::string rawData)
+    {
+        std::string startDelimiter = "---START---";
+        std::string endDelimiter = "---END---";
+
+        std::size_t startPos = rawData.find(startDelimiter) + startDelimiter.length();
+        std::size_t endPos = rawData.find(endDelimiter, startPos);
+        std::string jsonStr = rawData.substr(startPos, endPos - startPos);
+
+        try 
+        {
+            JsonHandler::jsonData = nlohmann::json::parse(jsonStr);
+        } 
+        
+        catch (nlohmann::json::parse_error& e) 
+        {
+            std::cerr << "JSON parse error: " << e.what() << '\n';
+        }
+    }
+
+    JsonHandler::~JsonHandler()
+    {
+        std::cout << "JsonHandler destroyed" << std::endl;
+    }
 
 
+    std::string JsonHandler::JsonOutputter(const std::string key)
+    {
+        try 
+        {
+            if (jsonData.contains(key)) {
+                return jsonData[key].dump(); 
+            } else {
+                return "Key not found";
+            }
+        } 
+        
+        catch (std::exception& e) {
+            std::cerr << "Error: " << e.what() << '\n';
+            return "Error occurred";
+        }
+    }
+
+    std::string JsonHandler::StringtoRaw(std::string normalString)
+    {
+        std::ostringstream oss;
+        oss << "R\"(";
+        oss << ")\"";
+        return oss.str();
+    }
 
 
 }
