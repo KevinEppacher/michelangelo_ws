@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <nlohmann/json.hpp>
+#include <sstream>
 
 
 #define RCVBUFSIZE 100000   /* Size of receive buffer */

@@ -25,7 +25,6 @@ int main(int argc, char *argv[]) {
         client.receiveData(buffer, sizeof(buffer));  
         //client.closeTCPconnection();
         
-
     }
 
     
