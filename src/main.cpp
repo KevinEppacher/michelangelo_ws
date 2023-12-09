@@ -4,13 +4,13 @@
 
 int main(int argc, char *argv[]) {
 
-    char buffer[1024] = {0};
+    char buffer[8192] = {};
 
     //Robot::TCPClient client("127.0.0.1", 8080);
     double i = 0;
 
-/*     Robot::TCPClient client("192.168.100.51", 9997);
-    client.getOdom(client.receiveData(buffer, sizeof(buffer))); */
+    Robot::TCPClient client(argv[1], 9998);
+    client.getOdom(client.receiveData(buffer, sizeof(buffer)));
 
     while(true)
     {
@@ -25,8 +25,8 @@ int main(int argc, char *argv[]) {
         client.receiveData(buffer, sizeof(buffer));   */
         
         
-        Robot::TCPClient client("192.168.100.51", 9997);
-        client.getOdom(client.receiveData(buffer, sizeof(buffer)));
+/*         Robot::TCPClient client("192.168.100.55", 9997);
+        client.getOdom(client.receiveData(buffer, sizeof(buffer))); */
 
         //client.sendData(echoString.c_str());
         //client.closeTCPconnection();
