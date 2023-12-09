@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/kevin/michelangelo_ws/src/Robot.cpp
-Robot.h
-/home/kevin/michelangelo_ws/src/Robot.h
-
 /home/kevin/michelangelo_ws/src/Robot.h
 iostream
 -

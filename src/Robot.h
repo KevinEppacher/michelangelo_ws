@@ -39,16 +39,20 @@ namespace Robot
     public:
         MobileRobot();
         ~MobileRobot();
-
         bool linearController(Robot::Pose goalPose, Robot::Pose currentPose);
+
+    protected:
         double calculateTotalDistance(Robot::Pose diffPose);
+        double calculateGamma(Robot::Pose diffPose);
+        double calculateAlpha(double gamma, Robot::Pose currentAngle);
 
     private:
         double scanMsg;
         double odomMsg;
         double cmdVelMsg;
         Robot::Pose diffPose;
-        const double totalDistance = 0;
+        double totalDistance = 0;
+        double gamma = 0;
     };
 
 

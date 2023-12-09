@@ -10,13 +10,23 @@ namespace Robot
 
     MobileRobot::~MobileRobot()
     {
+        
     }
 
     bool MobileRobot::linearController(Robot::Pose goalPose, Robot::Pose currentPose)
     {
+        std::cout << "linearController aufgerufen." << std::endl;
+
         diffPose.position.x = goalPose.position.x - currentPose.position.x;
         diffPose.position.y = goalPose.position.y - currentPose.position.y;
-        std::cout << calculateTotalDistance(diffPose) <<std::endl;
+
+        std::cout << "Diff Pose berechnet: X=" << diffPose.position.x << ", Y=" << diffPose.position.y << std::endl;
+
+        gamma = calculateGamma(diffPose);
+        std::cout << "Gamma berechnet: " << gamma << std::endl;
+
+        std::cout << "Gesamtdistanz: " << calculateTotalDistance(diffPose) << std::endl;
+        std::cout << "Alpha berechnet: " << calculateAlpha(gamma, currentPose) << std::endl;
         
         return 1;
     }
@@ -24,6 +34,16 @@ namespace Robot
     double MobileRobot::calculateTotalDistance(Robot::Pose diffPose)
     {
         return (sqrt(pow(diffPose.position.x,2) + pow(diffPose.position.y, 2)));
+    }
+
+    double MobileRobot::calculateGamma(Robot::Pose diffPose)
+    {
+        return (atan2(diffPose.position.y, diffPose.position.x));
+    }
+
+    double MobileRobot::calculateAlpha(double gamma, Robot::Pose currentPose)
+    {
+        return (gamma - currentPose.orientation.yaw);
     }
 
     TCPClient::TCPClient(const char* serverIP, int port)
