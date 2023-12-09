@@ -2,6 +2,7 @@
 
 namespace Robot
 {
+    
     MobileRobot::MobileRobot()
     {
         std::cout << "A Robot is born" << std::endl;
@@ -11,6 +12,19 @@ namespace Robot
     {
     }
 
+    bool MobileRobot::linearController(Robot::Pose goalPose, Robot::Pose currentPose)
+    {
+        diffPose.position.x = goalPose.position.x - currentPose.position.x;
+        diffPose.position.y = goalPose.position.y - currentPose.position.y;
+        std::cout << calculateTotalDistance(diffPose) <<std::endl;
+        
+        return 1;
+    }
+
+    double MobileRobot::calculateTotalDistance(Robot::Pose diffPose)
+    {
+        return (sqrt(pow(diffPose.position.x,2) + pow(diffPose.position.y, 2)));
+    }
 
     TCPClient::TCPClient(const char* serverIP, int port)
     {
@@ -58,8 +72,6 @@ namespace Robot
         valread = read(client_fd, buffer, size - 1);
         buffer[valread] = '\0'; // Null-terminator hinzufügen
         std::cout << buffer << std::endl;
-
-
     }
 
         //COCO//

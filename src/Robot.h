@@ -15,16 +15,40 @@
 
 namespace Robot
 {
+    struct Pose
+    {
+        struct Position
+        {
+            double x = 0, y = 0, z = 0;
+            double vx = 0, vy = 0, vz = 0; // Geschwindigkeiten
+        };
+
+        struct Orientation
+        {
+            double roll = 0, pitch = 0, yaw = 0;
+            double vRoll = 0, vPitch = 0, vYaw = 0; // Winkelgeschwindigkeiten
+        };
+
+        Position position;
+        Orientation orientation;
+    };
+    
+
     class MobileRobot
     {
     public:
         MobileRobot();
         ~MobileRobot();
 
+        bool linearController(Robot::Pose goalPose, Robot::Pose currentPose);
+        double calculateTotalDistance(Robot::Pose diffPose);
+
     private:
         double scanMsg;
         double odomMsg;
         double cmdVelMsg;
+        Robot::Pose diffPose;
+        const double totalDistance = 0;
     };
 
 
