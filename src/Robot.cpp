@@ -71,7 +71,6 @@ namespace Robot
     {
         valread = read(client_fd, buffer, size - 1);
         buffer[valread] = '\0'; // Null-terminator hinzufügen
-        //std::cout << buffer << std::endl;
         return buffer;
     }
 
@@ -79,18 +78,67 @@ namespace Robot
     {
         Robot::Pose odom_pose;
         Robot::JsonHandler dataHandler;
+        nlohmann :: json json;
 
         dataHandler.extractJson(receivedData);
-        
-        std::cout << dataHandler.JsonOutputter("pose") << std::endl;
 
-        std::cout << "BREAK" << std::endl;
+        json = dataHandler.extractJson(receivedData);
 
-        std::cout << dataHandler.extractJson(dataHandler.JsonOutputter("pose")) << std::endl;
+        std::cout << "x-value position: " << std::endl;
+        std::cout << json["pose"]["pose"]["position"]["x"] << std::endl;
 
-        //pose.pose.position, pose.orientation, twist.twist.linear, twist.twist.angular
+        std::cout << "y-value position: " << std::endl;
+        std::cout << json["pose"]["pose"]["position"]["y"] << std::endl;
 
-        //Nachricht: ---START---{"header": {"seq": 41486, "stamp": {"secs": 1677512013, "nsecs": 49092063}, "frame_id": "odom"}, "child_frame_id": "base_footprint", "pose": {"pose": {"position": {"x": 2.923440933777499e-10, "y": -2.7172184502433083e-08, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": 0.005155239254236221, "w": 0.9999867081642151}}, "covariance": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, "twist": {"twist": {"linear": {"x": 0.0, "y": 0.0, "z": 0.0}, "angular": {"x": 0.0, "y": 0.0, "z": -0.0022432173136621714}}, "covariance": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}}___END___
+        std::cout << "z-value position: " << std::endl;
+        std::cout << json["pose"]["pose"]["position"]["z"] << std::endl;
+
+
+        std::cout << "x-value orientation: " << std::endl;
+        std::cout << json["pose"]["pose"]["orientation"]["x"] << std::endl;
+
+        std::cout << "y-value orientation: " << std::endl;
+        std::cout << json["pose"]["pose"]["orientation"]["y"] << std::endl;
+
+        std::cout << "z-value orientation: " << std::endl;
+        std::cout << json["pose"]["pose"]["orientation"]["z"] << std::endl;
+
+        std::cout << "w-value orientation: " << std::endl;
+        std::cout << json["pose"]["pose"]["orientation"]["w"] << std::endl;
+
+
+        std::cout << "x-value twist: " << std::endl;
+        std::cout << json["twist"]["twist"]["linear"]["x"] << std::endl;
+
+        std::cout << "y-value twist: " << std::endl;
+        std::cout << json["twist"]["twist"]["linear"]["y"] << std::endl;
+
+        std::cout << "z-value twist: " << std::endl;
+        std::cout << json["twist"]["twist"]["linear"]["z"] << std::endl;
+
+
+        std::cout << "x-value twist: " << std::endl;
+        std::cout << json["twist"]["twist"]["angular"]["x"] << std::endl;
+
+        std::cout << "y-value twist: " << std::endl;
+        std::cout << json["twist"]["twist"]["angular"]["y"] << std::endl;
+
+        std::cout << "z-value twist: " << std::endl;
+        std::cout << json["twist"]["twist"]["angular"]["z"] << std::endl;
+
+
+/*         odom_pose.position.x =
+        odom_pose.position.y =
+        odom_pose.position.z =
+        odom_pose.position.vx = 
+        odom_pose.position.vy = 
+        odom_pose.position.vz =  
+        odom_pose.orientation.roll = 
+        odom_pose.orientation.pitch = 
+        odom_pose.orientation.yaw = 
+        odom_pose.orientation.vRoll = 
+        odom_pose.orientation.vPitch = 
+        odom_pose.orientation.vYaw =  */
 
         return odom_pose;
     };
@@ -109,14 +157,16 @@ namespace Robot
 
     nlohmann::json JsonHandler::extractJson(std::string rawData)
     {
-        //std::cout << rawData << std::endl;
-
+        std::string jsonStr;
         std::string startDelimiter = "---START---";
         std::string endDelimiter = "___END___";
 
-        std::size_t startPos = rawData.find(startDelimiter) + startDelimiter.length();
-        std::size_t endPos = rawData.find(endDelimiter, startPos);
-        std::string jsonStr = rawData.substr(startPos, endPos - startPos);
+        if (rawData.find(startDelimiter) != std::string::npos)
+        {
+            std::size_t startPos = rawData.find(startDelimiter) + startDelimiter.length();
+            std::size_t endPos = rawData.find(endDelimiter, startPos);
+            jsonStr = rawData.substr(startPos, endPos - startPos);
+        }
 
         try 
         {
@@ -168,80 +218,3 @@ namespace Robot
         return jsonData;
     }
 }
-
-/*     char *Socket::getEchoBuffer()
-    {
-        return echoBuffer;
-    }
-
-    void Socket::sendData()
-    {
-        //Send the string to the server
-        echoString = "1.0,0.0";
-
-        if (send(sock, echoString, echoStringLen, 0) != static_cast<ssize_t>(echoStringLen))
-        {
-            perror("send() sent a different number of bytes than expected");
-            exit(1);
-        }
-    } */
-
-/* 
-
-    //COCO//
-
-    JsonHandler::JsonHandler(std::string rawData)
-    {
-        std::string startDelimiter = "---START---";
-        std::string endDelimiter = "---END---";
-
-        std::size_t startPos = rawData.find(startDelimiter) + startDelimiter.length();
-        std::size_t endPos = rawData.find(endDelimiter, startPos);
-        std::string jsonStr = rawData.substr(startPos, endPos - startPos);
-
-        try 
-        {
-            JsonHandler::jsonData = nlohmann::json::parse(jsonStr);
-        } 
-        
-        catch (nlohmann::json::parse_error& e) 
-        {
-            std::cerr << "JSON parse error: " << e.what() << '\n';
-        }
-    }
-
-    JsonHandler::~JsonHandler()
-    {
-        std::cout << "JsonHandler destroyed" << std::endl;
-    }
-
-
-    std::string JsonHandler::JsonOutputter(const std::string key)
-    {
-        try 
-        {
-            if (jsonData.contains(key)) {
-                return jsonData[key].dump(); 
-            } else {
-                return "Key not found";
-            }
-        } 
-        
-        catch (std::exception& e) {
-            std::cerr << "Error: " << e.what() << '\n';
-            return "Error occurred";
-        }
-    }
-
-    std::string JsonHandler::StringtoRaw(std::string normalString)
-    {
-        std::ostringstream oss;
-        oss << "R\"(";
-        oss << ")\"";
-        return oss.str();
-    }
-
-
-    //COCO//
-}
- */

@@ -1,4 +1,4 @@
-#ifndef ROBOT_H
+//#ifndef ROBOT_H
 #define ROBOT_H
 
 #include <iostream>
@@ -78,7 +78,6 @@ namespace Robot
     {
         public:
             JsonHandler();
-            //JsonHandler();
             ~JsonHandler();
 
             nlohmann::json extractJson(std::string rawData);
@@ -96,5 +95,3 @@ namespace Robot
 
 
 }
-
-#endif // ROBOT_H
