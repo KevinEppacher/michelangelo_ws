@@ -1,15 +1,4 @@
 Ausführen:
-<<<<<<< HEAD
 cmake //PFAD ZUR CMAKELIST//
 make
 ./main //ip_addresse//
-
-
-
-//UPDATE//
-=======
-    1. cmake //PFAD ZUR CMAKELIST.txt//
-    2. make
-    3. ./main //IP_ADRESSE VON T-BOT//
-
->>>>>>> origin/master
