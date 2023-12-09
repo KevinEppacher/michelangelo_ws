@@ -64,7 +64,17 @@ namespace Robot
 
         //COCO//
 
-    JsonHandler::JsonHandler(std::string rawData)
+    JsonHandler::JsonHandler()
+    {
+        std::cout << "Json handler has risen from the depth of unexistence into existence" << std::endl;
+    }
+
+    JsonHandler::~JsonHandler()
+    {
+        std::cout << "JsonHandler destroyed" << std::endl;
+    }
+
+    nlohmann::json JsonHandler::extractJson(std::string rawData)
     {
         std::string startDelimiter = "---START---";
         std::string endDelimiter = "---END---";
@@ -75,33 +85,37 @@ namespace Robot
 
         try 
         {
+            //std::cout << "Here2" << std::endl;
             JsonHandler::jsonData = nlohmann::json::parse(jsonStr);
+            std::cout << "Parsing finished correctly" << std::endl;
         } 
         
         catch (nlohmann::json::parse_error& e) 
         {
             std::cerr << "JSON parse error: " << e.what() << '\n';
+            std::cout << "Parsing finished uncorrectly" << std::endl;
         }
-    }
 
-    JsonHandler::~JsonHandler()
-    {
-        std::cout << "JsonHandler destroyed" << std::endl;
+        return jsonData;
     }
-
 
     std::string JsonHandler::JsonOutputter(const std::string key)
     {
         try 
         {
-            if (jsonData.contains(key)) {
+            //std::cout << key << std::endl;
+            if (jsonData.contains(key)) 
+            {
                 return jsonData[key].dump(); 
-            } else {
+            } 
+            else 
+            {
                 return "Key not found";
             }
         } 
         
-        catch (std::exception& e) {
+        catch (std::exception& e)
+        {
             std::cerr << "Error: " << e.what() << '\n';
             return "Error occurred";
         }
@@ -113,6 +127,11 @@ namespace Robot
         oss << "R\"(";
         oss << ")\"";
         return oss.str();
+    }
+
+    nlohmann::json JsonHandler::get_jsonData()
+    {
+        return jsonData;
     }
 
 

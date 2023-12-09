@@ -1,16 +1,15 @@
+
+# Consider dependencies only in project.
+set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
+
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
-  "CXX"
   )
-# The set of files for implicit dependencies of each language:
-set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/hudai/michelangelo_ws/src/Robot.cpp" "/home/hudai/michelangelo_ws/CMakeFiles/main.dir/src/Robot.cpp.o"
-  "/home/hudai/michelangelo_ws/src/main.cpp" "/home/hudai/michelangelo_ws/CMakeFiles/main.dir/src/main.cpp.o"
-  )
-set(CMAKE_CXX_COMPILER_ID "GNU")
 
-# The include file search paths:
-set(CMAKE_CXX_TARGET_INCLUDE_PATH
+# The set of dependency files which are needed:
+set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/cocokayya18/michelangelo_ws/src/Robot.cpp" "CMakeFiles/main.dir/src/Robot.cpp.o" "gcc" "CMakeFiles/main.dir/src/Robot.cpp.o.d"
+  "/home/cocokayya18/michelangelo_ws/src/main.cpp" "CMakeFiles/main.dir/src/main.cpp.o" "gcc" "CMakeFiles/main.dir/src/main.cpp.o.d"
   )
 
 # Targets to which this target links.

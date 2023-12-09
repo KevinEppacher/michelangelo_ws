@@ -50,14 +50,24 @@ namespace Robot
 
 
     class JsonHandler
+
+/*     How to use:
+        Robot::JsonHandler jsonHüdai; Initiate Json Object
+        jsonHüdai.extractJson(GIVE RAW DATA AS INPUT TO PARSE THE DATA);
+        jsonHüdai.JsonOutputter(GIVE KEY AS INPUT) */
+
+
     {
         public:
-            JsonHandler(std::string rawData);
             JsonHandler();
+            //JsonHandler();
             ~JsonHandler();
 
+            nlohmann::json extractJson(std::string rawData);
             std::string JsonOutputter(const std::string key);
             std::string StringtoRaw(std::string normalString);
+
+            nlohmann::json get_jsonData();
 
         private:
             nlohmann::json jsonData;
