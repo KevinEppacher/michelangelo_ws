@@ -2,6 +2,7 @@
 
 namespace Robot
 {
+    
     MobileRobot::MobileRobot()
     {
         std::cout << "A Robot is born" << std::endl;
@@ -11,70 +12,142 @@ namespace Robot
     {
     }
 
-    Socket::Socket(const char *serverIP, const char *echoString, unsigned short echoServPort)
-        : servIP(serverIP), echoString(echoString), echoServPort(echoServPort)
+    bool MobileRobot::linearController(Robot::Pose goalPose, Robot::Pose currentPose)
     {
-        establishConnection();
+        diffPose.position.x = goalPose.position.x - currentPose.position.x;
+        diffPose.position.y = goalPose.position.y - currentPose.position.y;
+        std::cout << calculateTotalDistance(diffPose) <<std::endl;
+        
+        return 1;
     }
 
-    Socket::~Socket()
+    double MobileRobot::calculateTotalDistance(Robot::Pose diffPose)
     {
-        close(sock);
+        return (sqrt(pow(diffPose.position.x,2) + pow(diffPose.position.y, 2)));
     }
 
-    void Socket::establishConnection()
+    TCPClient::TCPClient(const char* serverIP, int port)
     {
-        /* Create a reliable, stream socket using TCP */
-        if ((sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
-        {
-            perror("socket() failed");
-            exit(1);
+        client_fd = socket(AF_INET, SOCK_STREAM, 0);
+        if (client_fd < 0) {
+            printf("\n Socket creation error \n");
+            exit(EXIT_FAILURE);
         }
 
-        /* Construct the server address structure */
-        memset(&echoServAddr, 0, sizeof(echoServAddr));   /* Zero out structure */
-        echoServAddr.sin_family = AF_INET;                /* Internet address family */
-        echoServAddr.sin_addr.s_addr = inet_addr(servIP); /* Server IP address */
-        echoServAddr.sin_port = htons(echoServPort);      /* Server port */
+        serv_addr.sin_family = AF_INET;
+        serv_addr.sin_port = htons(port);
 
-        /* Establish the connection to the echo server */
-        if (connect(sock, reinterpret_cast<struct sockaddr *>(&echoServAddr), sizeof(echoServAddr)) < 0)
+        if (inet_pton(AF_INET, serverIP, &serv_addr.sin_addr) <= 0) {
+            printf("\nInvalid address/ Address not supported \n");
+            exit(EXIT_FAILURE);
+        }
+
+        if (connect(client_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0) {
+            printf("\nConnection Failed \n");
+            exit(EXIT_FAILURE);
+        }
+
+    }
+
+    TCPClient::~TCPClient() 
+    {
+        std::cout<<"Client wurde geschlossen111"<<std::endl;
+        close(client_fd);
+    }
+
+    void TCPClient::closeTCPconnection()
+    {
+        close(client_fd);
+    }
+
+    void TCPClient::sendData(const char* data) 
+    {
+        send(client_fd, data, strlen(data), 0);
+        std::cout << "Message sent: " << data << std::endl;
+        close(client_fd);
+    }
+
+    void TCPClient::receiveData(char* buffer, ssize_t size) 
+    {
+        valread = read(client_fd, buffer, size - 1);
+        buffer[valread] = '\0'; // Null-terminator hinzufügen
+        std::cout << buffer << std::endl;
+    }
+
+        //COCO//
+
+    JsonHandler::JsonHandler()
+    {
+        std::cout << "Json handler has risen from the depth of unexistence into existence" << std::endl;
+    }
+
+    JsonHandler::~JsonHandler()
+    {
+        std::cout << "JsonHandler destroyed" << std::endl;
+    }
+
+    nlohmann::json JsonHandler::extractJson(std::string rawData)
+    {
+        std::string startDelimiter = "---START---";
+        std::string endDelimiter = "---END---";
+
+        std::size_t startPos = rawData.find(startDelimiter) + startDelimiter.length();
+        std::size_t endPos = rawData.find(endDelimiter, startPos);
+        std::string jsonStr = rawData.substr(startPos, endPos - startPos);
+
+        try 
         {
-            perror("connect() failed");
-            exit(1);
+            //std::cout << "Here2" << std::endl;
+            JsonHandler::jsonData = nlohmann::json::parse(jsonStr);
+            std::cout << "Parsing finished correctly" << std::endl;
+        } 
+        
+        catch (nlohmann::json::parse_error& e) 
+        {
+            std::cerr << "JSON parse error: " << e.what() << '\n';
+            std::cout << "Parsing finished uncorrectly" << std::endl;
+        }
+
+        return jsonData;
+    }
+
+    std::string JsonHandler::JsonOutputter(const std::string key)
+    {
+        try 
+        {
+            //std::cout << key << std::endl;
+            if (jsonData.contains(key)) 
+            {
+                return jsonData[key].dump(); 
+            } 
+            else 
+            {
+                return "Key not found";
+            }
+        } 
+        
+        catch (std::exception& e)
+        {
+            std::cerr << "Error: " << e.what() << '\n';
+            return "Error occurred";
         }
     }
 
-    void Socket::sendAndReceiveData()
+    std::string JsonHandler::StringtoRaw(std::string normalString)
     {
-        sendData();
-
-        echoStringLen = strlen(echoString); /* Determine input length */
-
-        /* Receive up to the buffer size (minus 1 to leave space for
-        a null terminator) bytes from the sender */
-        bytesRcvd = recv(getSock(), getEchoBuffer(), RCVBUFSIZE - 1, 0);
-        if (bytesRcvd <= 0)
-        {
-            perror("recv() failed or connection closed prematurely");
-            exit(1);
-        }
-
-        totalBytesRcvd += bytesRcvd;               /* Keep tally of total bytes */
-        getEchoBuffer()[bytesRcvd] = '\0'; /* Terminate the string! */
-        std::cout << getEchoBuffer()<<std::endl;      /* Print the echo buffer */
+        std::ostringstream oss;
+        oss << "R\"(";
+        oss << ")\"";
+        return oss.str();
     }
 
-    unsigned int Socket::getEchoStringLen() const
+    nlohmann::json JsonHandler::get_jsonData()
     {
-        return echoStringLen;
+        return jsonData;
     }
 
-    int Socket::getSock() const
-    {
-        return sock;
-    }
 
+<<<<<<< HEAD
     char *Socket::getEchoBuffer()
     {
         return echoBuffer;
@@ -149,4 +222,6 @@ namespace Robot
 
 
     //COCO//
+=======
+>>>>>>> origin/master
 }
