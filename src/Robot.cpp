@@ -126,6 +126,7 @@ namespace Robot
         std::cout << "z-value twist: " << std::endl;
         std::cout << json["twist"]["twist"]["angular"]["z"] << std::endl;
 
+        //Loop?
 
 /*         odom_pose.position.x =
         odom_pose.position.y =
@@ -139,6 +140,8 @@ namespace Robot
         odom_pose.orientation.vRoll = 
         odom_pose.orientation.vPitch = 
         odom_pose.orientation.vYaw =  */
+
+        //push to shared memory
 
         return odom_pose;
     };
