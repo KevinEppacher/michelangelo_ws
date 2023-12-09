@@ -10,10 +10,7 @@ namespace Robot
 
     MobileRobot::~MobileRobot()
     {
-        std::stringstream ss;
-        ss << "---START---{linear: 0 , angular:   0  }___END___";
-        std::string echoString = ss.str();
-
+        
     }
 
  
