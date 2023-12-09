@@ -67,12 +67,27 @@ namespace Robot
         close(client_fd);
     }
 
-    void TCPClient::receiveData(char* buffer, ssize_t size) 
+    std::string TCPClient::receiveData(char* buffer, ssize_t size) 
     {
         valread = read(client_fd, buffer, size - 1);
         buffer[valread] = '\0'; // Null-terminator hinzufügen
         std::cout << buffer << std::endl;
+        return buffer;
     }
+
+    Robot::Pose TCPClient::getOdom(std::string receivedData)
+    {
+        Robot::Pose odom_pose;
+        Robot::JsonHandler dataHandler;
+        
+        char buffer[1024] = {0};
+
+        dataHandler.extractJson(receivedData);
+        
+        std::cout << dataHandler.JsonOutputter("header") << std::endl;
+
+        return odom_pose;
+    };
 
         //COCO//
 
@@ -145,17 +160,16 @@ namespace Robot
     {
         return jsonData;
     }
+}
 
-
-<<<<<<< HEAD
-    char *Socket::getEchoBuffer()
+/*     char *Socket::getEchoBuffer()
     {
         return echoBuffer;
     }
 
     void Socket::sendData()
     {
-        /* Send the string to the server */
+        //Send the string to the server
         echoString = "1.0,0.0";
 
         if (send(sock, echoString, echoStringLen, 0) != static_cast<ssize_t>(echoStringLen))
@@ -163,9 +177,9 @@ namespace Robot
             perror("send() sent a different number of bytes than expected");
             exit(1);
         }
-    }
+    } */
 
-
+/* 
 
     //COCO//
 
@@ -222,6 +236,5 @@ namespace Robot
 
 
     //COCO//
-=======
->>>>>>> origin/master
 }
+ */

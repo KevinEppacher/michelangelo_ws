@@ -8,12 +8,6 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <nlohmann/json.hpp>
-<<<<<<< HEAD
-=======
-#include <sstream>
-
->>>>>>> origin/master
-
 #define RCVBUFSIZE 100000   /* Size of receive buffer */
 
 namespace Robot
@@ -66,7 +60,9 @@ namespace Robot
 
         void sendData(const char* data);
 
-        void receiveData(char* buffer, ssize_t size);
+        std::string receiveData(char* buffer, ssize_t size);
+
+        Robot::Pose getOdom(std::string receivedData);
 
     private:
         int client_fd;
@@ -77,32 +73,8 @@ namespace Robot
 
     //COCO//
 
-    class JsonHandler
-    {
-        public:
-            JsonHandler(std::string rawData);
-            ~JsonHandler();
-
-            std::string JsonOutputter(const std::string key);
-            std::string StringtoRaw(std::string normalString);
-
-        private:
-            nlohmann::json jsonData;
-
-    };
-
-    //COCO//
-
 
     class JsonHandler
-
-        /*     How to use:
-                sudo apt install nlohmann-json3-dev, in case the library is not installed yet
-                Robot::JsonHandler jsonHüdai; Initiate Json Object
-                jsonHüdai.extractJson(GIVE RAW DATA AS INPUT TO PARSE THE DATA);
-                jsonHüdai.JsonOutputter(GIVE KEY AS INPUT) */
-
-
     {
         public:
             JsonHandler();
