@@ -51,10 +51,11 @@ namespace Robot
 
     class JsonHandler
 
-/*     How to use:
-        Robot::JsonHandler jsonHüdai; Initiate Json Object
-        jsonHüdai.extractJson(GIVE RAW DATA AS INPUT TO PARSE THE DATA);
-        jsonHüdai.JsonOutputter(GIVE KEY AS INPUT) */
+        /*     How to use:
+                sudo apt install nlohmann-json3-dev, in case the library is not installed yet
+                Robot::JsonHandler jsonHüdai; Initiate Json Object
+                jsonHüdai.extractJson(GIVE RAW DATA AS INPUT TO PARSE THE DATA);
+                jsonHüdai.JsonOutputter(GIVE KEY AS INPUT) */
 
 
     {
