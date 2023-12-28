@@ -69,7 +69,14 @@ namespace Robot
 
     void Robot::MobileRobot::publishCmdVel(double* linear_x, double* angular_z) 
     {
+        std::stringstream ss;
+        ss << "---START---{\"linear\": " << linear_x << ", \"angular\": " << angular_z << "}___END___";
+        std::string echoString = ss.str();
 
+        Robot::TCPClient client("192.168.100.51", 9999);
+        client.sendData(echoString.c_str());
+        //client.receiveData(buffer, sizeof(buffer));  
+        //client.closeTCPconnection();
     }
 
     double MobileRobot::calculateTotalDistance(Robot::Pose diffPose)

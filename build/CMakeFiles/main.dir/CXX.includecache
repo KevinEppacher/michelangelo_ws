@@ -41,6 +41,14 @@ iostream
 -
 sstream
 -
+thread
+-
+SFML/Graphics.hpp
+-
+X11/Xlib.h
+-
+atomic
+-
 tcpHandler.h
 /home/kevin/michelangelo_ws/src/tcpHandler.h
 

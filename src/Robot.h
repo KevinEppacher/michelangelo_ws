@@ -167,7 +167,6 @@ MobileRobot
 
     //COCO//
 
-
 }
 
 #endif // ROBOT_H
