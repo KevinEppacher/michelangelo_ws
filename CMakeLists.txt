@@ -6,3 +6,14 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(main src/main.cpp src/Robot.cpp)
+
+
+## Find Eigen3 package (if needed)
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
+
+## Find SFML package
+find_package(SFML 2.5 REQUIRED COMPONENTS graphics window system)
+
+## Find X11 package
+find_package(X11 REQUIRED)

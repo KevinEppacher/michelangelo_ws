@@ -23,11 +23,11 @@ int main(int argc, char *argv[]) {
         Robot::Pose goalPose, currentPose;
         goalPose.position.x = 2;
         goalPose.position.y = 2;
-        goalPose.orientation.yaw = 1.5;
+        goalPose.orientation.z = 1.5;
 
         currentPose.position.x = 0;
         currentPose.position.y = 0;
-        currentPose.orientation.yaw = 0.25;
+        currentPose.orientation.z = 0.25;
 
         turtle.linearController(goalPose, currentPose);
 
