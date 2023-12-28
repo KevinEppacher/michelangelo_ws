@@ -6,5 +6,9 @@ CXX_DEFINES = -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1
 
 CXX_INCLUDES = -I/home/cocokayya18/michelangelo_ws/build/_deps/eigen-src -I/home/cocokayya18/michelangelo_ws/build/_deps/matplotlib-src -I/home/cocokayya18/michelangelo_ws/build/_deps/json-src/single_include -isystem /usr/include/python3.10 -isystem /usr/lib/python3/dist-packages/numpy/core/include
 
+<<<<<<< HEAD
 CXX_FLAGS = -std=gnu++17
+=======
+CXX_INCLUDES = -I/usr/include/eigen3 
+>>>>>>> 613340bb (Linearer Controller und Trajektorie Planer is dabei und sollte laufen hearns)
 

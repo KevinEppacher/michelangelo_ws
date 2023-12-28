@@ -6,10 +6,16 @@ set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
 set(CMAKE_DEPENDS_LANGUAGES
   )
 
+<<<<<<< HEAD
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/cocokayya18/michelangelo_ws/src/Robot.cpp" "CMakeFiles/main.dir/src/Robot.cpp.o" "gcc" "CMakeFiles/main.dir/src/Robot.cpp.o.d"
   "/home/cocokayya18/michelangelo_ws/src/main.cpp" "CMakeFiles/main.dir/src/main.cpp.o" "gcc" "CMakeFiles/main.dir/src/main.cpp.o.d"
+=======
+# The include file search paths:
+set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "/usr/include/eigen3"
+>>>>>>> 613340bb (Linearer Controller und Trajektorie Planer is dabei und sollte laufen hearns)
   )
 
 # Targets to which this target links.

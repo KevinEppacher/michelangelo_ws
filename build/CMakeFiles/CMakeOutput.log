@@ -449,6 +449,7 @@ Parsed CXX implicit link information from above output:
   implicit fwks: []
 
 
+<<<<<<< HEAD
 Performing C++ SOURCE FILE Test EIGEN_COMPILER_SUPPORT_CPP11 succeeded with the following output:
 Change Dir: /home/cocokayya18/michelangelo_ws/build/CMakeFiles/CMakeTmp
 
@@ -1110,6 +1111,101 @@ Linking C executable cmTC_5adf3
 /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5adf3.dir/link.txt --verbose=1
 /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=sgemm_ -fopenmp CMakeFiles/cmTC_5adf3.dir/CheckFunctionExists.c.o -o cmTC_5adf3  /usr/lib/x86_64-linux-gnu/libopenblas.so 
 gmake[1]: Leaving directory '/home/cocokayya18/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+=======
+Determining if the function XOpenDisplay exists in the /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so passed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_41455/fast && make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_41455.dir/build.make CMakeFiles/cmTC_41455.dir/build
+make[2]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_41455.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay   -o CMakeFiles/cmTC_41455.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_41455
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_41455.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=XOpenDisplay    -rdynamic CMakeFiles/cmTC_41455.dir/CheckFunctionExists.c.o  -o cmTC_41455  /usr/lib/x86_64-linux-gnu/libX11.so /usr/lib/x86_64-linux-gnu/libXext.so 
+make[2]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function gethostbyname exists passed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_d84e5/fast && make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_d84e5.dir/build.make CMakeFiles/cmTC_d84e5.dir/build
+make[2]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d84e5.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname   -o CMakeFiles/cmTC_d84e5.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_d84e5
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d84e5.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=gethostbyname    -rdynamic CMakeFiles/cmTC_d84e5.dir/CheckFunctionExists.c.o  -o cmTC_d84e5 
+make[2]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function connect exists passed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_0633f/fast && make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_0633f.dir/build.make CMakeFiles/cmTC_0633f.dir/build
+make[2]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0633f.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect   -o CMakeFiles/cmTC_0633f.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_0633f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0633f.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=connect    -rdynamic CMakeFiles/cmTC_0633f.dir/CheckFunctionExists.c.o  -o cmTC_0633f 
+make[2]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function remove exists passed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_e0227/fast && make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_e0227.dir/build.make CMakeFiles/cmTC_e0227.dir/build
+make[2]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e0227.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove   -o CMakeFiles/cmTC_e0227.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_e0227
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e0227.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=remove    -rdynamic CMakeFiles/cmTC_e0227.dir/CheckFunctionExists.c.o  -o cmTC_e0227 
+make[2]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function shmat exists passed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_658b3/fast && make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_658b3.dir/build.make CMakeFiles/cmTC_658b3.dir/build
+make[2]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_658b3.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat   -o CMakeFiles/cmTC_658b3.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_658b3
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_658b3.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=shmat    -rdynamic CMakeFiles/cmTC_658b3.dir/CheckFunctionExists.c.o  -o cmTC_658b3 
+make[2]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function IceConnectionNumber exists in the ICE passed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_d5f35/fast && make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_d5f35.dir/build.make CMakeFiles/cmTC_d5f35.dir/build
+make[2]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d5f35.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber   -o CMakeFiles/cmTC_d5f35.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_d5f35
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d5f35.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=IceConnectionNumber    -rdynamic CMakeFiles/cmTC_d5f35.dir/CheckFunctionExists.c.o  -o cmTC_d5f35  -lICE 
+make[2]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+>>>>>>> 613340bb (Linearer Controller und Trajektorie Planer is dabei und sollte laufen hearns)
 
 
 
