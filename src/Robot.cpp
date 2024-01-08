@@ -209,6 +209,64 @@ namespace Robot
             //std::cout << ", pitchAngle = " << pitchAngle << std::endl;
             return pitchAngle;
         }
+        //I KOMM NED WEIDAAAA
+        //shared Memory setup comes in here
+        Socket::msgqid = msgget(IPC_PRIVATE, 0660);
+
+        if (msgqid == -1) {
+            std::cerr << "msgget failed\n";
+            exit(EXIT_FAILURE);
+   }
+
+        Socket::child_pid = fork();
+        if (Socket::child_pid < 0) { /* error occurred */
+            std::cerr << "Fork Failed\n";
+            exit(-1);
+   }
+
+            //maybe woanders hin!
+   if (Socket::child_pid == 0) // child process - the consumer
+   { 
+      signal (SIGINT, consumerHandler);  // catch SIGINT
+      std::cout << "I am the child\n";
+
+      // consuming loop
+      while (true)
+      {
+        std::cout << "Consumer attempting to read message\n";
+	 	Message consMsg; 
+
+	 // receive message - should test for error
+	    msgrcv(Socket::msgqid, &consMsg, sizeof(int), PROD_MSG, 0);
+        std::cout << "Consumer read: " << consMsg.data << std::endl;
+        sleep(0.1);  // 0.1s
+      }  // end consuming loop
+   }  // end consumer code
+   else  // parent process - the producer
+   { 
+        signal (SIGINT, Socket::producerHandler);  // catch SIGINT
+        std::cout << "I am the producer\n";
+
+        // producing loop
+        while (true)
+      {
+            std::cout << "Producer attempting write\n";
+            Message prodMsg;
+            prodMsg.type = PROD_MSG;
+            prodMsg.data = 0;//INSERT MESSAGE HERE !!!!!!
+
+            // send message - should test for error
+            msgsnd(Socket::msgqid, &prodMsg, sizeof(int), 0);
+            std::cout << "Producer sent: " << prodMsg.data << std::endl;
+            sleep(0.1);  // 0.1s
+      }  // end producing loop
+   }  // end producer code
+
+//STOP maybe woanders hin
+
+
+
+
     }
 
     double MobileRobot::calculateYaw(Pose* qA)

@@ -137,6 +137,25 @@ MobileRobot
 
         std::string receiveData(char* buffer, ssize_t size);
 
+
+        //memory stuff
+        void producerHandler (int sig);  // Signal handler for the producer
+        void consumerHandler (int sig);  // Signal handler for the consumer
+
+        struct Message           // Format of the messages
+        {
+            int type;            // message type, required
+            int data;             // item is an int, can by anything
+        };
+        enum MessageType { PROD_MSG=1, CONS_MSG };
+        // CONS_MSG is not used in this program, since the consumer doesn't
+        // send messages to the producer.  Can also have more than 2 types
+        // of messages if needed.
+
+        int msgqid;                // Message queue id
+        pid_t child_pid;           // Result of fork(); global for sig handler
+        
+
     private:
         int client_fd;
         ssize_t valread;
