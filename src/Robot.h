@@ -5,6 +5,10 @@
 #include <cstring>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
 #include <arpa/inet.h> 
 #include <netinet/in.h>
 #include <nlohmann/json.hpp>
@@ -16,6 +20,7 @@
 #include <vector>
 #include "matplotlibcpp.h"
 
+>>>>>>> 5f60fb3f (	modified:   src/Robot.cpp)
 
 #define RCVBUFSIZE 100000   /* Size of receive buffer */
 
@@ -85,14 +90,24 @@ MobileRobot
     public:
         MobileRobot();
         ~MobileRobot();
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> 5f60fb3f (	modified:   src/Robot.cpp)
         void publishCmdVel(double* linear_x, double* angular_z);
         bool linearController(Robot::Pose goalPose, Robot::Pose currentPose);
         bool pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta);
         bool limitControllerVariables(Twist* cmdVel, double upperLimit, double lowerLimit);
         bool convertQuaternionsToEuler(Pose* currentAngle);
         int goTo(Pose* goalPose, Pose* currentPose);
+<<<<<<< HEAD
         bool run(char* ip);
         void setIP(char* ipAdress);
+=======
+        bool run();
+
+>>>>>>> 5f60fb3f (	modified:   src/Robot.cpp)
 
     protected:
         double calculateTotalDistance(Robot::Pose diffPose);
@@ -107,7 +122,11 @@ MobileRobot
         double angleDiff(double angle1, double angle2);
         bool orientationController(Robot::Pose goalPose, Robot::Pose currentPose);
         Robot::Pose robotPose;
+<<<<<<< HEAD
         void arrivedEndgoal();
+=======
+>>>>>>> Stashed changes
+>>>>>>> 5f60fb3f (	modified:   src/Robot.cpp)
 
     private:
         char* ip;
@@ -163,6 +182,7 @@ MobileRobot
 
     };
 
+<<<<<<< HEAD
     //COCO//
 
 
@@ -210,6 +230,33 @@ MobileRobot
 
     //COCO//
 
+=======
+<<<<<<< Updated upstream
+=======
+    class SharedMemories
+    {
+        public:
+        void producerHandler (int sig);  // Signal handler for the producer
+        void consumerHandler (int sig);  // Signal handler for the consumer
+
+        struct Message           // Format of the messages
+        {
+            int type;            // message type
+            int data;             // content of the message
+        };
+        enum MessageType { PROD_MSG=1, CONS_MSG };
+        //used to differentiate bewteen the sender of the message
+
+        int msgqid;                // identifier of the message queue
+        pid_t child_pid;           // identifier of the forked process
+        
+
+
+    }
+    //COCO//
+
+>>>>>>> Stashed changes
+>>>>>>> 5f60fb3f (	modified:   src/Robot.cpp)
 
 }
 
