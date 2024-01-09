@@ -20,7 +20,7 @@
 #include <vector>
 #include "matplotlibcpp.h"
 
->>>>>>> 5f60fb3f (	modified:   src/Robot.cpp)
+>>>>>>> Stashed changes
 
 #define RCVBUFSIZE 100000   /* Size of receive buffer */
 
@@ -90,11 +90,8 @@ MobileRobot
     public:
         MobileRobot();
         ~MobileRobot();
-<<<<<<< HEAD
-=======
 <<<<<<< Updated upstream
 =======
->>>>>>> 5f60fb3f (	modified:   src/Robot.cpp)
         void publishCmdVel(double* linear_x, double* angular_z);
         bool linearController(Robot::Pose goalPose, Robot::Pose currentPose);
         bool pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta);
@@ -122,39 +119,29 @@ MobileRobot
         double angleDiff(double angle1, double angle2);
         bool orientationController(Robot::Pose goalPose, Robot::Pose currentPose);
         Robot::Pose robotPose;
-<<<<<<< HEAD
-        void arrivedEndgoal();
-=======
 >>>>>>> Stashed changes
->>>>>>> 5f60fb3f (	modified:   src/Robot.cpp)
 
     private:
-        char* ip;
-        Robot::Pose diffPose;
-        Robot::Twist cmdVel;
-        int sequenceNumber = 1;
-        float robotVector[2] = { 0 , 0 };
-        float distanceVector[2] = { 0 , 0 };
-        double totalDistance = 0;
-        double gamma = 0;
-        double alpha = 0;
-        double beta = 0;
-        double dt = 0;
+        double scanMsg;
+        double odomMsg;
+        double cmdVelMsg;
     };
 
 
     class TCPClient: public MobileRobot
     {
     public:
-        TCPClient(const char* serverIP, int port);
-        
-        ~TCPClient();
-
-        void closeTCPconnection();
-
-        void sendData(const char* data);
-
-        std::string receiveData(char* buffer, ssize_t size);
+        Socket(const char *serverIP, const char *echoString, unsigned short echoServPort = 7);
+        ~Socket();
+        void establishConnection();
+        void sendAndReceiveData();
+        unsigned int getEchoStringLen() const;
+        int getSock() const;
+        char *getEchoBuffer();
+        void sendData();
+        void receiveData();
+        //const int totalBytesRcvd = 0;
+        //int bytesRcvd, totalBytesRcvd; /* Bytes read in single recv() and total bytes read */
 
 
         //memory stuff
@@ -176,87 +163,52 @@ MobileRobot
         
 
     private:
-        int client_fd;
-        ssize_t valread;
-        struct sockaddr_in serv_addr;
+        int sock;                        /* Socket descriptor */
+        struct sockaddr_in echoServAddr; /* Echo server address */
+        const char *servIP;               /* Server IP address (dotted quad) */
+        const char *echoString;           /* String to send to the echo server */
+        unsigned int echoStringLen;      /* Length of the string to echo */
+        char echoBuffer[RCVBUFSIZE];     /* Buffer for echo string */
+        int bytesRcvd, totalBytesRcvd;   /* Bytes read in single recv() and total bytes read */
+        unsigned short echoServPort;     /* Echo server port */
+        unsigned short odomPort = 9998;     /* Echo server port */
+        unsigned short scanPort = 9997;     /* Echo server port */
+
+
 
     };
 
-<<<<<<< HEAD
-    //COCO//
-
-
-    class JsonHandler
-    {
-        public:
-            JsonHandler();
-            ~JsonHandler();
-
-            nlohmann::json extractJson(std::string rawData);
-            std::string JsonOutputter(const std::string key);
-            std::string StringtoRaw(std::string normalString);
-
-            nlohmann::json get_jsonData();
-
-        private:
-            nlohmann::json jsonData;
-
-    };
-
-    class PCA
-    {
-        public:
-            PCA();
-            ~PCA();
-
-            void runPCA(std::vector<double> rawLaserScan);  
-            Eigen::MatrixXd PolarToCartesian(Eigen::VectorXd laserScanData);
-            void FilterLaserscan(Eigen::MatrixXd laserScanData, int filterTolerance);
-            Eigen::VectorXd computePCA(const Eigen::MatrixXd &data);
-            void plotData(Eigen::MatrixXd laserScanData, Eigen::VectorXd PCA_vector);
-            Eigen::VectorXd getAngleDifference();
-            Eigen::MatrixXd getFilteredLeftScanData();
-            Eigen::MatrixXd getFilteredRightScanData();
-            Eigen::VectorXd getPCA_Left();
-            Eigen::VectorXd getPCA_Right();
-
-        private:
-            Eigen::MatrixXd filteredLaserScanLeftSide;
-            Eigen::MatrixXd filteredLaserScanRightSide;
-            Eigen::VectorXd PCA_Left;
-            Eigen::VectorXd PCA_Right;
-
-    };
-
-    //COCO//
-
-=======
 <<<<<<< Updated upstream
 =======
     class SharedMemories
     {
         public:
-        void producerHandler (int sig);  // Signal handler for the producer
-        void consumerHandler (int sig);  // Signal handler for the consumer
+            SharedMemories();
+            ~SharedMemories();
+            void startupMemories();
 
-        struct Message           // Format of the messages
-        {
-            int type;            // message type
-            int data;             // content of the message
-        };
-        enum MessageType { PROD_MSG=1, CONS_MSG };
-        //used to differentiate bewteen the sender of the message
+            static void producerHandler(int sig);
+            static void consumerHandler(int sig);
 
-        int msgqid;                // identifier of the message queue
-        pid_t child_pid;           // identifier of the forked process
-        
+            struct Message
+            {
+                long type; // Use long for message type
+                int data;  // Content of the message
+            };
 
+            enum MessageType
+            {
+                PROD_MSG = 1,
+                CONS_MSG
+            };
+
+            int msgqid;      // Identifier of the message queue
+            pid_t child_pid; // Identifier of the forked process
 
     }
     //COCO//
 
 >>>>>>> Stashed changes
->>>>>>> 5f60fb3f (	modified:   src/Robot.cpp)
 
 }
 
