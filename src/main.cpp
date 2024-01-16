@@ -4,16 +4,21 @@
 
 int main(int argc, char *argv[]) {
 
-    char buffer[8192] = {};
-    double i = 0;
-
-    Robot::TCPClient client("127.0.0.1", 8080);
-
 
     while(true)
     {
         
-        client.getOdom(client.receiveData(buffer, sizeof(buffer)));
+        Robot::MobileRobot turtle;
+
+        std::cout << argc << std::endl;
+        std::cout << argv[1] << std::endl;
+
+        while(true)
+        {
+            turtle.run();
+        }
+
+        return 0;
         
     }
 

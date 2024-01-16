@@ -9,7 +9,7 @@
 #include <netinet/in.h>
 #include <nlohmann/json.hpp>
 #include <Eigen/Geometry> 
-#include <SFML/Graphics.hpp>
+//#include <SFML/Graphics.hpp>
 #include <vector>
 #include <chrono>
 
@@ -129,7 +129,7 @@ MobileRobot
 
         void sendData(const char* data);
 
-        void receiveData(char* buffer, ssize_t size);
+        std::string receiveData(char* buffer, ssize_t size);
 
     private:
         int client_fd;

@@ -1,0 +1,16 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-src/unsupported/test/dgmres.cpp"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"BuildUnsupported"
+		],
+		"name" : "dgmres_2"
+	}
+}

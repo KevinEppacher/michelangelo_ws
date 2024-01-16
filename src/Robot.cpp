@@ -271,17 +271,15 @@ namespace Robot
     bool MobileRobot::run()
     {
 
-///////////////////////////////////////////////////////////////////////////////////////
-//      Cocooooooo, füg dein Shit hier bei den 420is hinzu
-///////////////////////////////////////////////////////////////////////////////////////
-
         Robot::Pose currentPose;
         Robot::JsonHandler dataHandler;
         nlohmann :: json json;
+        char buffer[8192] = {};
+        Robot::TCPClient client("192.168.100.52", 9997);
 
-        dataHandler.extractJson(receivedData);
+        //dataHandler.extractJson(receivedData);
 
-        json = dataHandler.extractJson(receivedData);
+        json = dataHandler.extractJson(client.receiveData(buffer, sizeof(buffer)));
 
         //Position
         std::cout << "x-value position: " << std::endl;
@@ -430,11 +428,12 @@ TCP Client
         close(client_fd);
     }
 
-    void TCPClient::receiveData(char* buffer, ssize_t size) 
+    std::string TCPClient::receiveData(char* buffer, ssize_t size) 
     {
         valread = read(client_fd, buffer, size - 1);
         buffer[valread] = '\0'; // Null-terminator hinzufügen
         std::cout << buffer << std::endl;
+        return buffer;
     }
 
 
@@ -471,19 +470,17 @@ JsonHandler
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
 
-        //COCO//
-
     JsonHandler::JsonHandler()
         {
             std::cout << "Json handler has risen from the depth of unexistence into existence" << std::endl;
         }
 
-        JsonHandler::~JsonHandler()
+    JsonHandler::~JsonHandler()
         {
             std::cout << "JsonHandler destroyed" << std::endl;
         }
 
-        nlohmann::json JsonHandler::extractJson(std::string rawData)
+    nlohmann::json JsonHandler::extractJson(std::string rawData)
         {
             std::string jsonStr;
             std::string startDelimiter = "---START---";
@@ -511,7 +508,7 @@ JsonHandler
             return jsonData;
         }
 
-        std::string JsonHandler::JsonOutputter(const std::string key)
+    std::string JsonHandler::JsonOutputter(const std::string key)
         {
             try 
             {
@@ -533,7 +530,7 @@ JsonHandler
             }
         }
 
-        std::string JsonHandler::StringtoRaw(std::string normalString)
+    std::string JsonHandler::StringtoRaw(std::string normalString)
         {
             std::ostringstream oss;
             oss << "R\"(";
@@ -541,12 +538,12 @@ JsonHandler
             return oss.str();
         }
 
-        nlohmann::json JsonHandler::get_jsonData()
+    nlohmann::json JsonHandler::get_jsonData()
         {
             return jsonData;
         }
 
-    Robot::Pose TCPClient::getOdom(std::string receivedData)
+/*     Robot::Pose TCPClient::getOdom(std::string receivedData)
     {
         Robot::Pose odom_pose;
         Robot::JsonHandler dataHandler;
@@ -600,7 +597,7 @@ JsonHandler
 
         //Loop?
 
-/*         odom_pose.position.x =
+         odom_pose.position.x =
         odom_pose.position.y =
         odom_pose.position.z =
         odom_pose.position.vx = 
@@ -611,13 +608,13 @@ JsonHandler
         odom_pose.orientation.yaw = 
         odom_pose.orientation.vRoll = 
         odom_pose.orientation.vPitch = 
-        odom_pose.orientation.vYaw =  */
+        odom_pose.orientation.vYaw =  
 
         //push to shared memory
 
         return odom_pose;
     };
-
+ */
         //COCO//
 
     

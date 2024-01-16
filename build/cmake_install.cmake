@@ -1,4 +1,4 @@
-# Install script for directory: /home/kevin/michelangelo_ws
+# Install script for directory: /home/cocokayya18/Advanced Programming for Robots/michelangelo_ws
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -37,6 +37,18 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
+# Set default install directory permissions.
+if(NOT DEFINED CMAKE_OBJDUMP)
+  set(CMAKE_OBJDUMP "/usr/bin/objdump")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for each subdirectory.
+  include("/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/json-build/cmake_install.cmake")
+  include("/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-build/cmake_install.cmake")
+
+endif()
+
 if(CMAKE_INSTALL_COMPONENT)
   set(CMAKE_INSTALL_MANIFEST "install_manifest_${CMAKE_INSTALL_COMPONENT}.txt")
 else()
@@ -45,5 +57,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/kevin/michelangelo_ws/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
