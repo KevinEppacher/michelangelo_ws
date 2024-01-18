@@ -284,6 +284,9 @@ namespace Robot
         char buffer[16000] = {};
         Robot::TCPClient client(ip, 9997);
 
+
+        //received data = sharedMemory !!! // @julian
+
         //dataHandler.extractJson(receivedData);
 
         json = dataHandler.extractJson(client.receiveData(buffer, sizeof(buffer)));
@@ -356,25 +359,27 @@ namespace Robot
         goalPose1.position.x = 1.0;
         goalPose1.position.y = 0.0;
         goalPose1.orientation.z = 0;
-        goalPose1.tolerance = 0.2;
+        goalPose1.tolerance = 0.1;
 
         goalPose2.index = 2;
-        goalPose2.position.x = 2.0;
-        goalPose2.position.y = -1.0;
+        goalPose2.position.x = 0.0;
+        goalPose2.position.y = 1.0;
         goalPose2.orientation.z = 0;
-        goalPose2.tolerance = 0.2;
+        goalPose2.tolerance = 0.1;
 
         goalPose3.index = 3;
-        goalPose3.position.x = 3;
+        goalPose3.position.x = -1;
         goalPose3.position.y = 0;
-        goalPose3.orientation.z = M_PI/2;
-        goalPose3.tolerance = 0.2;
+        goalPose3.orientation.z = 0;
+        //goalPose3.orientation.z = M_PI/2;
+        goalPose3.tolerance = 0.1;
 
         goalPose4.index = 4;
-        goalPose4.position.x = 2;
-        goalPose4.position.y = 1;
-        goalPose4.orientation.z = -M_PI/2;
-        goalPose4.tolerance = 0.2;
+        goalPose4.position.x = 0;
+        goalPose4.position.y = -1;
+        goalPose3.orientation.z = 0;
+        //goalPose4.orientation.z = -M_PI/2;
+        goalPose4.tolerance = 0.1;
 
         if(goalPose1.index == sequenceNumber) goTo(&goalPose1, &currentPose);
         if(goalPose2.index == sequenceNumber) goTo(&goalPose2, &currentPose);

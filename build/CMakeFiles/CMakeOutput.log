@@ -966,3 +966,20 @@ gmake[1]: Leaving directory '/home/cocokayya18/Advanced Programming for Robots/m
 
 Source file was:
 int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_std=cpp03 succeeded with the following output:
+Change Dir: /home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_1c783/fast && gmake[1]: Entering directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+/usr/bin/gmake  -f CMakeFiles/cmTC_1c783.dir/build.make CMakeFiles/cmTC_1c783.dir/build
+gmake[2]: Entering directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_1c783.dir/src.cxx.o
+/usr/bin/c++ -DCOMPILER_SUPPORT_std=cpp03  -std=c++03 -o CMakeFiles/cmTC_1c783.dir/src.cxx.o -c "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
+Linking CXX executable cmTC_1c783
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1c783.dir/link.txt --verbose=1
+/usr/bin/c++ CMakeFiles/cmTC_1c783.dir/src.cxx.o -o cmTC_1c783 
+gmake[2]: Leaving directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+gmake[1]: Leaving directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main() { return 0; }
