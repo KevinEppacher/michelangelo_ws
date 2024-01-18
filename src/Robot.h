@@ -9,6 +9,15 @@
 #include <netinet/in.h>
 #include <nlohmann/json.hpp>
 #include <Eigen/Geometry> 
+#include <SFML/Graphics.hpp>
+#include <vector>
+#include <chrono>
+#include <stdlib.h> 
+
+#include <arpa/inet.h> 
+#include <netinet/in.h>
+#include <nlohmann/json.hpp>
+#include <Eigen/Geometry> 
 //#include <SFML/Graphics.hpp>
 #include <vector>
 #include <chrono>
@@ -90,6 +99,28 @@ MobileRobot
         int goTo(Pose* goalPose, Pose* currentPose);
         bool run();
 
+
+    protected:
+        double calculateTotalDistance(Robot::Pose diffPose);
+        double calculateGamma(Robot::Pose diffPose);
+        double calculateAlpha(double gamma, Robot::Pose currentAngle);
+        double calculateBeta(Robot::Pose goalPose, double gamma);
+        bool calculateRobotVektor();
+        bool calculateVektorFromRobotToGoal();
+        double calculateYaw(Pose* qA);
+        double calculateRoll(Pose* qA);
+        double calculatePitch(Pose* qA);
+        double angleDiff(double angle1, double angle2);
+        bool orientationController(Robot::Pose goalPose, Robot::Pose currentPose);
+        Robot::Pose robotPose;
+        void publishCmdVel(double* linear_x, double* angular_z);
+        bool linearController(Robot::Pose goalPose, Robot::Pose currentPose);
+        bool pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta);
+        bool limitControllerVariables(Twist* cmdVel, double upperLimit, double lowerLimit);
+        bool convertQuaternionsToEuler(Pose* currentAngle);
+        int goTo(Pose* goalPose, Pose* currentPose);
+        bool run();
+
     protected:
         double calculateTotalDistance(Robot::Pose diffPose);
         double calculateGamma(Robot::Pose diffPose);
@@ -129,7 +160,7 @@ MobileRobot
 
         void sendData(const char* data);
 
-        std::string receiveData(char* buffer, ssize_t size);
+        void receiveData(char* buffer, ssize_t size);
 
     private:
         int client_fd;
@@ -158,6 +189,32 @@ MobileRobot
 
     };
 
+    class SharedMemories
+    {
+        public:
+            SharedMemories();
+            ~SharedMemories();
+            void startupMemories();
+
+            static void producerHandler(int sig);
+            static void consumerHandler(int sig);
+
+            struct Message
+            {
+                long type; // Use long for message type
+                int data;  // Content of the message
+            };
+
+            enum MessageType
+            {
+                PROD_MSG = 1,
+                CONS_MSG
+            };
+
+            int msgqid;      // Identifier of the message queue
+            pid_t child_pid; // Identifier of the forked process
+
+    }
     //COCO//
 
 
