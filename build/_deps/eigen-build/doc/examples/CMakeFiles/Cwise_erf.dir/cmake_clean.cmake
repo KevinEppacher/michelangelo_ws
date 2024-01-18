@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Cwise_erf.dir/Cwise_erf.cpp.o"
-  "CMakeFiles/Cwise_erf.dir/Cwise_erf.cpp.o.d"
   "Cwise_erf"
   "Cwise_erf.pdb"
 )

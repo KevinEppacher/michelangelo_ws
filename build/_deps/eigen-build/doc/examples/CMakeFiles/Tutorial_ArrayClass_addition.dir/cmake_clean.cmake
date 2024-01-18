@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Tutorial_ArrayClass_addition.dir/Tutorial_ArrayClass_addition.cpp.o"
-  "CMakeFiles/Tutorial_ArrayClass_addition.dir/Tutorial_ArrayClass_addition.cpp.o.d"
   "Tutorial_ArrayClass_addition"
   "Tutorial_ArrayClass_addition.pdb"
 )

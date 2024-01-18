@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/example_MatrixLogarithm.dir/MatrixLogarithm.cpp.o"
-  "CMakeFiles/example_MatrixLogarithm.dir/MatrixLogarithm.cpp.o.d"
   "example_MatrixLogarithm"
   "example_MatrixLogarithm.pdb"
 )

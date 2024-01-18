@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/geo_orthomethods_5.dir/geo_orthomethods.cpp.o"
-  "CMakeFiles/geo_orthomethods_5.dir/geo_orthomethods.cpp.o.d"
   "geo_orthomethods_5"
   "geo_orthomethods_5.pdb"
 )

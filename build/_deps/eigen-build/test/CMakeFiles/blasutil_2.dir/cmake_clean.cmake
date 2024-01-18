@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/blasutil_2.dir/blasutil.cpp.o"
-  "CMakeFiles/blasutil_2.dir/blasutil.cpp.o.d"
   "blasutil_2"
   "blasutil_2.pdb"
 )

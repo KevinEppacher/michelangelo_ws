@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/dontalign_4.dir/dontalign.cpp.o"
-  "CMakeFiles/dontalign_4.dir/dontalign.cpp.o.d"
   "dontalign_4"
   "dontalign_4.pdb"
 )

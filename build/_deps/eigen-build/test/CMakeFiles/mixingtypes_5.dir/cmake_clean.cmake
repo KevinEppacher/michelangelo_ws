@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/mixingtypes_5.dir/mixingtypes.cpp.o"
-  "CMakeFiles/mixingtypes_5.dir/mixingtypes.cpp.o.d"
   "mixingtypes_5"
   "mixingtypes_5.pdb"
 )

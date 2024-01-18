@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/rvalue_types_5.dir/rvalue_types.cpp.o"
-  "CMakeFiles/rvalue_types_5.dir/rvalue_types.cpp.o.d"
   "rvalue_types_5"
   "rvalue_types_5.pdb"
 )

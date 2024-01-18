@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/stdlist_2.dir/stdlist.cpp.o"
-  "CMakeFiles/stdlist_2.dir/stdlist.cpp.o.d"
   "stdlist_2"
   "stdlist_2.pdb"
 )

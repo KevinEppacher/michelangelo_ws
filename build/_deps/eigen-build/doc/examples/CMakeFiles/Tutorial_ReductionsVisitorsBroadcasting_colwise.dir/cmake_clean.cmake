@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Tutorial_ReductionsVisitorsBroadcasting_colwise.dir/Tutorial_ReductionsVisitorsBroadcasting_colwise.cpp.o"
-  "CMakeFiles/Tutorial_ReductionsVisitorsBroadcasting_colwise.dir/Tutorial_ReductionsVisitorsBroadcasting_colwise.cpp.o.d"
   "Tutorial_ReductionsVisitorsBroadcasting_colwise"
   "Tutorial_ReductionsVisitorsBroadcasting_colwise.pdb"
 )

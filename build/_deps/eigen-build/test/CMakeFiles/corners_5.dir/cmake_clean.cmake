@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/corners_5.dir/corners.cpp.o"
-  "CMakeFiles/corners_5.dir/corners.cpp.o.d"
   "corners_5"
   "corners_5.pdb"
 )

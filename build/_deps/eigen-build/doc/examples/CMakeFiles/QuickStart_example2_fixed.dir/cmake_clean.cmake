@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/QuickStart_example2_fixed.dir/QuickStart_example2_fixed.cpp.o"
-  "CMakeFiles/QuickStart_example2_fixed.dir/QuickStart_example2_fixed.cpp.o.d"
   "QuickStart_example2_fixed"
   "QuickStart_example2_fixed.pdb"
 )

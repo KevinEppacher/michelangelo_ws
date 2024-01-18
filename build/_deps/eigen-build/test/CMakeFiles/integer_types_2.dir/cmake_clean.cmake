@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/integer_types_2.dir/integer_types.cpp.o"
-  "CMakeFiles/integer_types_2.dir/integer_types.cpp.o.d"
   "integer_types_2"
   "integer_types_2.pdb"
 )

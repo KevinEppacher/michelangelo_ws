@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/stable_norm_6.dir/stable_norm.cpp.o"
-  "CMakeFiles/stable_norm_6.dir/stable_norm.cpp.o.d"
   "stable_norm_6"
   "stable_norm_6.pdb"
 )

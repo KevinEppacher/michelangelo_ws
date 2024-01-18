@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/eigensolver_int_ok.dir/eigensolver_int.cpp.o"
-  "CMakeFiles/eigensolver_int_ok.dir/eigensolver_int.cpp.o.d"
   "eigensolver_int_ok"
   "eigensolver_int_ok.pdb"
 )

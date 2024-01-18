@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_Tutorial_reshaped_vs_resize_1.dir/compile_Tutorial_reshaped_vs_resize_1.cpp.o"
-  "CMakeFiles/compile_Tutorial_reshaped_vs_resize_1.dir/compile_Tutorial_reshaped_vs_resize_1.cpp.o.d"
   "compile_Tutorial_reshaped_vs_resize_1"
   "compile_Tutorial_reshaped_vs_resize_1.pdb"
 )

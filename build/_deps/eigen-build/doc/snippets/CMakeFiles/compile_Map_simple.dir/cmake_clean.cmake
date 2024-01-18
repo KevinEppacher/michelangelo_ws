@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_Map_simple.dir/compile_Map_simple.cpp.o"
-  "CMakeFiles/compile_Map_simple.dir/compile_Map_simple.cpp.o.d"
   "compile_Map_simple"
   "compile_Map_simple.pdb"
 )

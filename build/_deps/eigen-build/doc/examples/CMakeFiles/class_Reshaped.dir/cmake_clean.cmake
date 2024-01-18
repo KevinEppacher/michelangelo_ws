@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/class_Reshaped.dir/class_Reshaped.cpp.o"
-  "CMakeFiles/class_Reshaped.dir/class_Reshaped.cpp.o.d"
   "class_Reshaped"
   "class_Reshaped.pdb"
 )

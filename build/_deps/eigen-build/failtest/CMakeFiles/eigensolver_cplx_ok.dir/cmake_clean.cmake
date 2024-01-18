@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/eigensolver_cplx_ok.dir/eigensolver_cplx.cpp.o"
-  "CMakeFiles/eigensolver_cplx_ok.dir/eigensolver_cplx.cpp.o.d"
   "eigensolver_cplx_ok"
   "eigensolver_cplx_ok.pdb"
 )

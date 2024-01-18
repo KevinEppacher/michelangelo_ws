@@ -1,89 +1,104 @@
 Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wshorten64to32 failed with the following output:
-Change Dir: /home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp
+Change Dir: /home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_05710/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_05710.dir/build.make CMakeFiles/cmTC_05710.dir/build
-gmake[1]: Entering directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_05710.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wshorten64to32  -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Werror   -Wshorten-64-to-32 -o CMakeFiles/cmTC_05710.dir/src.cxx.o -c "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
-c++: error: unrecognized command-line option '-Wshorten-64-to-32'
-gmake[1]: *** [CMakeFiles/cmTC_05710.dir/build.make:78: CMakeFiles/cmTC_05710.dir/src.cxx.o] Error 1
-gmake[1]: Leaving directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
-gmake: *** [Makefile:127: cmTC_05710/fast] Error 2
+Run Build Command(s):/usr/bin/make cmTC_bfe90/fast && /usr/bin/make -f CMakeFiles/cmTC_bfe90.dir/build.make CMakeFiles/cmTC_bfe90.dir/build
+make[1]: Entering directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_bfe90.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -DCOMPILER_SUPPORT_Wshorten64to32 -Werror   -Wshorten-64-to-32 -o CMakeFiles/cmTC_bfe90.dir/src.cxx.o -c "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
+c++: error: unrecognized command line option '-Wshorten-64-to-32'
+make[1]: *** [CMakeFiles/cmTC_bfe90.dir/build.make:66: CMakeFiles/cmTC_bfe90.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_bfe90/fast] Error 2
+
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wenumconversion failed with the following output:
+Change Dir: /home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_696b5/fast && /usr/bin/make -f CMakeFiles/cmTC_696b5.dir/build.make CMakeFiles/cmTC_696b5.dir/build
+make[1]: Entering directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_696b5.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -DCOMPILER_SUPPORT_Wenumconversion -Werror   -Wenum-conversion -o CMakeFiles/cmTC_696b5.dir/src.cxx.o -c "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
+c++: error: unrecognized command line option '-Wenum-conversion'; did you mean '-Wno-conversion'?
+make[1]: *** [CMakeFiles/cmTC_696b5.dir/build.make:66: CMakeFiles/cmTC_696b5.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_696b5/fast] Error 2
 
 
 Source file was:
 int main() { return 0; }
 Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wcpp11extensions failed with the following output:
-Change Dir: /home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp
+Change Dir: /home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_a0c23/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_a0c23.dir/build.make CMakeFiles/cmTC_a0c23.dir/build
-gmake[1]: Entering directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_a0c23.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Wcpp11extensions  -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Werror   -Wc++11-extensions -o CMakeFiles/cmTC_a0c23.dir/src.cxx.o -c "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
-c++: error: unrecognized command-line option '-Wc++11-extensions'; did you mean '-fms-extensions'?
-gmake[1]: *** [CMakeFiles/cmTC_a0c23.dir/build.make:78: CMakeFiles/cmTC_a0c23.dir/src.cxx.o] Error 1
-gmake[1]: Leaving directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
-gmake: *** [Makefile:127: cmTC_a0c23/fast] Error 2
+Run Build Command(s):/usr/bin/make cmTC_8c524/fast && /usr/bin/make -f CMakeFiles/cmTC_8c524.dir/build.make CMakeFiles/cmTC_8c524.dir/build
+make[1]: Entering directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_8c524.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -DCOMPILER_SUPPORT_Wcpp11extensions -Werror   -Wc++11-extensions -o CMakeFiles/cmTC_8c524.dir/src.cxx.o -c "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
+c++: error: unrecognized command line option '-Wc++11-extensions'; did you mean '-fms-extensions'?
+make[1]: *** [CMakeFiles/cmTC_8c524.dir/build.make:66: CMakeFiles/cmTC_8c524.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_8c524/fast] Error 2
 
 
 Source file was:
 int main() { return 0; }
 Performing C++ SOURCE FILE Test COMPILER_SUPPORT_wd981 failed with the following output:
-Change Dir: /home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp
+Change Dir: /home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_ba47f/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_ba47f.dir/build.make CMakeFiles/cmTC_ba47f.dir/build
-gmake[1]: Entering directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_ba47f.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_wd981  -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -Werror   -wd981 -o CMakeFiles/cmTC_ba47f.dir/src.cxx.o -c "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
-c++: error: unrecognized command-line option '-wd981'
-gmake[1]: *** [CMakeFiles/cmTC_ba47f.dir/build.make:78: CMakeFiles/cmTC_ba47f.dir/src.cxx.o] Error 1
-gmake[1]: Leaving directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
-gmake: *** [Makefile:127: cmTC_ba47f/fast] Error 2
+Run Build Command(s):/usr/bin/make cmTC_ff050/fast && /usr/bin/make -f CMakeFiles/cmTC_ff050.dir/build.make CMakeFiles/cmTC_ff050.dir/build
+make[1]: Entering directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_ff050.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_wd981 -Werror   -wd981 -o CMakeFiles/cmTC_ff050.dir/src.cxx.o -c "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
+c++: error: unrecognized command line option '-wd981'
+make[1]: *** [CMakeFiles/cmTC_ff050.dir/build.make:66: CMakeFiles/cmTC_ff050.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_ff050/fast] Error 2
 
 
 Source file was:
 int main() { return 0; }
 Performing C++ SOURCE FILE Test COMPILER_SUPPORT_wd2304 failed with the following output:
-Change Dir: /home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp
+Change Dir: /home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_cd04b/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_cd04b.dir/build.make CMakeFiles/cmTC_cd04b.dir/build
-gmake[1]: Entering directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_cd04b.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_wd2304  -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -Werror   -wd2304 -o CMakeFiles/cmTC_cd04b.dir/src.cxx.o -c "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
-c++: error: unrecognized command-line option '-wd2304'
-gmake[1]: *** [CMakeFiles/cmTC_cd04b.dir/build.make:78: CMakeFiles/cmTC_cd04b.dir/src.cxx.o] Error 1
-gmake[1]: Leaving directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
-gmake: *** [Makefile:127: cmTC_cd04b/fast] Error 2
+Run Build Command(s):/usr/bin/make cmTC_24381/fast && /usr/bin/make -f CMakeFiles/cmTC_24381.dir/build.make CMakeFiles/cmTC_24381.dir/build
+make[1]: Entering directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_24381.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_wd2304 -Werror   -wd2304 -o CMakeFiles/cmTC_24381.dir/src.cxx.o -c "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
+c++: error: unrecognized command line option '-wd2304'
+make[1]: *** [CMakeFiles/cmTC_24381.dir/build.make:66: CMakeFiles/cmTC_24381.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_24381/fast] Error 2
 
 
 Source file was:
 int main() { return 0; }
 Performing C++ SOURCE FILE Test COMPILER_SUPPORT_STRICTANSI failed with the following output:
-Change Dir: /home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp
+Change Dir: /home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_0bc72/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0bc72.dir/build.make CMakeFiles/cmTC_0bc72.dir/build
-gmake[1]: Entering directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_0bc72.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_STRICTANSI  -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -Werror   -strict-ansi -o CMakeFiles/cmTC_0bc72.dir/src.cxx.o -c "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
-c++: error: unrecognized command-line option '-strict-ansi'; did you mean '-fstrict-enums'?
-gmake[1]: *** [CMakeFiles/cmTC_0bc72.dir/build.make:78: CMakeFiles/cmTC_0bc72.dir/src.cxx.o] Error 1
-gmake[1]: Leaving directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
-gmake: *** [Makefile:127: cmTC_0bc72/fast] Error 2
+Run Build Command(s):/usr/bin/make cmTC_5ca8e/fast && /usr/bin/make -f CMakeFiles/cmTC_5ca8e.dir/build.make CMakeFiles/cmTC_5ca8e.dir/build
+make[1]: Entering directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_5ca8e.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_STRICTANSI -Werror   -strict-ansi -o CMakeFiles/cmTC_5ca8e.dir/src.cxx.o -c "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
+c++: error: unrecognized command line option '-strict-ansi'; did you mean '-fstrict-enums'?
+make[1]: *** [CMakeFiles/cmTC_5ca8e.dir/build.make:66: CMakeFiles/cmTC_5ca8e.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_5ca8e/fast] Error 2
 
 
 Source file was:
 int main() { return 0; }
 Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Qunusedarguments failed with the following output:
-Change Dir: /home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp
+Change Dir: /home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake -f Makefile cmTC_82e34/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_82e34.dir/build.make CMakeFiles/cmTC_82e34.dir/build
-gmake[1]: Entering directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_82e34.dir/src.cxx.o
-/usr/bin/c++ -DCOMPILER_SUPPORT_Qunusedarguments  -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -Werror   -Qunused-arguments -o CMakeFiles/cmTC_82e34.dir/src.cxx.o -c "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
-c++: error: unrecognized command-line option '-Qunused-arguments'
-gmake[1]: *** [CMakeFiles/cmTC_82e34.dir/build.make:78: CMakeFiles/cmTC_82e34.dir/src.cxx.o] Error 1
-gmake[1]: Leaving directory '/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/CMakeFiles/CMakeTmp'
-gmake: *** [Makefile:127: cmTC_82e34/fast] Error 2
+Run Build Command(s):/usr/bin/make cmTC_705d9/fast && /usr/bin/make -f CMakeFiles/cmTC_705d9.dir/build.make CMakeFiles/cmTC_705d9.dir/build
+make[1]: Entering directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_705d9.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_Qunusedarguments -Werror   -Qunused-arguments -o CMakeFiles/cmTC_705d9.dir/src.cxx.o -c "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx"
+c++: error: unrecognized command line option '-Qunused-arguments'
+make[1]: *** [CMakeFiles/cmTC_705d9.dir/build.make:66: CMakeFiles/cmTC_705d9.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_705d9/fast] Error 2
 
 
 Source file was:
@@ -99,6 +114,64 @@ CMake Error at CMakeLists.txt:2 (project):
 
 
 -- Configuring incomplete, errors occurred!
-See also "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-build/test/CMakeFiles/CheckFortran/CMakeFiles/CMakeOutput.log".
-See also "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-build/test/CMakeFiles/CheckFortran/CMakeFiles/CMakeError.log".
+See also "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-build/test/CMakeFiles/CheckFortran/CMakeFiles/CMakeOutput.log".
+See also "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-build/test/CMakeFiles/CheckFortran/CMakeFiles/CMakeError.log".
+
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_8081a/fast && /usr/bin/make -f CMakeFiles/cmTC_8081a.dir/build.make CMakeFiles/cmTC_8081a.dir/build
+make[1]: Entering directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8081a.dir/src.c.o
+/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_8081a.dir/src.c.o   -c "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.c"
+Linking C executable cmTC_8081a
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8081a.dir/link.txt --verbose=1
+/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD    CMakeFiles/cmTC_8081a.dir/src.c.o  -o cmTC_8081a 
+/usr/bin/ld: CMakeFiles/cmTC_8081a.dir/src.c.o: in function `main':
+src.c:(.text+0x46): undefined reference to `pthread_create'
+/usr/bin/ld: src.c:(.text+0x52): undefined reference to `pthread_detach'
+/usr/bin/ld: src.c:(.text+0x63): undefined reference to `pthread_join'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_8081a.dir/build.make:87: cmTC_8081a] Error 1
+make[1]: Leaving directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_8081a/fast] Error 2
+
+
+Source file was:
+#include <pthread.h>
+
+void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_926af/fast && /usr/bin/make -f CMakeFiles/cmTC_926af.dir/build.make CMakeFiles/cmTC_926af.dir/build
+make[1]: Entering directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_926af.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_926af.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_926af
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_926af.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_926af.dir/CheckFunctionExists.c.o  -o cmTC_926af  -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_926af.dir/build.make:87: cmTC_926af] Error 1
+make[1]: Leaving directory '/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_926af/fast] Error 2
+
+
 

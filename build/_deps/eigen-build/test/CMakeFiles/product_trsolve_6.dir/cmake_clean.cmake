@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/product_trsolve_6.dir/product_trsolve.cpp.o"
-  "CMakeFiles/product_trsolve_6.dir/product_trsolve.cpp.o.d"
   "product_trsolve_6"
   "product_trsolve_6.pdb"
 )

@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/umeyama_5.dir/umeyama.cpp.o"
-  "CMakeFiles/umeyama_5.dir/umeyama.cpp.o.d"
   "umeyama_5"
   "umeyama_5.pdb"
 )

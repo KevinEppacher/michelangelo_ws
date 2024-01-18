@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/spsolver.dir/sp_solver.cpp.o"
-  "CMakeFiles/spsolver.dir/sp_solver.cpp.o.d"
   "spsolver"
   "spsolver.pdb"
 )

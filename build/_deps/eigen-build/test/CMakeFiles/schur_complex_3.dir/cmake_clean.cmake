@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/schur_complex_3.dir/schur_complex.cpp.o"
-  "CMakeFiles/schur_complex_3.dir/schur_complex.cpp.o.d"
   "schur_complex_3"
   "schur_complex_3.pdb"
 )

@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/stdlist_overload_5.dir/stdlist_overload.cpp.o"
-  "CMakeFiles/stdlist_overload_5.dir/stdlist_overload.cpp.o.d"
   "stdlist_overload_5"
   "stdlist_overload_5.pdb"
 )

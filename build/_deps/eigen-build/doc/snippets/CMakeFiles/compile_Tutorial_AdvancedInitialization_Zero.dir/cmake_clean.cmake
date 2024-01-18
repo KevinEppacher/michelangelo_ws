@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_Tutorial_AdvancedInitialization_Zero.dir/compile_Tutorial_AdvancedInitialization_Zero.cpp.o"
-  "CMakeFiles/compile_Tutorial_AdvancedInitialization_Zero.dir/compile_Tutorial_AdvancedInitialization_Zero.cpp.o.d"
   "compile_Tutorial_AdvancedInitialization_Zero"
   "compile_Tutorial_AdvancedInitialization_Zero.pdb"
 )

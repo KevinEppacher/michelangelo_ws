@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/sparse_storage_mismatch_ok.dir/sparse_storage_mismatch.cpp.o"
-  "CMakeFiles/sparse_storage_mismatch_ok.dir/sparse_storage_mismatch.cpp.o.d"
   "sparse_storage_mismatch_ok"
   "sparse_storage_mismatch_ok.pdb"
 )

@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/example_MatrixExponential.dir/MatrixExponential.cpp.o"
-  "CMakeFiles/example_MatrixExponential.dir/MatrixExponential.cpp.o.d"
   "example_MatrixExponential"
   "example_MatrixExponential.pdb"
 )

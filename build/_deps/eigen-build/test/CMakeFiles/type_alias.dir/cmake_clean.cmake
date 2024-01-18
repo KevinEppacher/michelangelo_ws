@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/type_alias.dir/type_alias.cpp.o"
-  "CMakeFiles/type_alias.dir/type_alias.cpp.o.d"
   "type_alias"
   "type_alias.pdb"
 )

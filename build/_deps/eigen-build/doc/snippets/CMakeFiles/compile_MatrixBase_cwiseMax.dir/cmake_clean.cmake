@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_MatrixBase_cwiseMax.dir/compile_MatrixBase_cwiseMax.cpp.o"
-  "CMakeFiles/compile_MatrixBase_cwiseMax.dir/compile_MatrixBase_cwiseMax.cpp.o.d"
   "compile_MatrixBase_cwiseMax"
   "compile_MatrixBase_cwiseMax.pdb"
 )

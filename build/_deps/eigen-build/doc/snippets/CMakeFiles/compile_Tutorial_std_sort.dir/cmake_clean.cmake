@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_Tutorial_std_sort.dir/compile_Tutorial_std_sort.cpp.o"
-  "CMakeFiles/compile_Tutorial_std_sort.dir/compile_Tutorial_std_sort.cpp.o.d"
   "compile_Tutorial_std_sort"
   "compile_Tutorial_std_sort.pdb"
 )

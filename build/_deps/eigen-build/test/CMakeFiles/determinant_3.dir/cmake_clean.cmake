@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/determinant_3.dir/determinant.cpp.o"
-  "CMakeFiles/determinant_3.dir/determinant.cpp.o.d"
   "determinant_3"
   "determinant_3.pdb"
 )

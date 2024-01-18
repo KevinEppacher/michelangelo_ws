@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/indexed_view_3.dir/indexed_view.cpp.o"
-  "CMakeFiles/indexed_view_3.dir/indexed_view.cpp.o.d"
   "indexed_view_3"
   "indexed_view_3.pdb"
 )

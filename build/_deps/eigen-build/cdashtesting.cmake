@@ -1,9 +1,9 @@
 
-set(CTEST_SOURCE_DIRECTORY  "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws")
-set(CTEST_BINARY_DIRECTORY  "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build")
+set(CTEST_SOURCE_DIRECTORY  "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws")
+set(CTEST_BINARY_DIRECTORY  "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build")
 set(CTEST_CMAKE_GENERATOR   "Unix Makefiles")
-set(CTEST_BUILD_NAME        "linux-5.15.133.1-microsoft-standard-wsl2-_-11.4.0-sse2-64bit")
-set(CTEST_SITE              "cocossurface2")
+set(CTEST_BUILD_NAME        "linux-5.15.0-91-generic-_-9.4.0-sse2-64bit")
+set(CTEST_SITE              "JulianLaptop")
 
 set(MODEL Experimental)
 if(${CTEST_SCRIPT_ARG} MATCHES Nightly)

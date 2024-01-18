@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/schur_real_1.dir/schur_real.cpp.o"
-  "CMakeFiles/schur_real_1.dir/schur_real.cpp.o.d"
   "schur_real_1"
   "schur_real_1.pdb"
 )

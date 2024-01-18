@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/ldlt_int_ok.dir/ldlt_int.cpp.o"
-  "CMakeFiles/ldlt_int_ok.dir/ldlt_int.cpp.o.d"
   "ldlt_int_ok"
   "ldlt_int_ok.pdb"
 )

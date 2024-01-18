@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_PartialRedux_prod.dir/compile_PartialRedux_prod.cpp.o"
-  "CMakeFiles/compile_PartialRedux_prod.dir/compile_PartialRedux_prod.cpp.o.d"
   "compile_PartialRedux_prod"
   "compile_PartialRedux_prod.pdb"
 )

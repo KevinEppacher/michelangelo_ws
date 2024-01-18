@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/colpivqr_int_ok.dir/colpivqr_int.cpp.o"
-  "CMakeFiles/colpivqr_int_ok.dir/colpivqr_int.cpp.o.d"
   "colpivqr_int_ok"
   "colpivqr_int_ok.pdb"
 )

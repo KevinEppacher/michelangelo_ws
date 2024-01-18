@@ -169,9 +169,9 @@ targets_to_make=$(echo "$TESTSLIST" | grep -E "$1" | xargs echo)
 
 if [ -n "${EIGEN_MAKE_ARGS:+x}" ]
 then
-  /usr/bin/gmake $targets_to_make ${EIGEN_MAKE_ARGS}
+  /usr/bin/make $targets_to_make ${EIGEN_MAKE_ARGS}
 else
-  /usr/bin/gmake $targets_to_make 
+  /usr/bin/make $targets_to_make 
 fi
 exit $?
 

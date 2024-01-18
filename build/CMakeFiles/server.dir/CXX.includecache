@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/src/server.cpp
+iostream
+-
+cstring
+-
+netinet/in.h
+-
+unistd.h
+-
+

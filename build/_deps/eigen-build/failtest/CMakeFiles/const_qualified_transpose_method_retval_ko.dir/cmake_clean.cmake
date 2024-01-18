@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/const_qualified_transpose_method_retval_ko.dir/const_qualified_transpose_method_retval.cpp.o"
-  "CMakeFiles/const_qualified_transpose_method_retval_ko.dir/const_qualified_transpose_method_retval.cpp.o.d"
   "const_qualified_transpose_method_retval_ko"
   "const_qualified_transpose_method_retval_ko.pdb"
 )

@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/geo_homogeneous_3.dir/geo_homogeneous.cpp.o"
-  "CMakeFiles/geo_homogeneous_3.dir/geo_homogeneous.cpp.o.d"
   "geo_homogeneous_3"
   "geo_homogeneous_3.pdb"
 )

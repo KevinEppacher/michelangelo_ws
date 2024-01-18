@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/sparse_vector_1.dir/sparse_vector.cpp.o"
-  "CMakeFiles/sparse_vector_1.dir/sparse_vector.cpp.o.d"
   "sparse_vector_1"
   "sparse_vector_1.pdb"
 )

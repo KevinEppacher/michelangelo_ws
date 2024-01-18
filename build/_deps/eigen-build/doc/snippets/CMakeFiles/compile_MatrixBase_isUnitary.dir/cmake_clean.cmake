@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_MatrixBase_isUnitary.dir/compile_MatrixBase_isUnitary.cpp.o"
-  "CMakeFiles/compile_MatrixBase_isUnitary.dir/compile_MatrixBase_isUnitary.cpp.o.d"
   "compile_MatrixBase_isUnitary"
   "compile_MatrixBase_isUnitary.pdb"
 )

@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_Map_outer_stride.dir/compile_Map_outer_stride.cpp.o"
-  "CMakeFiles/compile_Map_outer_stride.dir/compile_Map_outer_stride.cpp.o.d"
   "compile_Map_outer_stride"
   "compile_Map_outer_stride.pdb"
 )

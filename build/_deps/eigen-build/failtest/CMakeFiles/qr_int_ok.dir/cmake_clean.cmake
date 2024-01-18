@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/qr_int_ok.dir/qr_int.cpp.o"
-  "CMakeFiles/qr_int_ok.dir/qr_int.cpp.o.d"
   "qr_int_ok"
   "qr_int_ok.pdb"
 )

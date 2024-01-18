@@ -1,14 +1,16 @@
-
-# Consider dependencies only in project.
-set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
-
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
+  "CXX"
   )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-src/test/special_numbers.cpp" "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-build/test/CMakeFiles/special_numbers_1.dir/special_numbers.cpp.o"
+  )
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
-# The set of dependency files which are needed:
-set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-src/test/special_numbers.cpp" "_deps/eigen-build/test/CMakeFiles/special_numbers_1.dir/special_numbers.cpp.o" "gcc" "_deps/eigen-build/test/CMakeFiles/special_numbers_1.dir/special_numbers.cpp.o.d"
+# The include file search paths:
+set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "_deps/eigen-src"
   )
 
 # Targets to which this target links.

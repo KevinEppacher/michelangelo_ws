@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/sparse_permutations_1.dir/sparse_permutations.cpp.o"
-  "CMakeFiles/sparse_permutations_1.dir/sparse_permutations.cpp.o.d"
   "sparse_permutations_1"
   "sparse_permutations_1.pdb"
 )

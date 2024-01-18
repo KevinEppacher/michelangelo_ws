@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/exceptions.dir/exceptions.cpp.o"
-  "CMakeFiles/exceptions.dir/exceptions.cpp.o.d"
   "exceptions"
   "exceptions.pdb"
 )

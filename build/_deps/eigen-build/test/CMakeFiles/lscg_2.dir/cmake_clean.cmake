@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/lscg_2.dir/lscg.cpp.o"
-  "CMakeFiles/lscg_2.dir/lscg.cpp.o.d"
   "lscg_2"
   "lscg_2.pdb"
 )

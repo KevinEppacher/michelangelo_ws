@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_MatrixBase_colwise.dir/compile_MatrixBase_colwise.cpp.o"
-  "CMakeFiles/compile_MatrixBase_colwise.dir/compile_MatrixBase_colwise.cpp.o.d"
   "compile_MatrixBase_colwise"
   "compile_MatrixBase_colwise.pdb"
 )

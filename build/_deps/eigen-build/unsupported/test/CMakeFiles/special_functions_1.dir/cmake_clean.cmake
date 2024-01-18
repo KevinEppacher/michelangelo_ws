@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/special_functions_1.dir/special_functions.cpp.o"
-  "CMakeFiles/special_functions_1.dir/special_functions.cpp.o.d"
   "special_functions_1"
   "special_functions_1.pdb"
 )

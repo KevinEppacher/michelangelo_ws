@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/TutorialLinAlgComputeTwice.dir/TutorialLinAlgComputeTwice.cpp.o"
-  "CMakeFiles/TutorialLinAlgComputeTwice.dir/TutorialLinAlgComputeTwice.cpp.o.d"
   "TutorialLinAlgComputeTwice"
   "TutorialLinAlgComputeTwice.pdb"
 )

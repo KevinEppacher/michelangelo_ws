@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/polynomialutils_9.dir/polynomialutils.cpp.o"
-  "CMakeFiles/polynomialutils_9.dir/polynomialutils.cpp.o.d"
   "polynomialutils_9"
   "polynomialutils_9.pdb"
 )

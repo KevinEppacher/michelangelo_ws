@@ -428,14 +428,68 @@ TCP Client
         send(client_fd, data, strlen(data), 0);
         std::cout << "Message sent: " << data << std::endl;
         close(client_fd);
+
+
+        /* fork a child process */
+        child_pid = fork();
+        if (child_pid < 0) { /* error occurred */
+            cerr << "Fork Failed\n";
+            exit(-1);
+
+        if(SharedMemories::child_pid != 0)  // child pid not 0 -> producer
+   { 
+        signal (SIGINT, SharedMemories::producerHandler);  // shutdown if strg+C
+        std::cout << "I am the producer\n";
+
+        // producing loop
+        while (true)
+      {
+            std::cout << "Producer attempting write\n";
+            Message prodMsg;
+            prodMsg.type = PROD_MSG;
+            prodMsg.data = 0;//INSERT MESSAGE HERE !!!!!!
+
+            // send message - should test for error
+            msgsnd(SharedMemories::msgqid, &prodMsg, sizeof(int), 0);
+            std::cout << "Producer sent: " << prodMsg.data << std::endl;
+            sleep(0.1);  // 0.1s
+      }  // end producing loop
+   }  // end producer code
     }
 
     std::string TCPClient::receiveData(char* buffer, ssize_t size) 
     {
+        SharedMemories::child_pid = fork();     //erstellt einen Subprozess für consumer und producer
+        if (SharedMemories::child_pid < 0) { /* error occurred */
+            std::cerr << "Fork Failed\n";
+            exit(-1);
+   }
+
+    //into consumer
+    if (SharedMemories::child_pid == 0) // wenn die pid 0 ist, ist es ein Konsumer/ Empfänger
+    { 
+        signal (SIGINT, sharedMemories::consumerHandler);  // für shutdown
+        std::cout << "I am the child\n";
+        }
+        
+
+        // consuming loop
+        while (true)
+      {
+        std::cout << "Consumer attempting to read message\n";
+	 	SharedMemories::Message consMsg;    //erstellt leere Message
+
+	 // receive message - should test for error
+	    msgrcv(SharedMemories::msgqid, &consMsg, sizeof(int), PROD_MSG, 0); //liest Message und schreibt sie auf die Variable
+        std::cout << "Consumer read: " << consMsg.data << std::endl;
+        sleep(0.1);  // 0.1s
+      }
+    //KP ob wir das darunter noch brauchen??
         valread = read(client_fd, buffer, size - 1);
         buffer[valread] = '\0'; // Null-terminator hinzufügen
         std::cout << buffer << std::endl;
         return buffer;
+    //bis hier
     }
 
 
@@ -551,85 +605,48 @@ sharedMemory
 */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
+    SharedMemories::SharedMemories(){
+        //Constructor
+        startupMemories(); //startet die msq init
+    }
 
-       //shared Memory setup comes in here
-        Socket::msgqid = msgget(IPC_PRIVATE, 0660);
+    SharedMemories::startupMemories(){ //msq init
+        SharedMemories::msgqid = msgget(IPC_PRIVATE, 0660);
 
-        if (msgqid == -1) {
+        if (msgqid == -1) {     //wenn msqid < 0 ist -> Fehler
             std::cerr << "msgget failed\n";
             exit(EXIT_FAILURE);
    }
 
-        Socket::child_pid = fork();
-        if (Socket::child_pid < 0) { /* error occurred */
-            std::cerr << "Fork Failed\n";
-            exit(-1);
-   }
-
-            //maybe woanders hin!
-   if (Socket::child_pid == 0) // child process - the consumer
-   { 
-      signal (SIGINT, consumerHandler);  // catch SIGINT
-      std::cout << "I am the child\n";
-
-      // consuming loop
-      while (true)
-      {
-        std::cout << "Consumer attempting to read message\n";
-	 	Message consMsg; 
-
-	 // receive message - should test for error
-	    msgrcv(Socket::msgqid, &consMsg, sizeof(int), PROD_MSG, 0);
-        std::cout << "Consumer read: " << consMsg.data << std::endl;
-        sleep(0.1);  // 0.1s
-      }  // end consuming loop
-   }  // end consumer code
-   else  // parent process - the producer
-   { 
-        signal (SIGINT, Socket::producerHandler);  // catch SIGINT
-        std::cout << "I am the producer\n";
-
-        // producing loop
-        while (true)
-      {
-            std::cout << "Producer attempting write\n";
-            Message prodMsg;
-            prodMsg.type = PROD_MSG;
-            prodMsg.data = 0;//INSERT MESSAGE HERE !!!!!!
-
-            // send message - should test for error
-            msgsnd(Socket::msgqid, &prodMsg, sizeof(int), 0);
-            std::cout << "Producer sent: " << prodMsg.data << std::endl;
-            sleep(0.1);  // 0.1s
-      }  // end producing loop
-   }  // end producer code
+          
+   
 
 //STOP maybe woanders hin
 
-
+    
     //Manages shutdown of consumer process
-    void Socket::consumerHandler (int sig)
+    void SharedMemories::consumerHandler (int sig)
         {
         std::cout << "Consumer exiting\n";
         exit(EXIT_SUCCESS);
         }  // end consumerHandler
 
     //Manages shutdown of producer process
-    void Socket::producerHandler (int sig)
-        {
+    void SharedMemories::producerHandler (int sig)
+    {
         // kill child and wait for it
         std::cout << "Producer killing consumer\n";
-        kill (Socket::child_pid, SIGINT);
+        kill (SharedMemories::child_pid, SIGINT);
         wait (NULL);
 
         // remove message queue
         std::cout << "Producer removing message queue\n";
-        if (msgctl(Socket::msgqid, IPC_RMID, 0) == -1) {
+        if (msgctl(SharedMemories::msgqid, IPC_RMID, 0) == -1) {
             std::cerr << "msgctl(IPC_RMID) failed\n";
             exit(EXIT_FAILURE);
         }
         exit(EXIT_SUCCESS);
-}  // end producerHandler
+    }  // end producerHandler
     
 
     

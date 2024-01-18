@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/product_extra_4.dir/product_extra.cpp.o"
-  "CMakeFiles/product_extra_4.dir/product_extra.cpp.o.d"
   "product_extra_4"
   "product_extra_4.pdb"
 )

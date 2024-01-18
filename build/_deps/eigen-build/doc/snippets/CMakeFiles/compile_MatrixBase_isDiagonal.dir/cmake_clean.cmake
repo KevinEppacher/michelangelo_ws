@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_MatrixBase_isDiagonal.dir/compile_MatrixBase_isDiagonal.cpp.o"
-  "CMakeFiles/compile_MatrixBase_isDiagonal.dir/compile_MatrixBase_isDiagonal.cpp.o.d"
   "compile_MatrixBase_isDiagonal"
   "compile_MatrixBase_isDiagonal.pdb"
 )

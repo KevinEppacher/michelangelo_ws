@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_Tutorial_commainit_01.dir/compile_Tutorial_commainit_01.cpp.o"
-  "CMakeFiles/compile_Tutorial_commainit_01.dir/compile_Tutorial_commainit_01.cpp.o.d"
   "compile_Tutorial_commainit_01"
   "compile_Tutorial_commainit_01.pdb"
 )

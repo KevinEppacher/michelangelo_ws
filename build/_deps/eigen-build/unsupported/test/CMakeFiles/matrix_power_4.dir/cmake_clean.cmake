@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/matrix_power_4.dir/matrix_power.cpp.o"
-  "CMakeFiles/matrix_power_4.dir/matrix_power.cpp.o.d"
   "matrix_power_4"
   "matrix_power_4.pdb"
 )

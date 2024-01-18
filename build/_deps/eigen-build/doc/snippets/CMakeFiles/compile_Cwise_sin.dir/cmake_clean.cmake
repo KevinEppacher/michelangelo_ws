@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_Cwise_sin.dir/compile_Cwise_sin.cpp.o"
-  "CMakeFiles/compile_Cwise_sin.dir/compile_Cwise_sin.cpp.o.d"
   "compile_Cwise_sin"
   "compile_Cwise_sin.pdb"
 )

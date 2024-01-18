@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/geo_alignedbox_6.dir/geo_alignedbox.cpp.o"
-  "CMakeFiles/geo_alignedbox_6.dir/geo_alignedbox.cpp.o.d"
   "geo_alignedbox_6"
   "geo_alignedbox_6.pdb"
 )

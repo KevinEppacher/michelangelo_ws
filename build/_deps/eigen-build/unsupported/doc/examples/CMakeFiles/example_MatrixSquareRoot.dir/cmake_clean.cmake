@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/example_MatrixSquareRoot.dir/MatrixSquareRoot.cpp.o"
-  "CMakeFiles/example_MatrixSquareRoot.dir/MatrixSquareRoot.cpp.o.d"
   "example_MatrixSquareRoot"
   "example_MatrixSquareRoot.pdb"
 )

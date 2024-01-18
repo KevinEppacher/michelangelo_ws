@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/example_FFT.dir/FFT.cpp.o"
-  "CMakeFiles/example_FFT.dir/FFT.cpp.o.d"
   "example_FFT"
   "example_FFT.pdb"
 )

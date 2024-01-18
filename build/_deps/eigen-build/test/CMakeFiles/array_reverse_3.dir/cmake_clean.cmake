@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/array_reverse_3.dir/array_reverse.cpp.o"
-  "CMakeFiles/array_reverse_3.dir/array_reverse.cpp.o.d"
   "array_reverse_3"
   "array_reverse_3.pdb"
 )

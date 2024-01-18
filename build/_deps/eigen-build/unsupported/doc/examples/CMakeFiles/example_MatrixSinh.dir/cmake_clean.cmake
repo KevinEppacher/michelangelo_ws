@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/example_MatrixSinh.dir/MatrixSinh.cpp.o"
-  "CMakeFiles/example_MatrixSinh.dir/MatrixSinh.cpp.o.d"
   "example_MatrixSinh"
   "example_MatrixSinh.pdb"
 )

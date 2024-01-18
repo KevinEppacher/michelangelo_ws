@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/array_cwise_4.dir/array_cwise.cpp.o"
-  "CMakeFiles/array_cwise_4.dir/array_cwise.cpp.o.d"
   "array_cwise_4"
   "array_cwise_4.pdb"
 )

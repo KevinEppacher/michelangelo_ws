@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/simplicial_cholesky_13.dir/simplicial_cholesky.cpp.o"
-  "CMakeFiles/simplicial_cholesky_13.dir/simplicial_cholesky.cpp.o.d"
   "simplicial_cholesky_13"
   "simplicial_cholesky_13.pdb"
 )

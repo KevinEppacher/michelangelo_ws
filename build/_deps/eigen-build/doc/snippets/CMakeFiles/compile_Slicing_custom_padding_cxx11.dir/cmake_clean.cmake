@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_Slicing_custom_padding_cxx11.dir/compile_Slicing_custom_padding_cxx11.cpp.o"
-  "CMakeFiles/compile_Slicing_custom_padding_cxx11.dir/compile_Slicing_custom_padding_cxx11.cpp.o.d"
   "compile_Slicing_custom_padding_cxx11"
   "compile_Slicing_custom_padding_cxx11.pdb"
 )

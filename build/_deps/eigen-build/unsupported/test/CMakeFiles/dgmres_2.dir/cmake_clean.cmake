@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/dgmres_2.dir/dgmres.cpp.o"
-  "CMakeFiles/dgmres_2.dir/dgmres.cpp.o.d"
   "dgmres_2"
   "dgmres_2.pdb"
 )

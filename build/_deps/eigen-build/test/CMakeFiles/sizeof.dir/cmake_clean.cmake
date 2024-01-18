@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/sizeof.dir/sizeof.cpp.o"
-  "CMakeFiles/sizeof.dir/sizeof.cpp.o.d"
   "sizeof"
   "sizeof.pdb"
 )

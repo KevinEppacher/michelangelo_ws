@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/diagonalmatrices_10.dir/diagonalmatrices.cpp.o"
-  "CMakeFiles/diagonalmatrices_10.dir/diagonalmatrices.cpp.o.d"
   "diagonalmatrices_10"
   "diagonalmatrices_10.pdb"
 )

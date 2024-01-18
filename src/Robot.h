@@ -9,18 +9,10 @@
 #include <netinet/in.h>
 #include <nlohmann/json.hpp>
 #include <Eigen/Geometry> 
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include <chrono>
-#include <stdlib.h> 
-
-#include <arpa/inet.h> 
-#include <netinet/in.h>
-#include <nlohmann/json.hpp>
-#include <Eigen/Geometry> 
 //#include <SFML/Graphics.hpp>
 #include <vector>
 #include <chrono>
+#include <stdlib.h> 
 
 
 #define RCVBUFSIZE 100000   /* Size of receive buffer */
@@ -219,5 +211,12 @@ MobileRobot
 
 
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+shared Memory
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     
 
 #endif // ROBOT_H

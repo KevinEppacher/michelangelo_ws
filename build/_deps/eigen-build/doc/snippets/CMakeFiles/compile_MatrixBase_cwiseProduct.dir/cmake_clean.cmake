@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_MatrixBase_cwiseProduct.dir/compile_MatrixBase_cwiseProduct.cpp.o"
-  "CMakeFiles/compile_MatrixBase_cwiseProduct.dir/compile_MatrixBase_cwiseProduct.cpp.o.d"
   "compile_MatrixBase_cwiseProduct"
   "compile_MatrixBase_cwiseProduct.pdb"
 )

@@ -1,4 +1,4 @@
-# Install script for directory: /home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-src/unsupported/doc
+# Install script for directory: /home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-src/unsupported/doc
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -37,15 +37,10 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
-# Set default install directory permissions.
-if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "/usr/bin/objdump")
-endif()
-
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-build/unsupported/doc/examples/cmake_install.cmake")
-  include("/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-build/unsupported/doc/snippets/cmake_install.cmake")
+  include("/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-build/unsupported/doc/examples/cmake_install.cmake")
+  include("/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-build/unsupported/doc/snippets/cmake_install.cmake")
 
 endif()
 

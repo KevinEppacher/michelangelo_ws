@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/packetmath_11.dir/packetmath.cpp.o"
-  "CMakeFiles/packetmath_11.dir/packetmath.cpp.o.d"
   "packetmath_11"
   "packetmath_11.pdb"
 )

@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/TutorialLinAlgSetThreshold.dir/TutorialLinAlgSetThreshold.cpp.o"
-  "CMakeFiles/TutorialLinAlgSetThreshold.dir/TutorialLinAlgSetThreshold.cpp.o.d"
   "TutorialLinAlgSetThreshold"
   "TutorialLinAlgSetThreshold.pdb"
 )

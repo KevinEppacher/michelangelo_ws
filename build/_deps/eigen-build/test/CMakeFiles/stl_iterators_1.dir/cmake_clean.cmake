@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/stl_iterators_1.dir/stl_iterators.cpp.o"
-  "CMakeFiles/stl_iterators_1.dir/stl_iterators.cpp.o.d"
   "stl_iterators_1"
   "stl_iterators_1.pdb"
 )

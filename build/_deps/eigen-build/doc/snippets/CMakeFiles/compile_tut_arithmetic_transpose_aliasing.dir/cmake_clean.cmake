@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_tut_arithmetic_transpose_aliasing.dir/compile_tut_arithmetic_transpose_aliasing.cpp.o"
-  "CMakeFiles/compile_tut_arithmetic_transpose_aliasing.dir/compile_tut_arithmetic_transpose_aliasing.cpp.o.d"
   "compile_tut_arithmetic_transpose_aliasing"
   "compile_tut_arithmetic_transpose_aliasing.pdb"
 )

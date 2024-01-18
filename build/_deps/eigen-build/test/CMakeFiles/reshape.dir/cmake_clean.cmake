@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/reshape.dir/reshape.cpp.o"
-  "CMakeFiles/reshape.dir/reshape.cpp.o.d"
   "reshape"
   "reshape.pdb"
 )

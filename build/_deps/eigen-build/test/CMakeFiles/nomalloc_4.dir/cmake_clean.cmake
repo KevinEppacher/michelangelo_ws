@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/nomalloc_4.dir/nomalloc.cpp.o"
-  "CMakeFiles/nomalloc_4.dir/nomalloc.cpp.o.d"
   "nomalloc_4"
   "nomalloc_4.pdb"
 )

@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/first_aligned.dir/first_aligned.cpp.o"
-  "CMakeFiles/first_aligned.dir/first_aligned.cpp.o.d"
   "first_aligned"
   "first_aligned.pdb"
 )

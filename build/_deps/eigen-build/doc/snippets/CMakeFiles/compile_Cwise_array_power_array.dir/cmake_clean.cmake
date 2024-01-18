@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_Cwise_array_power_array.dir/compile_Cwise_array_power_array.cpp.o"
-  "CMakeFiles/compile_Cwise_array_power_array.dir/compile_Cwise_array_power_array.cpp.o.d"
   "compile_Cwise_array_power_array"
   "compile_Cwise_array_power_array.pdb"
 )

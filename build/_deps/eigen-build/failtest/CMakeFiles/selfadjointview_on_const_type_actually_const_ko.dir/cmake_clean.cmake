@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/selfadjointview_on_const_type_actually_const_ko.dir/selfadjointview_on_const_type_actually_const.cpp.o"
-  "CMakeFiles/selfadjointview_on_const_type_actually_const_ko.dir/selfadjointview_on_const_type_actually_const.cpp.o.d"
   "selfadjointview_on_const_type_actually_const_ko"
   "selfadjointview_on_const_type_actually_const_ko.pdb"
 )

@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/upperbidiagonalization_4.dir/upperbidiagonalization.cpp.o"
-  "CMakeFiles/upperbidiagonalization_4.dir/upperbidiagonalization.cpp.o.d"
   "upperbidiagonalization_4"
   "upperbidiagonalization_4.pdb"
 )

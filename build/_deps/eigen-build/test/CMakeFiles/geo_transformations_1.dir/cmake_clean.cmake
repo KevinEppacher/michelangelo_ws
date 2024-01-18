@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/geo_transformations_1.dir/geo_transformations.cpp.o"
-  "CMakeFiles/geo_transformations_1.dir/geo_transformations.cpp.o.d"
   "geo_transformations_1"
   "geo_transformations_1.pdb"
 )

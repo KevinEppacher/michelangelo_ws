@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/sparselu_4.dir/sparselu.cpp.o"
-  "CMakeFiles/sparselu_4.dir/sparselu.cpp.o.d"
   "sparselu_4"
   "sparselu_4.pdb"
 )

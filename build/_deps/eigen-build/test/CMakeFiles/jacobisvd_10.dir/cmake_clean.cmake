@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/jacobisvd_10.dir/jacobisvd.cpp.o"
-  "CMakeFiles/jacobisvd_10.dir/jacobisvd.cpp.o.d"
   "jacobisvd_10"
   "jacobisvd_10.pdb"
 )

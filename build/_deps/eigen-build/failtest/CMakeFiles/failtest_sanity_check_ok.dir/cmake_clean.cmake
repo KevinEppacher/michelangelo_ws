@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/failtest_sanity_check_ok.dir/failtest_sanity_check.cpp.o"
-  "CMakeFiles/failtest_sanity_check_ok.dir/failtest_sanity_check.cpp.o.d"
   "failtest_sanity_check_ok"
   "failtest_sanity_check_ok.pdb"
 )

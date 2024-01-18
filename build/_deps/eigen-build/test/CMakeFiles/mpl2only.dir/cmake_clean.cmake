@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/mpl2only.dir/mpl2only.cpp.o"
-  "CMakeFiles/mpl2only.dir/mpl2only.cpp.o.d"
   "mpl2only"
   "mpl2only.pdb"
 )

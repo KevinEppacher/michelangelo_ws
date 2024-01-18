@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/diagonal_2.dir/diagonal.cpp.o"
-  "CMakeFiles/diagonal_2.dir/diagonal.cpp.o.d"
   "diagonal_2"
   "diagonal_2.pdb"
 )

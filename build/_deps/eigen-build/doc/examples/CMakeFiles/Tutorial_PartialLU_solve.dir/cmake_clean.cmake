@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Tutorial_PartialLU_solve.dir/Tutorial_PartialLU_solve.cpp.o"
-  "CMakeFiles/Tutorial_PartialLU_solve.dir/Tutorial_PartialLU_solve.cpp.o.d"
   "Tutorial_PartialLU_solve"
   "Tutorial_PartialLU_solve.pdb"
 )

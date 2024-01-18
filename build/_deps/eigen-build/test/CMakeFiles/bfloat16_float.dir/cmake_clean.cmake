@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/bfloat16_float.dir/bfloat16_float.cpp.o"
-  "CMakeFiles/bfloat16_float.dir/bfloat16_float.cpp.o.d"
   "bfloat16_float"
   "bfloat16_float.pdb"
 )

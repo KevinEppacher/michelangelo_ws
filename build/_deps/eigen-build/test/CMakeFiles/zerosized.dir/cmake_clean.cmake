@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/zerosized.dir/zerosized.cpp.o"
-  "CMakeFiles/zerosized.dir/zerosized.cpp.o.d"
   "zerosized"
   "zerosized.pdb"
 )

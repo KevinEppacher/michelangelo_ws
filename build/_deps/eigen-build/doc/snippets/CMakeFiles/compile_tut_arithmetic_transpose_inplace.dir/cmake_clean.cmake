@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/compile_tut_arithmetic_transpose_inplace.dir/compile_tut_arithmetic_transpose_inplace.cpp.o"
-  "CMakeFiles/compile_tut_arithmetic_transpose_inplace.dir/compile_tut_arithmetic_transpose_inplace.cpp.o.d"
   "compile_tut_arithmetic_transpose_inplace"
   "compile_tut_arithmetic_transpose_inplace.pdb"
 )

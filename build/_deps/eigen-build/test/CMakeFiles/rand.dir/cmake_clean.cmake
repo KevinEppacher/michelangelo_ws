@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/rand.dir/rand.cpp.o"
-  "CMakeFiles/rand.dir/rand.cpp.o.d"
   "rand"
   "rand.pdb"
 )

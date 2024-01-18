@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/EulerAngles_1.dir/EulerAngles.cpp.o"
-  "CMakeFiles/EulerAngles_1.dir/EulerAngles.cpp.o.d"
   "EulerAngles_1"
   "EulerAngles_1.pdb"
 )

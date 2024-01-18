@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/idrs_2.dir/idrs.cpp.o"
-  "CMakeFiles/idrs_2.dir/idrs.cpp.o.d"
   "idrs_2"
   "idrs_2.pdb"
 )

@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/permutationmatrices_7.dir/permutationmatrices.cpp.o"
-  "CMakeFiles/permutationmatrices_7.dir/permutationmatrices.cpp.o.d"
   "permutationmatrices_7"
   "permutationmatrices_7.pdb"
 )

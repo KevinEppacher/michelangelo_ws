@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/sizeoverflow.dir/sizeoverflow.cpp.o"
-  "CMakeFiles/sizeoverflow.dir/sizeoverflow.cpp.o.d"
   "sizeoverflow"
   "sizeoverflow.pdb"
 )
