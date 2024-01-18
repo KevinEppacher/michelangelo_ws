@@ -90,21 +90,16 @@ MobileRobot
     public:
         MobileRobot();
         ~MobileRobot();
-<<<<<<< Updated upstream
-=======
         void publishCmdVel(double* linear_x, double* angular_z);
         bool linearController(Robot::Pose goalPose, Robot::Pose currentPose);
         bool pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta);
         bool limitControllerVariables(Twist* cmdVel, double upperLimit, double lowerLimit);
         bool convertQuaternionsToEuler(Pose* currentAngle);
         int goTo(Pose* goalPose, Pose* currentPose);
-<<<<<<< HEAD
         bool run(char* ip);
         void setIP(char* ipAdress);
-=======
         bool run();
 
->>>>>>> 5f60fb3f (	modified:   src/Robot.cpp)
 
     protected:
         double calculateTotalDistance(Robot::Pose diffPose);
@@ -178,8 +173,6 @@ MobileRobot
 
     };
 
-<<<<<<< Updated upstream
-=======
     class SharedMemories
     {
         public:
@@ -208,7 +201,6 @@ MobileRobot
     }
     //COCO//
 
->>>>>>> Stashed changes
 
 }
 
