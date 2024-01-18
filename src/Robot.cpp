@@ -70,13 +70,13 @@ namespace Robot
     void Robot::MobileRobot::publishCmdVel(double* linear_x, double* angular_z) 
     {
         std::stringstream ss;
-        ss << "---START---{\"linear\": " << linear_x << ", \"angular\": " << angular_z << "}___END___";
+        ss << "---START---{\"linear\": " << *linear_x << ", \"angular\": " << *angular_z << "}___END___";
         std::string echoString = ss.str();
 
-        Robot::TCPClient client("192.168.100.53", 9999);
-        std::cout << *linear_x << std::endl;
-        std::cout << *angular_z << std::endl;
-        //client.sendData(echoString.c_str());
+        Robot::TCPClient client(this->ip, 9999);
+/*         std::cout << *linear_x << std::endl;
+        std::cout << *angular_z << std::endl; */
+        client.sendData(echoString.c_str());
         //client.receiveData(buffer, sizeof(buffer));  
         //client.closeTCPconnection();
     }
@@ -249,6 +249,11 @@ namespace Robot
         return true;
     }
 
+    void MobileRobot::setIP(char* ipAdress)
+    {
+        this->ip = ipAdress;
+    };
+
     int MobileRobot::goTo(Pose* goalPose, Pose* currentPose)
     {
         Pose diffPose;
@@ -270,14 +275,14 @@ namespace Robot
         return goalPose->index;
     }
 
-    bool MobileRobot::run()
+    bool MobileRobot::run(char* ip)
     {
-
         Robot::Pose currentPose;
-        Robot::JsonHandler dataHandler;
+        setIP(ip);
+        /* Robot::JsonHandler dataHandler;
         nlohmann :: json json;
         char buffer[16000] = {};
-        Robot::TCPClient client("192.168.100.53", 9997);
+        Robot::TCPClient client(ip, 9997);
 
         //dataHandler.extractJson(receivedData);
 
@@ -335,7 +340,7 @@ namespace Robot
         currentPose.orientation.x = json["pose"]["pose"]["orientation"]["x"];
         currentPose.orientation.y = json["pose"]["pose"]["orientation"]["y"];
         currentPose.orientation.z = json["pose"]["pose"]["orientation"]["z"];
-        currentPose.orientation.w = json["pose"]["pose"]["orientation"]["w"];
+        currentPose.orientation.w = json["pose"]["pose"]["orientation"]["w"]; */
 
 /*         currentPose.position.x = 420;
         currentPose.position.y = 420;

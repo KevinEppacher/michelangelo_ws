@@ -10,12 +10,10 @@ int main(int argc, char *argv[]) {
         
         Robot::MobileRobot turtle;
 
-        std::cout << argc << std::endl;
-        std::cout << argv[1] << std::endl;
-
+        
         while(true)
         {
-            turtle.run();
+            turtle.run(argv[1]);
         }
 
         return 0;

@@ -88,7 +88,8 @@ MobileRobot
         bool limitControllerVariables(Twist* cmdVel, double upperLimit, double lowerLimit);
         bool convertQuaternionsToEuler(Pose* currentAngle);
         int goTo(Pose* goalPose, Pose* currentPose);
-        bool run();
+        bool run(char* ip);
+        void setIP(char* ipAdress);
 
     protected:
         double calculateTotalDistance(Robot::Pose diffPose);
@@ -105,6 +106,7 @@ MobileRobot
         Robot::Pose robotPose;
 
     private:
+        char* ip;
         Robot::Pose diffPose;
         Robot::Twist cmdVel;
         int sequenceNumber = 1;
