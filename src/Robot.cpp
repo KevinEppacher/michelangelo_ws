@@ -73,8 +73,10 @@ namespace Robot
         ss << "---START---{\"linear\": " << linear_x << ", \"angular\": " << angular_z << "}___END___";
         std::string echoString = ss.str();
 
-        Robot::TCPClient client("192.168.100.51", 9999);
-        client.sendData(echoString.c_str());
+        Robot::TCPClient client("192.168.100.53", 9999);
+        std::cout << *linear_x << std::endl;
+        std::cout << *angular_z << std::endl;
+        //client.sendData(echoString.c_str());
         //client.receiveData(buffer, sizeof(buffer));  
         //client.closeTCPconnection();
     }
@@ -274,8 +276,8 @@ namespace Robot
         Robot::Pose currentPose;
         Robot::JsonHandler dataHandler;
         nlohmann :: json json;
-        char buffer[8192] = {};
-        Robot::TCPClient client("192.168.100.52", 9997);
+        char buffer[16000] = {};
+        Robot::TCPClient client("192.168.100.53", 9997);
 
         //dataHandler.extractJson(receivedData);
 
@@ -543,78 +545,6 @@ JsonHandler
             return jsonData;
         }
 
-/*     Robot::Pose TCPClient::getOdom(std::string receivedData)
-    {
-        Robot::Pose odom_pose;
-        Robot::JsonHandler dataHandler;
-        nlohmann :: json json;
-
-        dataHandler.extractJson(receivedData);
-
-        json = dataHandler.extractJson(receivedData);
-
-        std::cout << "x-value position: " << std::endl;
-        std::cout << json["pose"]["pose"]["position"]["x"] << std::endl;
-
-        std::cout << "y-value position: " << std::endl;
-        std::cout << json["pose"]["pose"]["position"]["y"] << std::endl;
-
-        std::cout << "z-value position: " << std::endl;
-        std::cout << json["pose"]["pose"]["position"]["z"] << std::endl;
-
-
-        std::cout << "x-value orientation: " << std::endl;
-        std::cout << json["pose"]["pose"]["orientation"]["x"] << std::endl;
-
-        std::cout << "y-value orientation: " << std::endl;
-        std::cout << json["pose"]["pose"]["orientation"]["y"] << std::endl;
-
-        std::cout << "z-value orientation: " << std::endl;
-        std::cout << json["pose"]["pose"]["orientation"]["z"] << std::endl;
-
-        std::cout << "w-value orientation: " << std::endl;
-        std::cout << json["pose"]["pose"]["orientation"]["w"] << std::endl;
-
-
-        std::cout << "x-value twist: " << std::endl;
-        std::cout << json["twist"]["twist"]["linear"]["x"] << std::endl;
-
-        std::cout << "y-value twist: " << std::endl;
-        std::cout << json["twist"]["twist"]["linear"]["y"] << std::endl;
-
-        std::cout << "z-value twist: " << std::endl;
-        std::cout << json["twist"]["twist"]["linear"]["z"] << std::endl;
-
-
-        std::cout << "x-value twist: " << std::endl;
-        std::cout << json["twist"]["twist"]["angular"]["x"] << std::endl;
-
-        std::cout << "y-value twist: " << std::endl;
-        std::cout << json["twist"]["twist"]["angular"]["y"] << std::endl;
-
-        std::cout << "z-value twist: " << std::endl;
-        std::cout << json["twist"]["twist"]["angular"]["z"] << std::endl;
-
-        //Loop?
-
-         odom_pose.position.x =
-        odom_pose.position.y =
-        odom_pose.position.z =
-        odom_pose.position.vx = 
-        odom_pose.position.vy = 
-        odom_pose.position.vz =  
-        odom_pose.orientation.roll = 
-        odom_pose.orientation.pitch = 
-        odom_pose.orientation.yaw = 
-        odom_pose.orientation.vRoll = 
-        odom_pose.orientation.vPitch = 
-        odom_pose.orientation.vYaw =  
-
-        //push to shared memory
-
-        return odom_pose;
-    };
- */
         //COCO//
 
     

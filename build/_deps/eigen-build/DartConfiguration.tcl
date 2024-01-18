@@ -11,7 +11,7 @@ BuildDirectory: /home/cocokayya18/Advanced Programming for Robots/michelangelo_w
 CostDataFile: 
 
 # Site is something like machine.domain, i.e. pragmatic.crd
-Site: CoCosSurface2
+Site: cocossurface2
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
 BuildName: linux-5.15.133.1-microsoft-standard-wsl2-_-11.4.0-sse2-64bit
