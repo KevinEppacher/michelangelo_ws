@@ -279,17 +279,14 @@ namespace Robot
     {
         Robot::Pose currentPose;
         setIP(ip);
-        /* Robot::JsonHandler dataHandler;
-        nlohmann :: json json;
         char buffer[16000] = {};
-        Robot::TCPClient client(ip, 9997);
+        Robot::TCPClient client(ip, 9998); 
+        std::string receivedData = client.receiveData(buffer, sizeof(buffer));
 
+        Robot::JsonHandler dataHandler;
+        nlohmann :: json json;
 
-        //received data = sharedMemory !!! // @julian
-
-        //dataHandler.extractJson(receivedData);
-
-        json = dataHandler.extractJson(client.receiveData(buffer, sizeof(buffer)));
+        json = dataHandler.extractJson(receivedData);
 
         //Position
         std::cout << "x-value position: " << std::endl;
@@ -343,7 +340,7 @@ namespace Robot
         currentPose.orientation.x = json["pose"]["pose"]["orientation"]["x"];
         currentPose.orientation.y = json["pose"]["pose"]["orientation"]["y"];
         currentPose.orientation.z = json["pose"]["pose"]["orientation"]["z"];
-        currentPose.orientation.w = json["pose"]["pose"]["orientation"]["w"]; */
+        currentPose.orientation.w = json["pose"]["pose"]["orientation"]["w"]; 
 
 /*         currentPose.position.x = 420;
         currentPose.position.y = 420;
@@ -362,21 +359,21 @@ namespace Robot
         goalPose1.tolerance = 0.1;
 
         goalPose2.index = 2;
-        goalPose2.position.x = 0.0;
+        goalPose2.position.x = 1.0;
         goalPose2.position.y = 1.0;
         goalPose2.orientation.z = 0;
         goalPose2.tolerance = 0.1;
 
         goalPose3.index = 3;
-        goalPose3.position.x = -1;
-        goalPose3.position.y = 0;
+        goalPose3.position.x = 0;
+        goalPose3.position.y = 1;
         goalPose3.orientation.z = 0;
         //goalPose3.orientation.z = M_PI/2;
         goalPose3.tolerance = 0.1;
 
         goalPose4.index = 4;
         goalPose4.position.x = 0;
-        goalPose4.position.y = -1;
+        goalPose4.position.y = 0;
         goalPose3.orientation.z = 0;
         //goalPose4.orientation.z = -M_PI/2;
         goalPose4.tolerance = 0.1;
@@ -442,10 +439,35 @@ TCP Client
 
     std::string TCPClient::receiveData(char* buffer, ssize_t size) 
     {
-        valread = read(client_fd, buffer, size - 1);
-        buffer[valread] = '\0'; // Null-terminator hinzufügen
-        std::cout << buffer << std::endl;
-        return buffer;
+        std::string result;
+        bool startFound = false;
+
+        while (true) {
+            ssize_t bytesRead = read(client_fd, buffer, sizeof(buffer) - 1);
+            if (bytesRead < 0) {
+                // Handle error
+                return "Error"; // or throw an exception
+            }
+
+            buffer[bytesRead] = '\0'; // Null-terminate the buffer
+            result.append(buffer);
+
+            // Check if the start marker is found if not already found
+            if (!startFound) {
+                if (result.find("---START---") != std::string::npos) {
+                    startFound = true;
+                    result = result.substr(result.find("---START---"));
+                    std::cout << "START FOUND" << std::endl;
+                } 
+            }
+
+            // Check for the end marker
+            if (startFound && result.find("___END___") != std::string::npos) {
+                std::cout << "you did it" << std::endl;
+                break;
+            }
+        }
+        return result;
     }
 
 
