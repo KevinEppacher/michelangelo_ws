@@ -1,4 +1,4 @@
-# Install script for directory: /home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-src/unsupported/doc/snippets
+# Install script for directory: /home/kevin/michelangelo_ws/build/_deps/eigen-src/unsupported/doc/snippets
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

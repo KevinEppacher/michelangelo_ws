@@ -4,14 +4,14 @@
 
 
 # Configuration directories and files
-SourceDirectory: /home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-src
-BuildDirectory: /home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-build
+SourceDirectory: /home/kevin/michelangelo_ws/build/_deps/eigen-src
+BuildDirectory: /home/kevin/michelangelo_ws/build/_deps/eigen-build
 
 # Where to place the cost data store
 CostDataFile: 
 
 # Site is something like machine.domain, i.e. pragmatic.crd
-Site: JulianLaptop
+Site: Kevin
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
 BuildName: linux-5.15.0-91-generic-_-9.4.0-sse2-64bit
@@ -26,7 +26,7 @@ SubmitURL: http://my.cdash.org/submit.php?project=Eigen
 NightlyStartTime: 00:00:00 UTC
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/usr/bin/cmake" "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-src"
+ConfigureCommand: "/usr/bin/cmake" "/home/kevin/michelangelo_ws/build/_deps/eigen-src"
 MakeCommand: /usr/bin/cmake --build . --target buildtests --config "${CTEST_CONFIGURATION_TYPE}" --  
 DefaultCTestConfigurationType: Release
 
@@ -39,7 +39,7 @@ CVSCommand: CVSCOMMAND-NOTFOUND
 CVSUpdateOptions: -d -A -P
 
 # Subversion options
-SVNCommand: SVNCOMMAND-NOTFOUND
+SVNCommand: /usr/bin/svn
 SVNOptions: 
 SVNUpdateOptions: 
 

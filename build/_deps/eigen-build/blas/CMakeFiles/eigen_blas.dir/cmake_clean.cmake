@@ -4,7 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/eigen_blas.dir/double.cpp.o"
   "CMakeFiles/eigen_blas.dir/f2c/chbmv.c.o"
   "CMakeFiles/eigen_blas.dir/f2c/chpmv.c.o"
-  "CMakeFiles/eigen_blas.dir/f2c/complexdots.c.o"
   "CMakeFiles/eigen_blas.dir/f2c/ctbmv.c.o"
   "CMakeFiles/eigen_blas.dir/f2c/d_cnjg.c.o"
   "CMakeFiles/eigen_blas.dir/f2c/drotm.c.o"
@@ -22,6 +21,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/eigen_blas.dir/f2c/zhbmv.c.o"
   "CMakeFiles/eigen_blas.dir/f2c/zhpmv.c.o"
   "CMakeFiles/eigen_blas.dir/f2c/ztbmv.c.o"
+  "CMakeFiles/eigen_blas.dir/fortran/complexdots.f.o"
   "CMakeFiles/eigen_blas.dir/single.cpp.o"
   "CMakeFiles/eigen_blas.dir/xerbla.cpp.o"
   "libeigen_blas.pdb"
@@ -29,6 +29,6 @@ file(REMOVE_RECURSE
 )
 
 # Per-language clean rules from dependency scanning.
-foreach(lang C CXX)
+foreach(lang C CXX Fortran)
   include(CMakeFiles/eigen_blas.dir/cmake_clean_${lang}.cmake OPTIONAL)
 endforeach()

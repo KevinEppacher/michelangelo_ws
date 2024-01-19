@@ -11,8 +11,13 @@ int main(int argc, char *argv[])
     std::cout << "Received: "; /* Setup to print the echoed string */
     while (true)
     {
-        robotSocket.sendAndReceiveData();
-        std::cout<<"Testing sending data"<<std::endl;
+
+        
+
+
+
+        //robotSocket.sendAndReceiveData();
+        //std::cout<<"Testing sending data"<<std::endl;
     }
     return 0;
 }

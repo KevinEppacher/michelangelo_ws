@@ -139,6 +139,12 @@ num_dimensions
 stl_iterators
 blasutil
 fastmath
+umfpack_support
+klu_support
+superlu_support
+cholmod_support
+spqr_support
+boostmultiprec
 NonLinearOptimization
 NumericalDiff
 autodiff_scalar

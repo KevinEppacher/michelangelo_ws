@@ -12,8 +12,8 @@ project(json-populate NONE)
 include(ExternalProject)
 ExternalProject_Add(json-populate
                      "UPDATE_DISCONNECTED" "False" "GIT_REPOSITORY" "https://github.com/nlohmann/json.git" "GIT_TAG" "v3.10.5"
-                    SOURCE_DIR          "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/json-src"
-                    BINARY_DIR          "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/json-build"
+                    SOURCE_DIR          "/home/kevin/michelangelo_ws/build/_deps/json-src"
+                    BINARY_DIR          "/home/kevin/michelangelo_ws/build/_deps/json-build"
                     CONFIGURE_COMMAND   ""
                     BUILD_COMMAND       ""
                     INSTALL_COMMAND     ""

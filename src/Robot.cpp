@@ -435,26 +435,27 @@ TCP Client
         if (child_pid < 0) { /* error occurred */
             cerr << "Fork Failed\n";
             exit(-1);
+        }
 
         if(SharedMemories::child_pid != 0)  // child pid not 0 -> producer
-   { 
-        signal (SIGINT, SharedMemories::producerHandler);  // shutdown if strg+C
-        std::cout << "I am the producer\n";
+        { 
+            signal (SIGINT, SharedMemories::producerHandler);  // shutdown if strg+C
+            std::cout << "I am the producer\n";
 
-        // producing loop
-        while (true)
-      {
-            std::cout << "Producer attempting write\n";
-            Message prodMsg;
-            prodMsg.type = PROD_MSG;
-            prodMsg.data = 0;//INSERT MESSAGE HERE !!!!!!
+            // producing loop
+            while (true)
+            {
+                std::cout << "Producer attempting write\n";
+                Message prodMsg;
+                prodMsg.type = PROD_MSG;
+                prodMsg.data = 0;//INSERT MESSAGE HERE !!!!!!
 
-            // send message - should test for error
-            msgsnd(SharedMemories::msgqid, &prodMsg, sizeof(int), 0);
-            std::cout << "Producer sent: " << prodMsg.data << std::endl;
-            sleep(0.1);  // 0.1s
-      }  // end producing loop
-   }  // end producer code
+                // send message - should test for error
+                msgsnd(SharedMemories::msgqid, &prodMsg, sizeof(int), 0);
+                std::cout << "Producer sent: " << prodMsg.data << std::endl;
+                sleep(0.1);  // 0.1s
+            }  // end producing loop
+        }  // end producer code
     }
 
     std::string TCPClient::receiveData(char* buffer, ssize_t size) 

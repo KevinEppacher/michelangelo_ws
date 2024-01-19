@@ -6,5 +6,5 @@ CXX_FLAGS =  -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subs
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-src" 
+CXX_INCLUDES = -I/home/kevin/michelangelo_ws/build/_deps/eigen-src 
 

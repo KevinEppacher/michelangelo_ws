@@ -12,8 +12,8 @@ project(eigen-populate NONE)
 include(ExternalProject)
 ExternalProject_Add(eigen-populate
                      "UPDATE_DISCONNECTED" "False" "GIT_REPOSITORY" "https://gitlab.com/libeigen/eigen.git" "GIT_TAG" "3.4.0"
-                    SOURCE_DIR          "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-src"
-                    BINARY_DIR          "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-build"
+                    SOURCE_DIR          "/home/kevin/michelangelo_ws/build/_deps/eigen-src"
+                    BINARY_DIR          "/home/kevin/michelangelo_ws/build/_deps/eigen-build"
                     CONFIGURE_COMMAND   ""
                     BUILD_COMMAND       ""
                     INSTALL_COMMAND     ""

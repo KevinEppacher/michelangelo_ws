@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_FLAGS =  -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -ansi -O3 -DNDEBUG    -DEIGEN_TEST_MAX_SIZE=320  -DEIGEN_TEST_PART_11=1 -std=gnu++17
 
-CXX_DEFINES = 
+CXX_DEFINES = -DEIGEN_CHOLMOD_SUPPORT -DEIGEN_KLU_SUPPORT -DEIGEN_SPQR_SUPPORT -DEIGEN_SUPERLU_SUPPORT -DEIGEN_UMFPACK_SUPPORT
 
-CXX_INCLUDES = -I"/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-src" 
+CXX_INCLUDES = -I/home/kevin/michelangelo_ws/build/_deps/eigen-src -I/usr/include/suitesparse -I/usr/include/superlu 
 

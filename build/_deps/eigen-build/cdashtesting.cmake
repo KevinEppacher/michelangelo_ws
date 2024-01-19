@@ -1,9 +1,9 @@
 
-set(CTEST_SOURCE_DIRECTORY  "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws")
-set(CTEST_BINARY_DIRECTORY  "/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build")
+set(CTEST_SOURCE_DIRECTORY  "/home/kevin/michelangelo_ws")
+set(CTEST_BINARY_DIRECTORY  "/home/kevin/michelangelo_ws/build")
 set(CTEST_CMAKE_GENERATOR   "Unix Makefiles")
 set(CTEST_BUILD_NAME        "linux-5.15.0-91-generic-_-9.4.0-sse2-64bit")
-set(CTEST_SITE              "JulianLaptop")
+set(CTEST_SITE              "Kevin")
 
 set(MODEL Experimental)
 if(${CTEST_SCRIPT_ARG} MATCHES Nightly)

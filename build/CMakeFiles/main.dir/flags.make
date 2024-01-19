@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=gnu++17
 
 CXX_DEFINES = -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1
 
-CXX_INCLUDES = -I"/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/eigen-src" -I"/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/build/_deps/json-src/single_include" 
+CXX_INCLUDES = -I/home/kevin/michelangelo_ws/build/_deps/eigen-src -I/home/kevin/michelangelo_ws/build/_deps/json-src/single_include 
 
