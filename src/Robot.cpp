@@ -5,12 +5,21 @@ namespace Robot
     
     MobileRobot::MobileRobot()
     {
-        std::cout << "A Robot is born" << std::endl;
+        //std::cout << "A Robot is born" << std::endl;
     }
 
     MobileRobot::~MobileRobot()
     {
+/*         std::stringstream ss;
+        ss << "---START---{linear: 0 , angular:   0  }___END___";
+        std::string echoString = ss.str();
 
+        Robot::TCPClient client(this->ip, 9999);
+        std::cout << *linear_x << std::endl;
+        std::cout << *angular_z << std::endl; 
+        client.sendData(echoString.c_str());
+        //client.receiveData(buffer, sizeof(buffer));  
+        //client.closeTCPconnection(); */
     }
 
  
@@ -105,14 +114,14 @@ namespace Robot
     {        
         Parameter Lin, Alpha, Beta;
 
-        Lin.P = 0.2;
-        Lin.I = 0;
+        Lin.P = 0.1;
+        Lin.I = 0.01;
 
-        Alpha.P = 0.4;
+        Alpha.P = 0.8;
         Alpha.I = 0.01;
 
-        Beta.P = 0.01;
-        Beta.I = 0.6;
+        Beta.P = 0.05;
+        //Beta.I = 0.6;
 
         Lin.proportionalError = Lin.P * totalDistance;
         Lin.integralError += ( Lin.I / 2 ) * totalDistance;
@@ -180,24 +189,6 @@ namespace Robot
         currentAngle->orientation.y = euler[1];
         currentAngle->orientation.z = euler[2];
 
-        /*
-
-        if (currentAngle->orientation.x < 0) 
-        {
-            currentAngle->orientation.x += 2 * M_PI;
-        }
-
-        if (currentAngle->orientation.y < 0) 
-        {
-            currentAngle->orientation.y += 2 * M_PI;
-        }
-
-        if (currentAngle->orientation.z < 0) 
-        {
-            currentAngle->orientation.z += 2 * M_PI;
-        }
-
-        */
         return true;
     }
 
@@ -262,10 +253,14 @@ namespace Robot
 
         double totalDistance = calculateTotalDistance(diffPose);
 
-        if (totalDistance < goalPose->tolerance) 
+        convertQuaternionsToEuler(currentPose);
+        double totalOrientation = goalPose->orientation.z - currentPose->orientation.z;
+
+        if (totalDistance < goalPose->tolerance && (totalOrientation) < 0.1) 
         {
             sequenceNumber += 1;
-            std::cout << "Sequence Number: " << sequenceNumber << std::endl;           
+            std::cout << "Sequence Number: " << sequenceNumber << std::endl;
+            arrivedEndgoal();           
         }
         else
         {
@@ -273,6 +268,12 @@ namespace Robot
         }
     
         return goalPose->index;
+    }
+
+    void MobileRobot::arrivedEndgoal()
+    {
+        double zero=0;
+        publishCmdVel(&zero, &zero);
     }
 
     bool MobileRobot::run(char* ip)
@@ -288,49 +289,6 @@ namespace Robot
 
         json = dataHandler.extractJson(receivedData);
 
-        //Position
-        std::cout << "x-value position: " << std::endl;
-        std::cout << json["pose"]["pose"]["position"]["x"] << std::endl;
-
-        std::cout << "y-value position: " << std::endl;
-        std::cout << json["pose"]["pose"]["position"]["y"] << std::endl;
-
-        std::cout << "z-value position: " << std::endl;
-        std::cout << json["pose"]["pose"]["position"]["z"] << std::endl;
-
-        //Orientation
-        std::cout << "x-value orientation: " << std::endl;
-        std::cout << json["pose"]["pose"]["orientation"]["x"] << std::endl;
-
-        std::cout << "y-value orientation: " << std::endl;
-        std::cout << json["pose"]["pose"]["orientation"]["y"] << std::endl;
-
-        std::cout << "z-value orientation: " << std::endl;
-        std::cout << json["pose"]["pose"]["orientation"]["z"] << std::endl;
-
-        std::cout << "w-value orientation: " << std::endl;
-        std::cout << json["pose"]["pose"]["orientation"]["w"] << std::endl;
-
-        //linear Twist
-        std::cout << "x-value twist: " << std::endl;
-        std::cout << json["twist"]["twist"]["linear"]["x"] << std::endl;
-
-        std::cout << "y-value twist: " << std::endl;
-        std::cout << json["twist"]["twist"]["linear"]["y"] << std::endl;
-
-        std::cout << "z-value twist: " << std::endl;
-        std::cout << json["twist"]["twist"]["linear"]["z"] << std::endl;
-
-        //angular Twist
-        std::cout << "x-value twist: " << std::endl;
-        std::cout << json["twist"]["twist"]["angular"]["x"] << std::endl;
-
-        std::cout << "y-value twist: " << std::endl;
-        std::cout << json["twist"]["twist"]["angular"]["y"] << std::endl;
-
-        std::cout << "z-value twist: " << std::endl;
-        std::cout << json["twist"]["twist"]["angular"]["z"] << std::endl;
-
 
         //Overwriting current position with Sensor Position
 
@@ -342,13 +300,8 @@ namespace Robot
         currentPose.orientation.z = json["pose"]["pose"]["orientation"]["z"];
         currentPose.orientation.w = json["pose"]["pose"]["orientation"]["w"]; 
 
-/*         currentPose.position.x = 420;
-        currentPose.position.y = 420;
-        currentPose.position.z = 0;
-        currentPose.orientation.x = 0;
-        currentPose.orientation.y = 0;
-        currentPose.orientation.z = 420;
-        currentPose.orientation.w = 420; */
+        std::cout<<" sequence:    " << sequenceNumber<< "         || currentPose.position.x:   "<<currentPose.position.x<<"         || currentPose.position.y"<<currentPose.position.y<<"         ||  currentPose.orientation.z"<< currentPose.orientation.z<<std::endl;
+
 
         Robot::Pose goalPose1, goalPose3, goalPose2, goalPose4;
 
@@ -356,33 +309,33 @@ namespace Robot
         goalPose1.position.x = 1.0;
         goalPose1.position.y = 0.0;
         goalPose1.orientation.z = 0;
-        goalPose1.tolerance = 0.1;
+        goalPose1.tolerance = 0.2;
 
         goalPose2.index = 2;
         goalPose2.position.x = 1.0;
         goalPose2.position.y = 1.0;
         goalPose2.orientation.z = 0;
-        goalPose2.tolerance = 0.1;
+        goalPose2.tolerance = 0.2;
 
         goalPose3.index = 3;
         goalPose3.position.x = 0;
-        goalPose3.position.y = 1;
+        goalPose3.position.y = 1.0;
         goalPose3.orientation.z = 0;
-        //goalPose3.orientation.z = M_PI/2;
-        goalPose3.tolerance = 0.1;
+        goalPose3.orientation.z = M_PI/2;
+        goalPose3.tolerance = 0.2;
 
         goalPose4.index = 4;
         goalPose4.position.x = 0;
         goalPose4.position.y = 0;
         goalPose3.orientation.z = 0;
-        //goalPose4.orientation.z = -M_PI/2;
-        goalPose4.tolerance = 0.1;
+        goalPose4.orientation.z = -M_PI/2; 
+        goalPose4.tolerance = 0.2;
 
         if(goalPose1.index == sequenceNumber) goTo(&goalPose1, &currentPose);
         if(goalPose2.index == sequenceNumber) goTo(&goalPose2, &currentPose);
         if(goalPose3.index == sequenceNumber) goTo(&goalPose3, &currentPose);
         if(goalPose4.index == sequenceNumber) goTo(&goalPose4, &currentPose);
-        if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentPose);
+        //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentPose);
 
 
         return true;
@@ -421,7 +374,7 @@ TCP Client
 
     TCPClient::~TCPClient() 
     {
-        std::cout<<"Client wurde geschlossen111"<<std::endl;
+        //std::cout<<"Client wurde geschlossen111"<<std::endl;
         close(client_fd);
     }
 
@@ -433,7 +386,7 @@ TCP Client
     void TCPClient::sendData(const char* data) 
     {
         send(client_fd, data, strlen(data), 0);
-        std::cout << "Message sent: " << data << std::endl;
+        //std::cout << "Message sent: " << data << std::endl;
         close(client_fd);
     }
 
@@ -457,13 +410,13 @@ TCP Client
                 if (result.find("---START---") != std::string::npos) {
                     startFound = true;
                     result = result.substr(result.find("---START---"));
-                    std::cout << "START FOUND" << std::endl;
+                    //std::cout << "START FOUND" << std::endl;
                 } 
             }
 
             // Check for the end marker
             if (startFound && result.find("___END___") != std::string::npos) {
-                std::cout << "you did it" << std::endl;
+                //std::cout << "you did it" << std::endl;
                 break;
             }
         }
@@ -506,12 +459,12 @@ JsonHandler
 
     JsonHandler::JsonHandler()
         {
-            std::cout << "Json handler has risen from the depth of unexistence into existence" << std::endl;
+            //std::cout << "Json handler has risen from the depth of unexistence into existence" << std::endl;
         }
 
     JsonHandler::~JsonHandler()
         {
-            std::cout << "JsonHandler destroyed" << std::endl;
+            //std::cout << "JsonHandler destroyed" << std::endl;
         }
 
     nlohmann::json JsonHandler::extractJson(std::string rawData)
@@ -530,7 +483,7 @@ JsonHandler
             try 
             {
                 JsonHandler::jsonData = nlohmann::json::parse(jsonStr);
-                std::cout << "Parsing finished correctly" << std::endl;
+                //std::cout << "Parsing finished correctly" << std::endl;
             } 
             
             catch (nlohmann::json::parse_error& e) 

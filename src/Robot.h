@@ -104,6 +104,7 @@ MobileRobot
         double angleDiff(double angle1, double angle2);
         bool orientationController(Robot::Pose goalPose, Robot::Pose currentPose);
         Robot::Pose robotPose;
+        void arrivedEndgoal();
 
     private:
         char* ip;

@@ -4,21 +4,14 @@
 
 int main(int argc, char *argv[]) {
 
+    Robot::MobileRobot turtle;
 
+    
     while(true)
     {
-        
-        Robot::MobileRobot turtle;
-
-        
-        while(true)
-        {
-            turtle.run(argv[1]);
-        }
-
-        return 0;
-        
+        turtle.run(argv[1]);
     }
+
 
     return 0;
 }
