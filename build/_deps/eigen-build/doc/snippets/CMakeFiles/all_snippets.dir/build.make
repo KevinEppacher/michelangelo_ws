@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws"
+CMAKE_SOURCE_DIR = /home/cocokayya18/michelangelo_ws
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build"
+CMAKE_BINARY_DIR = /home/cocokayya18/michelangelo_ws/build
 
 # Utility rule file for all_snippets.
 
@@ -74,10 +74,10 @@ _deps/eigen-build/doc/snippets/CMakeFiles/all_snippets.dir/build: all_snippets
 .PHONY : _deps/eigen-build/doc/snippets/CMakeFiles/all_snippets.dir/build
 
 _deps/eigen-build/doc/snippets/CMakeFiles/all_snippets.dir/clean:
-	cd "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-build/doc/snippets" && $(CMAKE_COMMAND) -P CMakeFiles/all_snippets.dir/cmake_clean.cmake
+	cd /home/cocokayya18/michelangelo_ws/build/_deps/eigen-build/doc/snippets && $(CMAKE_COMMAND) -P CMakeFiles/all_snippets.dir/cmake_clean.cmake
 .PHONY : _deps/eigen-build/doc/snippets/CMakeFiles/all_snippets.dir/clean
 
 _deps/eigen-build/doc/snippets/CMakeFiles/all_snippets.dir/depend:
-	cd "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws" "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-src/doc/snippets" "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build" "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-build/doc/snippets" "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-build/doc/snippets/CMakeFiles/all_snippets.dir/DependInfo.cmake" --color=$(COLOR)
+	cd /home/cocokayya18/michelangelo_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cocokayya18/michelangelo_ws /home/cocokayya18/michelangelo_ws/build/_deps/eigen-src/doc/snippets /home/cocokayya18/michelangelo_ws/build /home/cocokayya18/michelangelo_ws/build/_deps/eigen-build/doc/snippets /home/cocokayya18/michelangelo_ws/build/_deps/eigen-build/doc/snippets/CMakeFiles/all_snippets.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : _deps/eigen-build/doc/snippets/CMakeFiles/all_snippets.dir/depend
 

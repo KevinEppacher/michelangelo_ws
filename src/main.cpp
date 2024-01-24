@@ -5,7 +5,6 @@
 int main(int argc, char *argv[]) {
 
     Robot::MobileRobot turtle;
-
     
     while(true)
     {

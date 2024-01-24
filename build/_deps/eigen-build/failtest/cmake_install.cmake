@@ -1,4 +1,4 @@
-# Install script for directory: /home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-src/failtest
+# Install script for directory: /home/cocokayya18/michelangelo_ws/build/_deps/eigen-src/failtest
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

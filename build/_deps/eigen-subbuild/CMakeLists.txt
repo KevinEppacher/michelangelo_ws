@@ -22,8 +22,8 @@ set_property(GLOBAL PROPERTY _CMAKE_FindGit_GIT_EXECUTABLE_VERSION
 include(ExternalProject)
 ExternalProject_Add(eigen-populate
                      "UPDATE_DISCONNECTED" "False" "GIT_REPOSITORY" "https://gitlab.com/libeigen/eigen.git" "GIT_TAG" "3.4.0"
-                    SOURCE_DIR          "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-src"
-                    BINARY_DIR          "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-build"
+                    SOURCE_DIR          "/home/cocokayya18/michelangelo_ws/build/_deps/eigen-src"
+                    BINARY_DIR          "/home/cocokayya18/michelangelo_ws/build/_deps/eigen-build"
                     CONFIGURE_COMMAND   ""
                     BUILD_COMMAND       ""
                     INSTALL_COMMAND     ""

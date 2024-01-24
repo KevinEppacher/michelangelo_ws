@@ -1,5 +1,5 @@
 CMakeFiles/server.dir/src/server.cpp.o: \
- /home/cocokayya18/Advanced\ Programming\ for\ Robots/michelangelo_ws/src/server.cpp \
+ /home/cocokayya18/michelangelo_ws/src/server.cpp \
  /usr/include/stdc-predef.h /usr/include/c++/11/iostream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

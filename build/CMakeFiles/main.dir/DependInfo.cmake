@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/src/Robot.cpp" "CMakeFiles/main.dir/src/Robot.cpp.o" "gcc" "CMakeFiles/main.dir/src/Robot.cpp.o.d"
-  "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/src/main.cpp" "CMakeFiles/main.dir/src/main.cpp.o" "gcc" "CMakeFiles/main.dir/src/main.cpp.o.d"
+  "/home/cocokayya18/michelangelo_ws/src/Robot.cpp" "CMakeFiles/main.dir/src/Robot.cpp.o" "gcc" "CMakeFiles/main.dir/src/Robot.cpp.o.d"
+  "/home/cocokayya18/michelangelo_ws/src/main.cpp" "CMakeFiles/main.dir/src/main.cpp.o" "gcc" "CMakeFiles/main.dir/src/main.cpp.o.d"
   )
 
 # Targets to which this target links.

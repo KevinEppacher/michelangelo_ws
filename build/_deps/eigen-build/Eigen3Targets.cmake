@@ -49,7 +49,7 @@ unset(_expectedTargets)
 add_library(Eigen3::Eigen INTERFACE IMPORTED)
 
 set_target_properties(Eigen3::Eigen PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-src"
+  INTERFACE_INCLUDE_DIRECTORIES "/home/cocokayya18/michelangelo_ws/build/_deps/eigen-src"
 )
 
 # This file does not depend on other imported targets which have

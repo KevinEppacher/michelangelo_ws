@@ -1,4 +1,4 @@
-# Install script for directory: /home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-src/lapack
+# Install script for directory: /home/cocokayya18/michelangelo_ws/build/_deps/eigen-src/lapack
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -43,7 +43,7 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-build/lapack/libeigen_lapack_static.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/cocokayya18/michelangelo_ws/build/_deps/eigen-build/lapack/libeigen_lapack_static.a")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -53,12 +53,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libeigen_lapack.so"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-build/lapack/libeigen_lapack.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/cocokayya18/michelangelo_ws/build/_deps/eigen-build/lapack/libeigen_lapack.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libeigen_lapack.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libeigen_lapack.so")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libeigen_lapack.so"
-         OLD_RPATH "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-build/blas:"
+         OLD_RPATH "/home/cocokayya18/michelangelo_ws/build/_deps/eigen-build/blas:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libeigen_lapack.so")

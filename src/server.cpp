@@ -72,12 +72,12 @@ int main() {
     const char* data = R"(---START---{"header": {"seq": 41486, "stamp": {"secs": 1677512013, "nsecs": 49092063}, "frame_id": "odom"}, "child_frame_id": "base_footprint", "pose": {"pose": {"position": {"x": 2.923440933777499e-10, "y": -2.7172184502433083e-08, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": 0.005155239254236221, "w": 0.9999867081642151}}, "covariance": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, "twist": {"twist": {"linear": {"x": 0.0, "y": 0.0, "z": 0.0}, "angular": {"x": 0.0, "y": 0.0, "z": -0.0022432173136621714}}, "covariance": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}}___END___)";
     char buffer[8192] = {};
 
-    TCPServer server(8080);
+    TCPServer server(10000);
     server.acceptConnection();
     
     while(true)
     {
-        std::cout<<"test"<<std::endl;
+        //std::cout<<"test"<<std::endl;
         //server.receiveData(buffer, sizeof(buffer));
         server.sendData(data); 
         std::cout << data << std::endl;

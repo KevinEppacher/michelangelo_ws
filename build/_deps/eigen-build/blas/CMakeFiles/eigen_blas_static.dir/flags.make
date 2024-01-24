@@ -5,13 +5,13 @@
 # compile CXX with /usr/bin/c++
 C_DEFINES = 
 
-C_INCLUDES = -I"/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-src"
+C_INCLUDES = -I/home/cocokayya18/michelangelo_ws/build/_deps/eigen-src
 
 C_FLAGS = -O3 -DNDEBUG
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-src"
+CXX_INCLUDES = -I/home/cocokayya18/michelangelo_ws/build/_deps/eigen-src
 
 CXX_FLAGS =  -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -ansi -O3 -DNDEBUG -std=gnu++17
 

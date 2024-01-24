@@ -23,22 +23,22 @@ namespace Robot
     }
 
  
-    bool Robot::MobileRobot::linearController(Robot::Pose goalPose, Robot::Pose currentPose)
+    bool Robot::MobileRobot::linearController(Robot::Pose goalPose, Robot::Pose currentOdomPose)
     {
         Parameter PID;
 
-        convertQuaternionsToEuler(&currentPose);
+        convertQuaternionsToEuler(&currentOdomPose);
 
-        robotPose = currentPose;
+        robotPose = currentOdomPose;
 
-        diffPose.position.x = goalPose.position.x - currentPose.position.x;
-        diffPose.position.y = goalPose.position.y - currentPose.position.y;
+        diffPose.position.x = goalPose.position.x - currentOdomPose.position.x;
+        diffPose.position.y = goalPose.position.y - currentOdomPose.position.y;
 
         totalDistance = calculateTotalDistance(diffPose);
 
         gamma = calculateGamma(diffPose);
 
-        alpha = calculateAlpha(gamma, currentPose);
+        alpha = calculateAlpha(gamma, currentOdomPose);
 
         beta = calculateBeta(goalPose, gamma);
         
@@ -49,25 +49,25 @@ namespace Robot
         publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);
 
         //std::cout << "" <<std::endl;
-        //std::cout << "Orientation" << currentPose.orientation.z  * (180 / M_PI) <<std::endl;
+        //std::cout << "Orientation" << currentOdomPose.orientation.z  * (180 / M_PI) <<std::endl;
         //std::cout << "Diff Pose berechnet: X=" << diffPose.position.x << ", Y=" << diffPose.position.y << std::endl;
         //std::cout << "Gamma berechnet: " << gamma * (180 / M_PI) << std::endl;
         //std::cout << "Gesamtdistanz: " << calculateTotalDistance(diffPose)<< std::endl;
-        //std::cout << "Alpha berechnet: " << calculateAlpha(gamma, currentPose) * (180 / M_PI) << std::endl;
+        //std::cout << "Alpha berechnet: " << calculateAlpha(gamma, currentOdomPose) * (180 / M_PI) << std::endl;
         //std::cout << "Beta berechnet: " << calculateBeta(goalPose, gamma)  * (180 / M_PI)<< std::endl;
         //std::cout << "cmdVel.linear.x: " << cmdVel.linear.x << "    ||  cmdVel.angular.z:"<<cmdVel.angular.z<<std::endl;
         //std::cout << "" <<std::endl;
         return 1;
     }
 
-    bool Robot::MobileRobot::orientationController(Robot::Pose goalPose, Robot::Pose currentPose)
+    bool Robot::MobileRobot::orientationController(Robot::Pose goalPose, Robot::Pose currentOdomPose)
     {
         Parameter PID;  
-        convertQuaternionsToEuler(&currentPose);    
-        diffPose.position.x = goalPose.position.x - currentPose.position.x;
-        diffPose.position.y = goalPose.position.y - currentPose.position.y; 
+        convertQuaternionsToEuler(&currentOdomPose);    
+        diffPose.position.x = goalPose.position.x - currentOdomPose.position.x;
+        diffPose.position.y = goalPose.position.y - currentOdomPose.position.y; 
         gamma = calculateGamma(diffPose);   
-        alpha = calculateAlpha(gamma, currentPose); 
+        alpha = calculateAlpha(gamma, currentOdomPose); 
         beta = calculateBeta(goalPose, gamma);  
         pidController(&cmdVel, PID, totalDistance, alpha, beta);    
         limitControllerVariables(&cmdVel, 1, -1);   
@@ -100,9 +100,9 @@ namespace Robot
         return (atan2(diffPose.position.y, diffPose.position.x));
     }
 
-    double MobileRobot::calculateAlpha(double gamma, Robot::Pose currentPose)
+    double MobileRobot::calculateAlpha(double gamma, Robot::Pose currentOdomPose)
     {
-        return (angleDiff(gamma , currentPose.orientation.z));
+        return (angleDiff(gamma , currentOdomPose.orientation.z));
     }
 
     double MobileRobot::calculateBeta(Robot::Pose goalPose, double gamma)
@@ -245,16 +245,16 @@ namespace Robot
         this->ip = ipAdress;
     };
 
-    int MobileRobot::goTo(Pose* goalPose, Pose* currentPose)
+    int MobileRobot::goTo(Pose* goalPose, Pose* currentOdomPose)
     {
         Pose diffPose;
-        diffPose.position.x = goalPose->position.x - currentPose->position.x;
-        diffPose.position.y = goalPose->position.y - currentPose->position.y;
+        diffPose.position.x = goalPose->position.x - currentOdomPose->position.x;
+        diffPose.position.y = goalPose->position.y - currentOdomPose->position.y;
 
         double totalDistance = calculateTotalDistance(diffPose);
 
-        convertQuaternionsToEuler(currentPose);
-        double totalOrientation = goalPose->orientation.z - currentPose->orientation.z;
+        convertQuaternionsToEuler(currentOdomPose);
+        double totalOrientation = goalPose->orientation.z - currentOdomPose->orientation.z;
 
         if (totalDistance < goalPose->tolerance && (totalOrientation) < 0.1) 
         {
@@ -264,7 +264,7 @@ namespace Robot
         }
         else
         {
-            linearController(*goalPose, *currentPose);
+            linearController(*goalPose, *currentOdomPose);
         }
     
         return goalPose->index;
@@ -278,30 +278,54 @@ namespace Robot
 
     bool MobileRobot::run(char* ip)
     {
-        Robot::Pose currentPose;
+        //Setup for message
         setIP(ip);
         char buffer[16000] = {};
+
+        //Receiving odom-data 
+        Robot::Pose currentOdomPose;
         Robot::TCPClient client(ip, 9998); 
-        std::string receivedData = client.receiveData(buffer, sizeof(buffer));
-
+        std::string odomData = client.receiveData(buffer, sizeof(buffer));
         Robot::JsonHandler dataHandler;
-        nlohmann :: json json;
+        nlohmann :: json jsonOdom;
 
-        json = dataHandler.extractJson(receivedData);
+        jsonOdom = dataHandler.extractJson(odomData);
+
+        //Overwriting current odometry position with Sensor Odometry Position
+
+        currentOdomPose.position.x = jsonOdom["pose"]["pose"]["position"]["x"];
+        currentOdomPose.position.y = jsonOdom["pose"]["pose"]["position"]["y"];
+        currentOdomPose.position.z = jsonOdom["pose"]["pose"]["position"]["z"];
+        currentOdomPose.orientation.x = jsonOdom["pose"]["pose"]["orientation"]["x"];
+        currentOdomPose.orientation.y = jsonOdom["pose"]["pose"]["orientation"]["y"];
+        currentOdomPose.orientation.z = jsonOdom["pose"]["pose"]["orientation"]["z"];
+        currentOdomPose.orientation.w = jsonOdom["pose"]["pose"]["orientation"]["w"]; 
+
+        std::cout<<" sequence:    " << sequenceNumber<< "         || currentOdomPose.position.x:   "<<currentOdomPose.position.x<<"         || currentOdomPose.position.y"<<currentOdomPose.position.y<<"         ||  currentOdomPose.orientation.z"<< currentOdomPose.orientation.z<<std::endl;
 
 
-        //Overwriting current position with Sensor Position
+/*         //Receiving laserscan-data
+        Robot::Pose currentLaserscanPose;
+        Robot::TCPClient client(ip, 10000); 
+        std::string laserscanData = client.receiveData(buffer, sizeof(buffer));
+        Robot::JsonHandler dataHandler;
+        nlohmann :: json jsonScan;
 
-        currentPose.position.x = json["pose"]["pose"]["position"]["x"];
-        currentPose.position.y = json["pose"]["pose"]["position"]["y"];
-        currentPose.position.z = json["pose"]["pose"]["position"]["z"];
-        currentPose.orientation.x = json["pose"]["pose"]["orientation"]["x"];
-        currentPose.orientation.y = json["pose"]["pose"]["orientation"]["y"];
-        currentPose.orientation.z = json["pose"]["pose"]["orientation"]["z"];
-        currentPose.orientation.w = json["pose"]["pose"]["orientation"]["w"]; 
+        jsonScan = dataHandler.extractJson(laserscanData);
 
-        std::cout<<" sequence:    " << sequenceNumber<< "         || currentPose.position.x:   "<<currentPose.position.x<<"         || currentPose.position.y"<<currentPose.position.y<<"         ||  currentPose.orientation.z"<< currentPose.orientation.z<<std::endl;
 
+
+        //Overwriting current laserscan position with Sensor Laserscan Position
+
+        currentLaserscanPose.position.x = jsonScan["pose"]["pose"]["position"]["x"];
+        currentLaserscanPose.position.y = jsonScan["pose"]["pose"]["position"]["y"];
+        currentLaserscanPose.position.z = jsonScan["pose"]["pose"]["position"]["z"];
+        currentLaserscanPose.orientation.x = jsonScan["pose"]["pose"]["orientation"]["x"];
+        currentLaserscanPose.orientation.y = jsonScan["pose"]["pose"]["orientation"]["y"];
+        currentLaserscanPose.orientation.z = jsonScan["pose"]["pose"]["orientation"]["z"];
+        currentLaserscanPose.orientation.w = jsonScan["pose"]["pose"]["orientation"]["w"]; 
+
+        std::cout<<" sequence:    " << sequenceNumber<< "         || currentOdomPose.position.x:   "<<currentLaserscanPose.position.x<<"         || currentOdomPose.position.y"<<currentLaserscanPose.position.y<<"         ||  currentOdomPose.orientation.z"<< currentLaserscanPose.orientation.z<<std::endl; */
 
         Robot::Pose goalPose1, goalPose3, goalPose2, goalPose4;
 
@@ -331,11 +355,11 @@ namespace Robot
         goalPose4.orientation.z = -M_PI/2; 
         goalPose4.tolerance = 0.2;
 
-        if(goalPose1.index == sequenceNumber) goTo(&goalPose1, &currentPose);
-        if(goalPose2.index == sequenceNumber) goTo(&goalPose2, &currentPose);
-        if(goalPose3.index == sequenceNumber) goTo(&goalPose3, &currentPose);
-        if(goalPose4.index == sequenceNumber) goTo(&goalPose4, &currentPose);
-        //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentPose);
+        if(goalPose1.index == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
+        if(goalPose2.index == sequenceNumber) goTo(&goalPose2, &currentOdomPose);
+        if(goalPose3.index == sequenceNumber) goTo(&goalPose3, &currentOdomPose);
+        if(goalPose4.index == sequenceNumber) goTo(&goalPose4, &currentOdomPose); 
+        //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
 
 
         return true;

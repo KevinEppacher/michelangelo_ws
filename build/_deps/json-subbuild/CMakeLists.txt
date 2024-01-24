@@ -22,8 +22,8 @@ set_property(GLOBAL PROPERTY _CMAKE_FindGit_GIT_EXECUTABLE_VERSION
 include(ExternalProject)
 ExternalProject_Add(json-populate
                      "UPDATE_DISCONNECTED" "False" "GIT_REPOSITORY" "https://github.com/nlohmann/json.git" "GIT_TAG" "v3.10.5"
-                    SOURCE_DIR          "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/json-src"
-                    BINARY_DIR          "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/json-build"
+                    SOURCE_DIR          "/home/cocokayya18/michelangelo_ws/build/_deps/json-src"
+                    BINARY_DIR          "/home/cocokayya18/michelangelo_ws/build/_deps/json-build"
                     CONFIGURE_COMMAND   ""
                     BUILD_COMMAND       ""
                     INSTALL_COMMAND     ""

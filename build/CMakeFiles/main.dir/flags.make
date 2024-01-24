@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DJSON_DIAGNOSTICS=0 -DJSON_USE_IMPLICIT_CONVERSIONS=1
 
-CXX_INCLUDES = -I"/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-src" -I"/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/json-src/single_include"
+CXX_INCLUDES = -I/home/cocokayya18/michelangelo_ws/build/_deps/eigen-src -I/home/cocokayya18/michelangelo_ws/build/_deps/json-src/single_include
 
 CXX_FLAGS = -std=gnu++17
 

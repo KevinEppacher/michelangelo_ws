@@ -4,14 +4,14 @@
 
 
 # Configuration directories and files
-SourceDirectory: /home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-src
-BuildDirectory: /home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-build
+SourceDirectory: /home/cocokayya18/michelangelo_ws/build/_deps/eigen-src
+BuildDirectory: /home/cocokayya18/michelangelo_ws/build/_deps/eigen-build
 
 # Where to place the cost data store
 CostDataFile: 
 
 # Site is something like machine.domain, i.e. pragmatic.crd
-Site: cocossurface2
+Site: CoCosSurface2
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
 BuildName: linux-5.15.133.1-microsoft-standard-wsl2-_-11.4.0-sse2-64bit
@@ -26,7 +26,7 @@ SubmitURL: http://my.cdash.org/submit.php?project=Eigen
 NightlyStartTime: 00:00:00 UTC
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/usr/bin/cmake" "/home/cocokayya18/Advanced Programming for Robots/michelangelo_ws/build/_deps/eigen-src"
+ConfigureCommand: "/usr/bin/cmake" "/home/cocokayya18/michelangelo_ws/build/_deps/eigen-src"
 MakeCommand: /usr/bin/cmake --build . --target buildtests --config "${CTEST_CONFIGURATION_TYPE}" --  
 DefaultCTestConfigurationType: Release
 
