@@ -62,6 +62,14 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "bit": "cpp"
+        "bit": "cpp",
+        "strstream": "cpp",
+        "forward_list": "cpp",
+        "unordered_set": "cpp",
+        "filesystem": "cpp",
+        "hash_map": "cpp",
+        "cfenv": "cpp",
+        "valarray": "cpp",
+        "*.ipp": "cpp"
     }
 }

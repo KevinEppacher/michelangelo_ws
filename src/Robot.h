@@ -124,28 +124,9 @@ MobileRobot
         double angleDiff(double angle1, double angle2);
         bool orientationController(Robot::Pose goalPose, Robot::Pose currentPose);
         Robot::Pose robotPose;
-        void publishCmdVel(double* linear_x, double* angular_z);
-        bool linearController(Robot::Pose goalPose, Robot::Pose currentPose);
-        bool pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta);
-        bool limitControllerVariables(Twist* cmdVel, double upperLimit, double lowerLimit);
-        bool convertQuaternionsToEuler(Pose* currentAngle);
-        int goTo(Pose* goalPose, Pose* currentPose);
-        bool run();
-
-    protected:
-        double calculateTotalDistance(Robot::Pose diffPose);
-        double calculateGamma(Robot::Pose diffPose);
-        double calculateAlpha(double gamma, Robot::Pose currentAngle);
-        double calculateBeta(Robot::Pose goalPose, double gamma);
-        bool calculateRobotVektor();
-        bool calculateVektorFromRobotToGoal();
-        double calculateYaw(Pose* qA);
-        double calculateRoll(Pose* qA);
-        double calculatePitch(Pose* qA);
-        double angleDiff(double angle1, double angle2);
-        bool orientationController(Robot::Pose goalPose, Robot::Pose currentPose);
-        Robot::Pose robotPose;
         void arrivedEndgoal();
+        void process(std::string odomData);
+        std::string receive();
 
     private:
         char* ip;
@@ -174,7 +155,7 @@ MobileRobot
 
         void sendData(const char* data);
 
-        void receiveData(char* buffer, ssize_t size);
+        std::string receiveData(char* buffer, ssize_t size);
 
     private:
         int client_fd;

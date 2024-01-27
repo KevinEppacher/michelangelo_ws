@@ -1,0 +1,225 @@
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wshorten64to32 failed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_1092d/fast && /usr/bin/make -f CMakeFiles/cmTC_1092d.dir/build.make CMakeFiles/cmTC_1092d.dir/build
+make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_1092d.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -DCOMPILER_SUPPORT_Wshorten64to32 -Werror   -Wshorten-64-to-32 -o CMakeFiles/cmTC_1092d.dir/src.cxx.o -c /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx
+c++: error: unrecognized command line option '-Wshorten-64-to-32'
+make[1]: *** [CMakeFiles/cmTC_1092d.dir/build.make:66: CMakeFiles/cmTC_1092d.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_1092d/fast] Error 2
+
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wenumconversion failed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_377c0/fast && /usr/bin/make -f CMakeFiles/cmTC_377c0.dir/build.make CMakeFiles/cmTC_377c0.dir/build
+make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_377c0.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -DCOMPILER_SUPPORT_Wenumconversion -Werror   -Wenum-conversion -o CMakeFiles/cmTC_377c0.dir/src.cxx.o -c /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx
+c++: error: unrecognized command line option '-Wenum-conversion'; did you mean '-Wno-conversion'?
+make[1]: *** [CMakeFiles/cmTC_377c0.dir/build.make:66: CMakeFiles/cmTC_377c0.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_377c0/fast] Error 2
+
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Wcpp11extensions failed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_1f2bf/fast && /usr/bin/make -f CMakeFiles/cmTC_1f2bf.dir/build.make CMakeFiles/cmTC_1f2bf.dir/build
+make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_1f2bf.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -DCOMPILER_SUPPORT_Wcpp11extensions -Werror   -Wc++11-extensions -o CMakeFiles/cmTC_1f2bf.dir/src.cxx.o -c /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx
+c++: error: unrecognized command line option '-Wc++11-extensions'; did you mean '-fms-extensions'?
+make[1]: *** [CMakeFiles/cmTC_1f2bf.dir/build.make:66: CMakeFiles/cmTC_1f2bf.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_1f2bf/fast] Error 2
+
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_wd981 failed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_9db68/fast && /usr/bin/make -f CMakeFiles/cmTC_9db68.dir/build.make CMakeFiles/cmTC_9db68.dir/build
+make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_9db68.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_wd981 -Werror   -wd981 -o CMakeFiles/cmTC_9db68.dir/src.cxx.o -c /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx
+c++: error: unrecognized command line option '-wd981'
+make[1]: *** [CMakeFiles/cmTC_9db68.dir/build.make:66: CMakeFiles/cmTC_9db68.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_9db68/fast] Error 2
+
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_wd2304 failed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_39b0f/fast && /usr/bin/make -f CMakeFiles/cmTC_39b0f.dir/build.make CMakeFiles/cmTC_39b0f.dir/build
+make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_39b0f.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_wd2304 -Werror   -wd2304 -o CMakeFiles/cmTC_39b0f.dir/src.cxx.o -c /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx
+c++: error: unrecognized command line option '-wd2304'
+make[1]: *** [CMakeFiles/cmTC_39b0f.dir/build.make:66: CMakeFiles/cmTC_39b0f.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_39b0f/fast] Error 2
+
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_STRICTANSI failed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_aeadb/fast && /usr/bin/make -f CMakeFiles/cmTC_aeadb.dir/build.make CMakeFiles/cmTC_aeadb.dir/build
+make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_aeadb.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_STRICTANSI -Werror   -strict-ansi -o CMakeFiles/cmTC_aeadb.dir/src.cxx.o -c /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx
+c++: error: unrecognized command line option '-strict-ansi'; did you mean '-fstrict-enums'?
+make[1]: *** [CMakeFiles/cmTC_aeadb.dir/build.make:66: CMakeFiles/cmTC_aeadb.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_aeadb/fast] Error 2
+
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test COMPILER_SUPPORT_Qunusedarguments failed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_65f48/fast && /usr/bin/make -f CMakeFiles/cmTC_65f48.dir/build.make CMakeFiles/cmTC_65f48.dir/build
+make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_65f48.dir/src.cxx.o
+/usr/bin/c++    -std=c++03 -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_Qunusedarguments -Werror   -Qunused-arguments -o CMakeFiles/cmTC_65f48.dir/src.cxx.o -c /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.cxx
+c++: error: unrecognized command line option '-Qunused-arguments'
+make[1]: *** [CMakeFiles/cmTC_65f48.dir/build.make:66: CMakeFiles/cmTC_65f48.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_65f48/fast] Error 2
+
+
+Source file was:
+int main() { return 0; }
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_5b8ec/fast && /usr/bin/make -f CMakeFiles/cmTC_5b8ec.dir/build.make CMakeFiles/cmTC_5b8ec.dir/build
+make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5b8ec.dir/src.c.o
+/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_5b8ec.dir/src.c.o   -c /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_5b8ec
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5b8ec.dir/link.txt --verbose=1
+/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD    CMakeFiles/cmTC_5b8ec.dir/src.c.o  -o cmTC_5b8ec 
+/usr/bin/ld: CMakeFiles/cmTC_5b8ec.dir/src.c.o: in function `main':
+src.c:(.text+0x46): undefined reference to `pthread_create'
+/usr/bin/ld: src.c:(.text+0x52): undefined reference to `pthread_detach'
+/usr/bin/ld: src.c:(.text+0x63): undefined reference to `pthread_join'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_5b8ec.dir/build.make:87: cmTC_5b8ec] Error 1
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_5b8ec/fast] Error 2
+
+
+Source file was:
+#include <pthread.h>
+
+void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_0ccf5/fast && /usr/bin/make -f CMakeFiles/cmTC_0ccf5.dir/build.make CMakeFiles/cmTC_0ccf5.dir/build
+make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0ccf5.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_0ccf5.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_0ccf5
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0ccf5.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_0ccf5.dir/CheckFunctionExists.c.o  -o cmTC_0ccf5  -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_0ccf5.dir/build.make:87: cmTC_0ccf5] Error 1
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_0ccf5/fast] Error 2
+
+
+
+Performing C SOURCE FILE Test SCOTCH_Num_4 failed with the following compile output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_c9c0d/fast && /usr/bin/make -f CMakeFiles/cmTC_c9c0d.dir/build.make CMakeFiles/cmTC_c9c0d.dir/build
+make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c9c0d.dir/src.c.o
+/usr/bin/cc   -DSCOTCH_Num_4 -fopenmp   -o CMakeFiles/cmTC_c9c0d.dir/src.c.o   -c /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.c
+/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.c:4:10: fatal error: scotch.h: No such file or directory
+    4 | #include <scotch.h>
+      |          ^~~~~~~~~~
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTC_c9c0d.dir/build.make:66: CMakeFiles/cmTC_c9c0d.dir/src.c.o] Error 1
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_c9c0d/fast] Error 2
+
+
+...and run output:
+
+Return value: 1
+Source file was:
+
+#include <stdio.h>
+#include <stdint.h>
+#include <scotch.h>
+int main(int argc, char **argv) {
+  if (sizeof(SCOTCH_Num) == 4)
+    return 0;
+  else
+    return 1;
+}
+
+Performing C SOURCE FILE Test SCOTCH_Num_8 failed with the following compile output:
+Change Dir: /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_5d75c/fast && /usr/bin/make -f CMakeFiles/cmTC_5d75c.dir/build.make CMakeFiles/cmTC_5d75c.dir/build
+make[1]: Entering directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5d75c.dir/src.c.o
+/usr/bin/cc   -DSCOTCH_Num_8 -fopenmp   -o CMakeFiles/cmTC_5d75c.dir/src.c.o   -c /home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.c
+/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp/src.c:4:10: fatal error: scotch.h: No such file or directory
+    4 | #include <scotch.h>
+      |          ^~~~~~~~~~
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTC_5d75c.dir/build.make:66: CMakeFiles/cmTC_5d75c.dir/src.c.o] Error 1
+make[1]: Leaving directory '/home/kevin/michelangelo_ws/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_5d75c/fast] Error 2
+
+
+...and run output:
+
+Return value: 1
+Source file was:
+
+#include <stdio.h>
+#include <stdint.h>
+#include <scotch.h>
+int main(int argc, char **argv) {
+  if (sizeof(SCOTCH_Num) == 8)
+    return 0;
+  else
+    return 1;
+}
+

@@ -1,3 +1,0 @@
-/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/_deps/json-subbuild/CMakeFiles/rebuild_cache.dir
-/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/_deps/json-subbuild/CMakeFiles/edit_cache.dir
-/home/julian/Documents/FH/Master 1. Semester/APR/michelangelo_ws/_deps/json-subbuild/CMakeFiles/json-populate.dir

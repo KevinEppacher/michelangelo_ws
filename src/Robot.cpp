@@ -283,17 +283,19 @@ namespace Robot
         publishCmdVel(&zero, &zero);
     }
 
-    std::string MobileRobot::receive();{
+    std::string MobileRobot::receive()
+    {
         char buffer[16000] = {};
         //Receiving odom-data 
-        Robot::Pose currentOdomPose;
         Robot::TCPClient odomClient(ip, 9998); 
         std::string odomData = odomClient.receiveData(buffer, sizeof(buffer));
         return odomData;
     }
 
 
-    std::string MobileRobot::process(std::string odomData){
+    void MobileRobot::process(std::string odomData)
+    {
+        Robot::Pose currentOdomPose;
         Robot::JsonHandler OdomdataHandler;
         nlohmann :: json jsonOdom;
 
@@ -335,7 +337,7 @@ namespace Robot
         {
             std::cout<<"Poses: "<<pose.index<<std::endl;
         }
-*/
+*/  
         
         
 
@@ -422,19 +424,16 @@ namespace Robot
   
         //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
 
-
-        return "";
     }
-    }
-
+    
 
     bool MobileRobot::run()
     {
-        std::string input = std::string = MobileRobot.receive();
+        std::string input = MobileRobot::receive();
         const char* charInput = input.c_str();
         SHM myBrain(charInput);
         std::string output = myBrain.returnOutput();
-        MobileRobot.process(output);
+        MobileRobot::process(output);
 
     }
 
@@ -485,35 +484,8 @@ TCP Client
         send(client_fd, data, strlen(data), 0);
         //std::cout << "Message sent: " << data << std::endl;
         close(client_fd);
-
-
-        /* fork a child process */
-        child_pid = fork();
-        if (child_pid < 0) { /* error occurred */
-            cerr << "Fork Failed\n";
-            exit(-1);
-        }
-
-        if(SharedMemories::child_pid != 0)  // child pid not 0 -> producer
-        { 
-            signal (SIGINT, SharedMemories::producerHandler);  // shutdown if strg+C
-            std::cout << "I am the producer\n";
-
-            // producing loop
-            while (true)
-            {
-                std::cout << "Producer attempting write\n";
-                Message prodMsg;
-                prodMsg.type = PROD_MSG;
-                prodMsg.data = 0;//INSERT MESSAGE HERE !!!!!!
-
-                // send message - should test for error
-                msgsnd(SharedMemories::msgqid, &prodMsg, sizeof(int), 0);
-                std::cout << "Producer sent: " << prodMsg.data << std::endl;
-                sleep(0.1);  // 0.1s
-            }  // end producing loop
-        }  // end producer code
     }
+
 
     std::string TCPClient::receiveData(char* buffer, ssize_t size) 
     {
