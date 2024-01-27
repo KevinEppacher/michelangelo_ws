@@ -9,7 +9,7 @@
 #include <netinet/in.h>
 #include <nlohmann/json.hpp>
 #include <Eigen/Geometry> 
-#include <SFML/Graphics.hpp>
+//#include <SFML/Graphics.hpp>
 #include <vector>
 #include <chrono>
 
@@ -35,6 +35,8 @@ namespace Robot
         Position position;
         Orientation orientation;
     };
+
+    double convertDegreesToRadiant(double degrees);
 
 
     struct Twist
@@ -66,6 +68,13 @@ namespace Robot
         double derivativeError = 0;
     };
 
+    struct Circle
+    {
+        double xOffset = 0;
+        double yOffset = 0;
+        double radius = 1;
+    };
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +89,8 @@ MobileRobot
     class MobileRobot
     {
     public:
-        MobileRobot();
+        MobileRobot(char* ip);
+        MobileRobot(){};
         ~MobileRobot();
         void publishCmdVel(double* linear_x, double* angular_z);
         bool linearController(Robot::Pose goalPose, Robot::Pose currentPose);
@@ -89,6 +99,7 @@ MobileRobot
         bool convertQuaternionsToEuler(Pose* currentAngle);
         int goTo(Pose* goalPose, Pose* currentPose);
         bool run();
+        void setIP(char* ipAdress);
 
     protected:
         double calculateTotalDistance(Robot::Pose diffPose);
@@ -103,8 +114,10 @@ MobileRobot
         double angleDiff(double angle1, double angle2);
         bool orientationController(Robot::Pose goalPose, Robot::Pose currentPose);
         Robot::Pose robotPose;
+        void arrivedEndgoal();
 
     private:
+        char* ip;
         Robot::Pose diffPose;
         Robot::Twist cmdVel;
         int sequenceNumber = 1;
@@ -122,6 +135,7 @@ MobileRobot
     {
     public:
         TCPClient(const char* serverIP, int port);
+        TCPClient(){};
         
         ~TCPClient();
 
@@ -129,29 +143,23 @@ MobileRobot
 
         void sendData(const char* data);
 
-        void receiveData(char* buffer, ssize_t size);
+        std::string receiveData(char* buffer, ssize_t size);
 
     private:
         int client_fd;
         ssize_t valread;
         struct sockaddr_in serv_addr;
+        
 
     };
 
+    //COCO//
+
 
     class JsonHandler
-
-        /*     How to use:
-                sudo apt install nlohmann-json3-dev, in case the library is not installed yet
-                Robot::JsonHandler jsonHüdai; Initiate Json Object
-                jsonHüdai.extractJson(GIVE RAW DATA AS INPUT TO PARSE THE DATA);
-                jsonHüdai.JsonOutputter(GIVE KEY AS INPUT) */
-
-
     {
         public:
             JsonHandler();
-            //JsonHandler();
             ~JsonHandler();
 
             nlohmann::json extractJson(std::string rawData);

@@ -1,3 +1,0 @@
-/home/cocokayya18/michelangelo_ws/CMakeFiles/main.dir
-/home/cocokayya18/michelangelo_ws/CMakeFiles/edit_cache.dir
-/home/cocokayya18/michelangelo_ws/CMakeFiles/rebuild_cache.dir
