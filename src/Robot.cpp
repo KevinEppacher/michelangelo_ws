@@ -433,6 +433,7 @@ namespace Robot
         const char* charInput = input.c_str();
         SHM myBrain(charInput);
         std::string output = myBrain.returnOutput();
+        std::cout << "Output: " << output << std::endl;
         MobileRobot::process(output);
         return true;
 

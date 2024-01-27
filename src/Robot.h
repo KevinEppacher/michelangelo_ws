@@ -203,7 +203,7 @@ public:
 
 private:
     struct SHM_Message {
-        char information[256];
+        char information[16000];
     };
 
     void checkSignal(int semid);
