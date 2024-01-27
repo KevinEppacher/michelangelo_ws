@@ -283,37 +283,44 @@ namespace Robot
         char buffer[16000] = {};
 
         //Receiving odom-data 
-        Robot::Pose currentOdomPose;
-        Robot::TCPClient client(ip, 9998); 
-        std::string odomData = client.receiveData(buffer, sizeof(buffer));
-        Robot::JsonHandler dataHandler;
-        nlohmann :: json jsonOdom;
+        // Robot::Pose currentOdomPose;
+        // Robot::TCPClient client(ip, 9998); 
+        // std::string odomData = client.receiveData(buffer, sizeof(buffer));
+        // Robot::JsonHandler dataHandler;
+        // nlohmann :: json jsonOdom;
 
-        jsonOdom = dataHandler.extractJson(odomData);
+        // jsonOdom = dataHandler.extractJson(odomData);
 
-        //Overwriting current odometry position with Sensor Odometry Position
+        // //Overwriting current odometry position with Sensor Odometry Position
 
-        currentOdomPose.position.x = jsonOdom["pose"]["pose"]["position"]["x"];
-        currentOdomPose.position.y = jsonOdom["pose"]["pose"]["position"]["y"];
-        currentOdomPose.position.z = jsonOdom["pose"]["pose"]["position"]["z"];
-        currentOdomPose.orientation.x = jsonOdom["pose"]["pose"]["orientation"]["x"];
-        currentOdomPose.orientation.y = jsonOdom["pose"]["pose"]["orientation"]["y"];
-        currentOdomPose.orientation.z = jsonOdom["pose"]["pose"]["orientation"]["z"];
-        currentOdomPose.orientation.w = jsonOdom["pose"]["pose"]["orientation"]["w"]; 
+        // currentOdomPose.position.x = jsonOdom["pose"]["pose"]["position"]["x"];
+        // currentOdomPose.position.y = jsonOdom["pose"]["pose"]["position"]["y"];
+        // currentOdomPose.position.z = jsonOdom["pose"]["pose"]["position"]["z"];
+        // currentOdomPose.orientation.x = jsonOdom["pose"]["pose"]["orientation"]["x"];
+        // currentOdomPose.orientation.y = jsonOdom["pose"]["pose"]["orientation"]["y"];
+        // currentOdomPose.orientation.z = jsonOdom["pose"]["pose"]["orientation"]["z"];
+        // currentOdomPose.orientation.w = jsonOdom["pose"]["pose"]["orientation"]["w"]; 
 
-        std::cout<<" sequence:    " << sequenceNumber<< "         || currentOdomPose.position.x:   "<<currentOdomPose.position.x<<"         || currentOdomPose.position.y"<<currentOdomPose.position.y<<"         ||  currentOdomPose.orientation.z"<< currentOdomPose.orientation.z<<std::endl;
+        // std::cout<<" sequence:    " << sequenceNumber<< "         || currentOdomPose.position.x:   "<<currentOdomPose.position.x<<"         || currentOdomPose.position.y"<<currentOdomPose.position.y<<"         ||  currentOdomPose.orientation.z"<< currentOdomPose.orientation.z<<std::endl;
 
 
-/*         //Receiving laserscan-data
+        //Receiving laserscan-data
         Robot::Pose currentLaserscanPose;
-        Robot::TCPClient client(ip, 10000); 
-        std::string laserscanData = client.receiveData(buffer, sizeof(buffer));
+        Robot::TCPClient laserClient(ip, 9997); 
+        std::string laserscanData = laserClient.receiveData(buffer, sizeof(buffer));
+
+        std::cout << laserscanData << std::endl;
+
         Robot::JsonHandler dataHandler;
         nlohmann :: json jsonScan;
 
         jsonScan = dataHandler.extractJson(laserscanData);
 
+        std::cout << "Json data incoming" << std::endl;
 
+        std::cout << jsonScan << std::endl;
+
+/* 
 
         //Overwriting current laserscan position with Sensor Laserscan Position
 
@@ -355,11 +362,11 @@ namespace Robot
         goalPose4.orientation.z = -M_PI/2; 
         goalPose4.tolerance = 0.2;
 
-        if(goalPose1.index == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
-        if(goalPose2.index == sequenceNumber) goTo(&goalPose2, &currentOdomPose);
-        if(goalPose3.index == sequenceNumber) goTo(&goalPose3, &currentOdomPose);
-        if(goalPose4.index == sequenceNumber) goTo(&goalPose4, &currentOdomPose); 
-        //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
+        // if(goalPose1.index == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
+        // if(goalPose2.index == sequenceNumber) goTo(&goalPose2, &currentOdomPose);
+        // if(goalPose3.index == sequenceNumber) goTo(&goalPose3, &currentOdomPose);
+        // if(goalPose4.index == sequenceNumber) goTo(&goalPose4, &currentOdomPose);
+        // //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
 
 
         return true;
