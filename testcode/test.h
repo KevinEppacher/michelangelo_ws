@@ -7,40 +7,30 @@
 #include <sys/shm.h>
 #include <sys/sem.h>
 #include <iostream>
-#include <thread>
-#include <csignal>
-#include <atomic>
+#include <functional>
+#include <cstring>
 
-void signalHandler(int signum);
-void producerHandler(int sig);
-void consumerHandler(int sig);
+class SHM {
+public:
+    SHM(const std::string& input);
+    ~SHM();
+    
+    std::string returnOutput();
+    int processID;
 
+private:
+    struct SHM_Message {
+        char information[256];
+    };
 
-std::atomic<bool> shutdown(false);
+    void checkSignal(int semid);
+    void setSignal(int semid);
+    static void signalHandler(int sig, SHM* instance);
 
-int mutex;
-int shmID;
-pid_t childID;
+    int mutexID;
+    int shmID;
+    SHM_Message* shmptr;
 
-const int BUFFER_SIZE = 1;
-struct SharedMemory          // Format of the shared memory
-{
-   int numItems;             // Count of items in buffer
-   int in, out;              // Indexes to back and front
-   int buffer[BUFFER_SIZE];  // Items are integers
+    std::string input;
+    std::string output;
 };
-SharedMemory *shmptr;
-
-
-class SHM{
-    public:
-        SHM();
-        void startTalking();
-        void startListening();
-
-        std::thread& getMyPthread();
-        std::thread& getMyCthread();
-        std::thread myPthread;
-        std::thread myCthread;
-};
-
