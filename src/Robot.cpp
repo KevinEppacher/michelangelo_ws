@@ -864,4 +864,8 @@ JsonHandler
         //COCO//
 
     
+<<<<<<< HEAD
 }
+=======
+};
+>>>>>>> 52da2fff (Merge branch 'Coco_Real' of https://github.com/KevinEppacher/michelangelo_ws into Kevin)
