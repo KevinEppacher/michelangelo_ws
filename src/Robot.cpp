@@ -651,13 +651,15 @@ sharedMemory
         startupMemories(); //startet die msq init
     }
 
-    SharedMemories::startupMemories(){ //msq init
+    SharedMemories::startupMemories()
+    { //msq init
         SharedMemories::msgqid = msgget(IPC_PRIVATE, 0660);
 
         if (msgqid == -1) {     //wenn msqid < 0 ist -> Fehler
             std::cerr << "msgget failed\n";
             exit(EXIT_FAILURE);
-   }
+        }
+    }
 
           
    
@@ -691,4 +693,4 @@ sharedMemory
     
 
     
-}
+};
