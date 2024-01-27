@@ -74,6 +74,7 @@
         "hash_map": "cpp",
         "semaphore": "cpp",
         "span": "cpp",
-        "stop_token": "cpp"
+        "stop_token": "cpp",
+        "geometry": "cpp"
     }
 }

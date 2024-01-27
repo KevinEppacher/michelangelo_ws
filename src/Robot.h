@@ -9,12 +9,15 @@
 #include <netinet/in.h>
 #include <nlohmann/json.hpp>
 #include <Eigen/Geometry> 
-//#include <SFML/Graphics.hpp>
 #include <vector>
 #include <chrono>
+#include <SFML/Graphics.hpp>
+#include <cmath>
+#include <deque>
 
 
 #define RCVBUFSIZE 100000   /* Size of receive buffer */
+
 
 namespace Robot
 {
@@ -73,6 +76,15 @@ namespace Robot
         double xOffset = 0;
         double yOffset = 0;
         double radius = 1;
+    };
+
+    struct sensor_msgs
+    {
+        struct scan_msg
+        {
+            std::vector<float> range;
+            std::vector<float> angle;
+        };
     };
 
 
@@ -175,6 +187,36 @@ MobileRobot
 
     //COCO//
 
+    class Visualizer
+    {
+    public:
+        Visualizer();
+        ~Visualizer();
+
+        void run();
+
+    private:
+        int screenWidth = 1200;
+        int screenHeight = 1000;
+        sf::RenderWindow window;
+        Robot::MobileRobot turtle;
+        float angle = 0.0f;
+        float angleIncrement = 1.0f;
+        std::deque<std::pair<float, float>> polarPointQueue;
+        sf::CircleShape pointShape;
+        const int maxBufferSize = 3;
+
+        sf::RectangleShape background; // Background shape
+        sf::VertexArray axes; // Axes lines
+        float centerX; // Center X coordinate
+        float centerY; // Center Y coordinate
+
+        sf::Vector2f polarToCartesian(float radius, float angleDegrees);
+    };
+    
+
+
 }
+
 
 #endif // ROBOT_H

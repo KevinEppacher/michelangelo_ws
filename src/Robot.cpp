@@ -291,6 +291,7 @@ namespace Robot
 
         //Receiving odom-data 
         Robot::Pose currentOdomPose;
+        Robot::sensor_msgs::scan_msg scanData;
         Robot::TCPClient odomClient(ip, 9998); 
         std::string odomData = odomClient.receiveData(buffer, sizeof(buffer));
         Robot::JsonHandler OdomdataHandler;
@@ -319,6 +320,7 @@ namespace Robot
         nlohmann :: json jsonScan;
 
         jsonScan = LaserdataHandler.extractJson(laserscanData);
+        
 /*
         double poseResolution = 9;
         std::vector<Robot::Pose> circlePaths;
@@ -418,7 +420,6 @@ namespace Robot
 
   
         //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
-
 
         return true;
     }
@@ -613,6 +614,81 @@ JsonHandler
         }
 
         //COCO//
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+Visualizer
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+    Visualizer::Visualizer()
+        : background(sf::Vector2f(screenWidth, screenHeight)),
+        axes(sf::Lines, 4),
+        centerX(static_cast<float>(screenWidth) / 2.0f),
+        centerY(static_cast<float>(screenHeight) / 2.0f)
+    {
+        window.create(sf::VideoMode(screenWidth, screenHeight), "Punkte in Polar-Koordinaten");
+        background.setFillColor(sf::Color::Black);
+
+        axes[0].position = sf::Vector2f(0, centerY);
+        axes[1].position = sf::Vector2f(screenWidth, centerY);
+        axes[2].position = sf::Vector2f(centerX, 0);
+        axes[3].position = sf::Vector2f(centerX, screenHeight);
+        for (int i = 0; i < 4; ++i) {
+            axes[i].color = sf::Color::White;
+        }
+
+
+
+        pointShape.setRadius(3);
+        pointShape.setFillColor(sf::Color::Red);
+
+        for (int i = 0; i < maxBufferSize; ++i) {
+            polarPointQueue.push_back({ 100.0f + i, angle });
+            angle += angleIncrement;
+        }
+    }
+
+    Robot::Visualizer::~Visualizer() 
+    {
+
+    }
+
+
+    void Visualizer::run()
+    {
+        //sf::Event event;
+
+        window.clear();
+        window.draw(background);
+        window.draw(axes);
+
+        angle += angleIncrement * 30;
+        polarPointQueue.push_back({ 150.0f + maxBufferSize, angle });
+
+        if (polarPointQueue.size() > maxBufferSize) {
+            polarPointQueue.pop_front();
+        }
+
+        for (const auto& polarPoint : polarPointQueue) {
+            sf::Vector2f cartesianPoint = polarToCartesian(polarPoint.first, polarPoint.second);
+            cartesianPoint += sf::Vector2f(centerX, centerY);
+            pointShape.setPosition(cartesianPoint);
+            window.draw(pointShape);
+        }
+        sf::sleep(sf::milliseconds(500));
+        window.display();
+    }
+
+    sf::Vector2f Visualizer::polarToCartesian(float radius, float angleDegrees)
+    {
+        float angleRadians = angleDegrees * (M_PI / 180.0f);
+        float x = radius * std::cos(angleRadians);
+        float y = radius * std::sin(angleRadians);
+        return sf::Vector2f(x, y);
+    }
+
+
 
     
 }

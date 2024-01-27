@@ -26,14 +26,17 @@ FetchContent_Declare(
 # Make Eigen available for use
 FetchContent_MakeAvailable(eigen)
 
+# Find SFML package
+find_package(SFML 2.5 COMPONENTS system window graphics REQUIRED)
+
 # Add your executables
 add_executable(main src/main.cpp src/Robot.cpp)
-add_executable(server src/server.cpp)
 
-# Link nlohmann/json to your targets
+# Link nlohmann/json to your main target
 target_link_libraries(main nlohmann_json::nlohmann_json)
-target_link_libraries(server nlohmann_json::nlohmann_json)
 
-# Include Eigen for your targets
+# Include Eigen for your main target
 target_include_directories(main PRIVATE ${eigen_SOURCE_DIR})
-target_include_directories(server PRIVATE ${eigen_SOURCE_DIR})
+
+# Link SFML with your main target
+target_link_libraries(main sfml-system sfml-window sfml-graphics)
