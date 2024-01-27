@@ -1,4 +1,0 @@
-# Target labels
- BuildOfficial
-# Source files and their labels
-/home/kevin/michelangelo_ws/build/_deps/eigen-src/test/rvalue_types.cpp

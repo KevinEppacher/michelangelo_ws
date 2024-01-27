@@ -1,23 +1,73 @@
 #include "Robot.h"
+#include <iostream>
+#include <sstream> 
+#include <thread>
+#include <atomic>
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
-    //Robot::Socket robotSocket(argv[1], argv[2], (argc == 4) ? atoi(argv[3]) : 7);
-
-    //Robot::SharedMemories robotSocket(argv[1], "hello", 8080);
-    Robot::SharedMemories robotSocket;
+    Robot::MobileRobot turtle(argv[1]);
 
     // Receive the same string back from the server
     std::cout << "Received: "; /* Setup to print the echoed string */
     while (true)
     {
-
-        
-
-
-
-        //robotSocket.sendAndReceiveData();
-        //std::cout<<"Testing sending data"<<std::endl;
+        turtle.run();
     }
+
     return 0;
 }
+
+
+
+
+
+/*
+void stopRobot(int argc, char **argv)
+{
+    Robot::MobileRobot turtle;
+
+    std::stringstream ss;
+    ss << "---START---{linear: 0 , angular:   0  }___END___";
+    std::string echoString = ss.str();
+    Robot::TCPClient client(argv[1], 9999);
+    client.sendData(echoString.c_str());
+    //client.receiveData(buffer, sizeof(buffer));  
+    client.closeTCPconnection(); 
+
+}
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+    Robot::MobileRobot turtle;
+    
+    while(true)
+    {
+        turtle.run(argv[1]);
+    }
+
+
+    return 0;
+}
+
+*/
