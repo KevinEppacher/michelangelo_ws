@@ -434,6 +434,7 @@ namespace Robot
         SHM myBrain(charInput);
         std::string output = myBrain.returnOutput();
         MobileRobot::process(output);
+        return true;
 
     }
 

@@ -31,8 +31,6 @@ add_executable(main src/main.cpp src/Robot.cpp)
 
 # Link nlohmann/json to your targets
 target_link_libraries(main nlohmann_json::nlohmann_json)
-target_link_libraries(server nlohmann_json::nlohmann_json)
 
 # Include Eigen for your targets
 target_include_directories(main PRIVATE ${eigen_SOURCE_DIR})
-target_include_directories(server PRIVATE ${eigen_SOURCE_DIR})
