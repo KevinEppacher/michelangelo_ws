@@ -145,7 +145,7 @@ class PCA
             Eigen::VectorXd principal_componentLeft = this->computePCA(left);
             this->PCA_Left = principal_componentLeft;
             //std::cout << "Principal Component Left: \n" << principal_componentLeft << std::endl;
-            //this->plotData(data, principal_componentLeft);  
+            this->plotData(data, principal_componentLeft);  
 
             Eigen::VectorXd principal_componentRight = this->computePCA(right);
             this->PCA_Right = principal_componentRight;
@@ -178,7 +178,6 @@ class PCA
             std::cout << "Angles: " << Thetas << std::endl;
 
             return Thetas;
-
         }
 
         Eigen::VectorXd getAngleDifference()
