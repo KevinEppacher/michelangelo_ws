@@ -1,3 +1,0 @@
-/home/kevin/michelangelo_ws/build/CMakeFiles/rebuild_cache.dir
-/home/kevin/michelangelo_ws/build/CMakeFiles/edit_cache.dir
-/home/kevin/michelangelo_ws/build/CMakeFiles/main.dir

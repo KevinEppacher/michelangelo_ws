@@ -1,3 +1,4 @@
 Ausführen:
-kevin@Kevin:~/michelangelo_ws/build$ make
-kevin@Kevin:~/michelangelo_ws/build$ ./main
+cmake //PFAD ZUR CMAKELIST//
+make
+./main //ip_addresse//
