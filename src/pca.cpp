@@ -153,6 +153,33 @@ class PCA
             this->plotData(data, principal_componentRight);
         }
 
+        Eigen::VectorXd getAngleDifference()
+        {
+            Eigen::VectorXd Thetas(2);
+
+            Eigen::VectorXd directionVector(2);
+            directionVector(0) = 1;
+            directionVector(1) = 0;
+
+            double dotProduct = (directionVector.dot(this->PCA_Left));
+
+            double magnitudeVec1 = directionVector.norm();
+            double magnitudeVec2 = this->PCA_Left.norm();
+
+            // Calculate the cosine of the angle
+            double cosAngle = dotProduct / (magnitudeVec1 * magnitudeVec2);
+
+            // Ensure the cosine value is within [-1, 1] to avoid NaN due to floating point errors
+            cosAngle = std::max(-1.0, std::min(1.0, cosAngle));
+
+            // Calculate the angle in radians
+            double angle = std::acos(cosAngle);
+
+            std::cout << "Angles: " << Thetas << std::endl;
+
+            return Thetas;
+        }
+
         Eigen::MatrixXd getFilteredLeftScanData()
         {
             return this->filteredLaserScanLeftSide;
