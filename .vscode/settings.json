@@ -75,6 +75,9 @@
         "semaphore": "cpp",
         "span": "cpp",
         "stop_token": "cpp",
-        "geometry": "cpp"
+        "geometry": "cpp",
+        "strstream": "cpp",
+        "filesystem": "cpp",
+        "cfenv": "cpp"
     }
 }

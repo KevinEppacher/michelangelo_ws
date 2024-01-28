@@ -120,10 +120,10 @@ namespace Robot
     {        
         Parameter Lin, Alpha, Beta;
 
-        Lin.P = 0.3;
+        Lin.P = 0.2;
         Lin.I = 0.01;
 
-        Alpha.P = 1;
+        Alpha.P = 0.8;
         Alpha.I = 0.8;
 
         Beta.P = -0.3;
@@ -258,7 +258,7 @@ namespace Robot
         diffPose.position.y = goalPose->position.y - currentOdomPose->position.y;
 
         double totalDistance = calculateTotalDistance(diffPose);
-        std::cout << "totalDistance: " << totalDistance << std::endl;
+        //std::cout << "totalDistance: " << totalDistance << std::endl;
 
         convertQuaternionsToEuler(currentOdomPose);
         double totalOrientation = goalPose->orientation.z - currentOdomPose->orientation.z;
@@ -290,8 +290,6 @@ namespace Robot
         char buffer[16000] = {};
 
         //Receiving odom-data 
-        Robot::Pose currentOdomPose;
-        Robot::sensor_msgs::scan_msg scanData;
         Robot::TCPClient odomClient(ip, 9998); 
         std::string odomData = odomClient.receiveData(buffer, sizeof(buffer));
         Robot::JsonHandler OdomdataHandler;
@@ -320,6 +318,22 @@ namespace Robot
         nlohmann :: json jsonScan;
 
         jsonScan = LaserdataHandler.extractJson(laserscanData);
+        scanData.range = jsonScan["ranges"].get<std::vector<float>>();
+
+        // Reservieren oder Größe anpassen, um 360 Winkel zu speichern
+        scanData.angle.resize(scanData.range.size());
+        // Iterieren über den Bereich und füllen die Winkel
+        for (size_t i = 0; i < scanData.range.size(); ++i) 
+        {
+            scanData.angle[i] = i; // i entspricht dem Winkel in Graden
+            //std::cout << "Angle:      " << scanData.angle[i] << std::endl;
+        }
+
+
+        // Iterieren über die Elemente von scanData.range
+        for (const auto& scanRange : scanData.range) {
+            std::cout << "Angle "<<scanData.angle.at(2)<<"  :" << scanRange << std::endl;
+        }
         
 /*
         double poseResolution = 9;
@@ -625,7 +639,8 @@ Visualizer
         : background(sf::Vector2f(screenWidth, screenHeight)),
         axes(sf::Lines, 4),
         centerX(static_cast<float>(screenWidth) / 2.0f),
-        centerY(static_cast<float>(screenHeight) / 2.0f)
+        centerY(static_cast<float>(screenHeight) / 2.0f),
+        window(sf::VideoMode(800, 600), "SFML Window")
     {
         window.create(sf::VideoMode(screenWidth, screenHeight), "Punkte in Polar-Koordinaten");
         background.setFillColor(sf::Color::Black);
@@ -657,7 +672,12 @@ Visualizer
 
     void Visualizer::run()
     {
-        //sf::Event event;
+        sf::Event event;
+        while (window.pollEvent(event)) 
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
 
         window.clear();
         window.draw(background);

@@ -84,6 +84,7 @@ namespace Robot
         {
             std::vector<float> range;
             std::vector<float> angle;
+            std::deque<std::pair<float, float>> scanTupleQue;
         };
     };
 
@@ -127,6 +128,8 @@ MobileRobot
         bool orientationController(Robot::Pose goalPose, Robot::Pose currentPose);
         Robot::Pose robotPose;
         void arrivedEndgoal();
+        Robot::Pose currentOdomPose;
+        Robot::sensor_msgs::scan_msg scanData;
 
     private:
         char* ip;
@@ -187,7 +190,7 @@ MobileRobot
 
     //COCO//
 
-    class Visualizer
+    class Visualizer: public MobileRobot
     {
     public:
         Visualizer();
