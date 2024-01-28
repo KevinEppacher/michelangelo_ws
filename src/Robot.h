@@ -22,6 +22,7 @@
 #include <sys/sem.h>
 #include <functional>
 #include <chrono>
+#include <iomanip>
 
 
 #define RCVBUFSIZE 100000   /* Size of receive buffer */
@@ -231,6 +232,7 @@ public:
     
     std::string returnOutput();
     int processID;
+    bool shutdown = false;
 
 private:
     struct SHM_Message {

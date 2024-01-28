@@ -50,8 +50,9 @@ namespace Robot
         auto timeDiff = time-lastTime;
         if((timeDiff >= std::chrono::milliseconds(1000))){
             lastTime = time;
-            std::cout << "current position:   x=" << currentOdomPose.position.x << "  y=" << currentOdomPose.position.y << std::endl;
-            std::cout << "current goal is:   x=" << goalPose.position.x << "  y=" << goalPose.position.y << std::endl;
+            printf("current position:   x=%.2f  y=%.2f\n", robotPose.position.x, robotPose.position.y);
+            printf("current goal  is:   x=%.2f  y=%.2f\n\n", goalPose.position.x, goalPose.position.y);
+        
         }
 
 
@@ -738,7 +739,13 @@ void SHM::setSignal(int semid){                                                 
 
 
 void SHM::signalHandler(int sig, SHM* instance) {                                               //enables clean termination of processes
-    if (sig == SIGINT) {                                                                        //if strg+c is pressed
+    if (sig == SIGINT) { 
+       /* Robot::Twist cmdVel;                                                                       //if strg+c is pressed
+        cmdVel.linear.x = 0;
+        cmdVel.angular.z = 0;
+        Robot::MobileRobot turtle;
+        turtle.publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);*/
+        
         if (instance->processID == 0) {  // Consumer process                                    //which process has to be killed
             std::cout << "Consumer shutting down \n";                                           //Consumer/ Child doesnt has to be shut down since Producer/Parent kills Child
         } else {
