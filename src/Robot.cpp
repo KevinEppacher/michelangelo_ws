@@ -283,16 +283,19 @@ namespace Robot
         publishCmdVel(&zero, &zero);
     }
 
-    bool MobileRobot::run()
+    std::string MobileRobot::receive()
     {
-        //Setup for message
-        //setIP(ip);
         char buffer[16000] = {};
-
         //Receiving odom-data 
-        Robot::Pose currentOdomPose;
         Robot::TCPClient odomClient(ip, 9998); 
         std::string odomData = odomClient.receiveData(buffer, sizeof(buffer));
+        return odomData;
+    }
+
+
+    void MobileRobot::process(std::string odomData)
+    {
+        Robot::Pose currentOdomPose;
         Robot::JsonHandler OdomdataHandler;
         nlohmann :: json jsonOdom;
 
@@ -312,6 +315,7 @@ namespace Robot
 
 
         //Receiving laserscan-data
+        /*
         Robot::Pose currentLaserscanPose;
         Robot::TCPClient laserClient(ip, 9997); 
         std::string laserscanData = laserClient.receiveData(buffer, sizeof(buffer));
@@ -319,7 +323,7 @@ namespace Robot
         nlohmann :: json jsonScan;
 
         jsonScan = LaserdataHandler.extractJson(laserscanData);
-/*
+
         double poseResolution = 9;
         std::vector<Robot::Pose> circlePaths;
 
@@ -333,10 +337,11 @@ namespace Robot
         {
             std::cout<<"Poses: "<<pose.index<<std::endl;
         }
-*/
+*/  
         
         
 
+        
         //Overwriting current laserscan position with Sensor Laserscan Position
         Robot::Pose goalPose1, goalPose3, goalPose2, goalPose4, goalPose5, goalPose6, goalPose7, goalPose8, goalPose9, goalPose10;
         Robot::Circle circle;
@@ -419,8 +424,19 @@ namespace Robot
   
         //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
 
+    }
+    
 
+    bool MobileRobot::run()
+    {
+        std::string input = MobileRobot::receive();
+        const char* charInput = input.c_str();
+        SHM myBrain(charInput);
+        std::string output = myBrain.returnOutput();
+        std::cout << "Output: " << output << std::endl;
+        MobileRobot::process(output);
         return true;
+
     }
 
 
@@ -470,35 +486,8 @@ TCP Client
         send(client_fd, data, strlen(data), 0);
         //std::cout << "Message sent: " << data << std::endl;
         close(client_fd);
-
-
-        /* fork a child process */
-        child_pid = fork();
-        if (child_pid < 0) { /* error occurred */
-            cerr << "Fork Failed\n";
-            exit(-1);
-        }
-
-        if(SharedMemories::child_pid != 0)  // child pid not 0 -> producer
-        { 
-            signal (SIGINT, SharedMemories::producerHandler);  // shutdown if strg+C
-            std::cout << "I am the producer\n";
-
-            // producing loop
-            while (true)
-            {
-                std::cout << "Producer attempting write\n";
-                Message prodMsg;
-                prodMsg.type = PROD_MSG;
-                prodMsg.data = 0;//INSERT MESSAGE HERE !!!!!!
-
-                // send message - should test for error
-                msgsnd(SharedMemories::msgqid, &prodMsg, sizeof(int), 0);
-                std::cout << "Producer sent: " << prodMsg.data << std::endl;
-                sleep(0.1);  // 0.1s
-            }  // end producing loop
-        }  // end producer code
     }
+
 
     std::string TCPClient::receiveData(char* buffer, ssize_t size) 
     {
@@ -646,50 +635,93 @@ sharedMemory
 */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
-    SharedMemories::SharedMemories(){
-        //Constructor
-        startupMemories(); //startet die msq init
+SHM::SHM(const std::string& input) : input(input), output() {
+    //std::cout << "shared memory starting up\n";
+    mutexID = semget(IPC_PRIVATE, 1, 0666);
+    shmID = shmget(IPC_PRIVATE, sizeof(struct SHM_Message), 0666 | IPC_CREAT);
+    processID = fork();
+    if (semctl(mutexID, 0, SETVAL, 1) == -1) {
+        std::cout << "semctl SETVAL failed!\n shutting down...\n" << std::endl;
+        std::exit(EXIT_FAILURE);
+}
+
+    if (processID == 0) {  // Consumer process
+        //std::cout << "Consumer started \n";
+        signal(SIGINT, [](int sig) { SHM::signalHandler(sig, nullptr); });  // Modified this line
+        shmptr = (SHM_Message*)shmat(shmID, NULL, 0);
+        //std::cout<<"checking signal\n";
+        checkSignal(mutexID);
+        output = shmptr->information;
+        setSignal(mutexID);
+        //std::cout << "semaphore successful \n output is: " << output;
+    } else {
+        //std::cout << "Producer started \n";
+        signal(SIGINT, [](int sig) { SHM::signalHandler(sig, nullptr); });  // Modified this line
+        shmptr = (SHM_Message*)shmat(shmID, NULL, 0);
+        //std::cout<<"checking signal\n";
+        checkSignal(mutexID);
+        strncpy(shmptr->information, input.c_str(), sizeof(shmptr->information) - 1);        setSignal(mutexID);
+        //std::cout << "semaphore successful \n input was: " << input;
+        waitpid(processID, 0 , 0);
+        kill(processID, SIGTERM);
+
+
+
+    }
+}
+SHM::~SHM() {
+    shmdt(shmptr);
     }
 
-    SharedMemories::startupMemories()
-    { //msq init
-        SharedMemories::msgqid = msgget(IPC_PRIVATE, 0660);
 
-        if (msgqid == -1) {     //wenn msqid < 0 ist -> Fehler
-            std::cerr << "msgget failed\n";
-            exit(EXIT_FAILURE);
-        }
+void SHM::checkSignal(int semid){
+   struct sembuf check = {0, -1, SEM_UNDO};
+   //std::cout<< "check done\n";
+    if (semop(semid, &check, 1) == -1){
+        std::cout << "semaphore check failed!\n shutting down...\n" << std::endl;
+        std::exit(EXIT_FAILURE);
     }
+}
 
-          
-   
+void SHM::setSignal(int semid){
+   struct sembuf set = {0, 1, SEM_UNDO};
+    if (semop(semid, &set, 1) == -1){
+        std::cout << "semaphore set failed!\n shutting down...\n" << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+}
 
-//STOP maybe woanders hin
 
-    
-    //Manages shutdown of consumer process
-    void SharedMemories::consumerHandler (int sig)
-        {
-        std::cout << "Consumer exiting\n";
-        exit(EXIT_SUCCESS);
-        }  // end consumerHandler
-
-    //Manages shutdown of producer process
-    void SharedMemories::producerHandler (int sig)
-    {
-        // kill child and wait for it
-        std::cout << "Producer killing consumer\n";
-        kill (SharedMemories::child_pid, SIGINT);
-        wait (NULL);
-
-        // remove message queue
-        std::cout << "Producer removing message queue\n";
-        if (msgctl(SharedMemories::msgqid, IPC_RMID, 0) == -1) {
-            std::cerr << "msgctl(IPC_RMID) failed\n";
-            exit(EXIT_FAILURE);
+void SHM::signalHandler(int sig, SHM* instance) {
+    if (sig == SIGINT) {
+        if (instance->processID == 0) {  // Consumer process
+            std::cout << "Consumer shutting down \n";
+        } else {
+            std::cout << "Producer shutting down \n";
+            std::cout << "Producer killing consumer\n";
+            kill(instance->processID, SIGINT);
+            wait(NULL);
+            std::cout << "Producer removing semaphores\n";
+            semctl(instance->mutexID, -1, IPC_RMID);
+            std::cout << "Producer detaching and removing shared memory\n";
+            if (shmdt(instance->shmptr) == -1) {
+                std::cout << "shmdt failed\n";
+                exit(EXIT_FAILURE);
+            }
+            if (shmctl(instance->shmID, IPC_RMID, 0) == -1) {
+                std::cout << "shmctl(IPC_RMID) failed\n";
+                exit(EXIT_FAILURE);
+            }
         }
         exit(EXIT_SUCCESS);
-    }  // end producerHandler
+    }
+}
+
+std::string SHM::returnOutput() {
+    return output;
+}
+
+
     
 
     
