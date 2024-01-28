@@ -134,7 +134,7 @@ class PCA
 
             //Compute PCA
             Eigen::VectorXd principal_component = this->computePCA(data);
-            std::cout << "Principal Component of all: \n" << principal_component << std::endl;
+            //std::cout << "Principal Component of all: \n" << principal_component << std::endl;
             //pca.plotData(data, principal_component); 
 
             //Filter Right and Left side and calculate PCA seperately
@@ -144,13 +144,41 @@ class PCA
 
             Eigen::VectorXd principal_componentLeft = this->computePCA(left);
             this->PCA_Left = principal_componentLeft;
-            std::cout << "Principal Component Left: \n" << principal_componentLeft << std::endl;
-            //pca.plotData(data, principal_componentLeft);  
+            //std::cout << "Principal Component Left: \n" << principal_componentLeft << std::endl;
+            //this->plotData(data, principal_componentLeft);  
 
             Eigen::VectorXd principal_componentRight = this->computePCA(right);
             this->PCA_Right = principal_componentRight;
-            std::cout << "Principal Component Right: \n" << principal_componentRight << std::endl;
-            this->plotData(data, principal_componentRight);
+            //std::cout << "Principal Component Right: \n" << principal_componentRight << std::endl;
+            //this->plotData(data, principal_componentRight);
+        }
+
+        Eigen::VectorXd getAngleDifference()
+        {
+            Eigen::VectorXd Thetas(2);
+
+            Eigen::VectorXd directionVector(2);
+            directionVector(0) = 1;
+            directionVector(1) = 0;
+
+            double dotProduct = (directionVector.dot(this->PCA_Left));
+
+            double magnitudeVec1 = directionVector.norm();
+            double magnitudeVec2 = this->PCA_Left.norm();
+
+            // Calculate the cosine of the angle
+            double cosAngle = dotProduct / (magnitudeVec1 * magnitudeVec2);
+
+            // Ensure the cosine value is within [-1, 1] to avoid NaN due to floating point errors
+            cosAngle = std::max(-1.0, std::min(1.0, cosAngle));
+
+            // Calculate the angle in radians
+            double angle = std::acos(cosAngle);
+
+            std::cout << "Angles: " << Thetas << std::endl;
+
+            return Thetas;
+
         }
 
         Eigen::VectorXd getAngleDifference()
@@ -217,8 +245,9 @@ int main()
     pca.CalculateAndPlotPCA(laserScanRange);
     // std::cout << pca.getFilteredLeftScanData() << std::endl;
     // std::cout << pca.getFilteredRightScanData() << std::endl;
-    std::cout << pca.getPCA_Left() << std::endl;
-    std::cout << pca.getPCA_Right() << std::endl;
+    // std::cout << pca.getPCA_Left() << std::endl;
+    // std::cout << pca.getPCA_Right() << std::endl;
+    pca.getAngleDifference();
 
     return 0;
 }
