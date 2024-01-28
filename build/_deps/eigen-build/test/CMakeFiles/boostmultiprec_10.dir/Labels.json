@@ -1,0 +1,16 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/eigen-src/test/boostmultiprec.cpp"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"BuildOfficial"
+		],
+		"name" : "boostmultiprec_10"
+	}
+}

@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/matplotlib-subbuild/CMakeFiles/matplotlib-populate"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/matplotlib-subbuild/CMakeFiles/matplotlib-populate.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/matplotlib-subbuild/CMakeFiles/matplotlib-populate-complete.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/matplotlib-subbuild/matplotlib-populate-prefix/src/matplotlib-populate-stamp/matplotlib-populate-build.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/matplotlib-subbuild/matplotlib-populate-prefix/src/matplotlib-populate-stamp/matplotlib-populate-configure.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/matplotlib-subbuild/matplotlib-populate-prefix/src/matplotlib-populate-stamp/matplotlib-populate-download.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/matplotlib-subbuild/matplotlib-populate-prefix/src/matplotlib-populate-stamp/matplotlib-populate-install.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/matplotlib-subbuild/matplotlib-populate-prefix/src/matplotlib-populate-stamp/matplotlib-populate-mkdir.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/matplotlib-subbuild/matplotlib-populate-prefix/src/matplotlib-populate-stamp/matplotlib-populate-patch.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/matplotlib-subbuild/matplotlib-populate-prefix/src/matplotlib-populate-stamp/matplotlib-populate-test.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/matplotlib-subbuild/matplotlib-populate-prefix/src/matplotlib-populate-stamp/matplotlib-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"matplotlib-populate"
+		],
+		"name" : "matplotlib-populate"
+	}
+}

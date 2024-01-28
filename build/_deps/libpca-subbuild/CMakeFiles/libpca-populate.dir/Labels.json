@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/libpca-subbuild/CMakeFiles/libpca-populate"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/libpca-subbuild/CMakeFiles/libpca-populate.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/libpca-subbuild/CMakeFiles/libpca-populate-complete.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/libpca-subbuild/libpca-populate-prefix/src/libpca-populate-stamp/libpca-populate-build.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/libpca-subbuild/libpca-populate-prefix/src/libpca-populate-stamp/libpca-populate-configure.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/libpca-subbuild/libpca-populate-prefix/src/libpca-populate-stamp/libpca-populate-download.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/libpca-subbuild/libpca-populate-prefix/src/libpca-populate-stamp/libpca-populate-install.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/libpca-subbuild/libpca-populate-prefix/src/libpca-populate-stamp/libpca-populate-mkdir.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/libpca-subbuild/libpca-populate-prefix/src/libpca-populate-stamp/libpca-populate-patch.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/libpca-subbuild/libpca-populate-prefix/src/libpca-populate-stamp/libpca-populate-test.rule"
+		},
+		{
+			"file" : "/home/cocokayya18/michelangelo_ws/build/_deps/libpca-subbuild/libpca-populate-prefix/src/libpca-populate-stamp/libpca-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"libpca-populate"
+		],
+		"name" : "libpca-populate"
+	}
+}

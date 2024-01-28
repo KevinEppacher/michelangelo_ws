@@ -139,6 +139,7 @@ num_dimensions
 stl_iterators
 blasutil
 fastmath
+boostmultiprec
 NonLinearOptimization
 NumericalDiff
 autodiff_scalar
