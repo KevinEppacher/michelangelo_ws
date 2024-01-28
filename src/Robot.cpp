@@ -3,6 +3,7 @@
 namespace Robot
 {
     
+<<<<<<< HEAD
     MobileRobot::MobileRobot()
     {
         //std::cout << "A Robot is born" << std::endl;
@@ -11,6 +12,34 @@ namespace Robot
     MobileRobot::~MobileRobot()
     {
         
+=======
+    MobileRobot::MobileRobot(char* ip):ip(ip){
+
+    }
+    
+
+    MobileRobot::~MobileRobot()
+    {
+        /*
+        std::cout<<"Robot was deleted"<<std::endl;
+        std::stringstream ss;
+        ss << "---START---{linear: 0 , angular:   0  }___END___";
+        std::string echoString = ss.str();
+
+        Robot::TCPClient client(this->ip, 9999);
+        client.sendData(echoString.c_str());
+        //client.receiveData(buffer, sizeof(buffer));  
+        client.closeTCPconnection(); 
+        */
+        
+    }
+
+
+
+    long long Robot::MobileRobot::getTimeMS(){
+        auto currentTimePoint = std::chrono::high_resolution_clock::now();
+        auto timeSinceEpoch = std::chrono::time_point_cast<std::chrono::milliseconds>(currentTimePoint);
+        return timeSinceEpoch.time_since_epoch().count();
     }
 
  
@@ -18,6 +47,68 @@ namespace Robot
     {
         Parameter PID;
 
+        convertQuaternionsToEuler(&currentOdomPose);
+
+        robotPose = currentOdomPose;
+
+        time = std::chrono::high_resolution_clock::time_point(std::chrono::milliseconds(getTimeMS()));
+        //std::cout<<time << std::endl;
+        auto timeDiff = time-lastTime;
+        if((timeDiff >= std::chrono::milliseconds(1000))){
+            lastTime = time;
+            std::cout << "current position:   x=" << currentOdomPose.position.x << "  y=" << currentOdomPose.position.y << std::endl;
+            std::cout << "current goal is:   x=" << goalPose.position.x << "  y=" << goalPose.position.y << std::endl;
+        }
+
+
+        diffPose.position.x = goalPose.position.x - currentOdomPose.position.x;
+        diffPose.position.y = goalPose.position.y - currentOdomPose.position.y;
+
+        totalDistance = calculateTotalDistance(diffPose);
+
+        gamma = calculateGamma(diffPose);
+
+        alpha = calculateAlpha(gamma, currentOdomPose);
+
+        beta = calculateBeta(goalPose, gamma);
+        
+        pidController(&cmdVel, PID, totalDistance, alpha, beta);
+
+        limitControllerVariables(&cmdVel, 1, -1);
+
+        publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);
+
+        //std::cout << "" <<std::endl;
+        //std::cout << "Orientation" << currentOdomPose.orientation.z  * (180 / M_PI) <<std::endl;
+        //std::cout << "Diff Pose berechnet: X=" << diffPose.position.x << ", Y=" << diffPose.position.y << std::endl;
+        //std::cout << "Gamma berechnet: " << gamma * (180 / M_PI) << std::endl;
+        //std::cout << "Gesamtdistanz: " << calculateTotalDistance(diffPose)<< std::endl;
+        //std::cout << "Alpha berechnet: " << calculateAlpha(gamma, currentOdomPose) * (180 / M_PI) << std::endl;
+        //std::cout << "Beta berechnet: " << calculateBeta(goalPose, gamma)  * (180 / M_PI)<< std::endl;
+        //std::cout << "cmdVel.linear.x: " << cmdVel.linear.x << "    ||  cmdVel.angular.z:"<<cmdVel.angular.z<<std::endl;
+        //std::cout << "" <<std::endl;
+        return 1;
+    }
+
+    bool Robot::MobileRobot::orientationController(Robot::Pose goalPose, Robot::Pose currentOdomPose){
+        /*
+        std::cout<<"Robot was deleted"<<std::endl;
+        std::stringstream ss;
+        ss << "---START---{linear: 0 , angular:   0  }___END___";
+        std::string echoString = ss.str();
+
+        Robot::TCPClient client(this->ip, 9999);
+        client.sendData(echoString.c_str());
+        //client.receiveData(buffer, sizeof(buffer));  
+        client.closeTCPconnection(); 
+        */
+       return true;
+>>>>>>> a51bf602 (kommentiert und couts bearbeitet)
+    }
+    
+
+
+<<<<<<< HEAD
         convertQuaternionsToEuler(&currentOdomPose);
 
         robotPose = currentOdomPose;
@@ -66,6 +157,8 @@ namespace Robot
         publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);
         return true;
     }
+=======
+>>>>>>> a51bf602 (kommentiert und couts bearbeitet)
 
     void Robot::MobileRobot::publishCmdVel(double* linear_x, double* angular_z) 
     {
@@ -101,10 +194,8 @@ namespace Robot
         return (angleDiff(goalPose.orientation.z , gamma));
     }
 
-    bool MobileRobot::pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta)
-    {        
-        Parameter Lin, Alpha, Beta;
 
+<<<<<<< HEAD
         Lin.P = 0.1;
         Lin.I = 0.01;
 
@@ -113,6 +204,33 @@ namespace Robot
 
         Beta.P = 0.05;
         //Beta.I = 0.6;
+=======
+
+    double MobileRobot::angleDiff(double angle1, double angle2) 
+    {
+        double diff = angle1 - angle2;
+        while (diff < -M_PI) diff += 2 * M_PI;
+        while (diff > M_PI) diff -= 2 * M_PI;
+        return diff;
+    }
+
+
+
+
+
+    bool MobileRobot::pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta)
+    {        
+        Parameter Lin, Alpha, Beta;
+
+        Lin.P = 0.3;
+        Lin.I = 0.01;
+
+        Alpha.P = 1;
+        Alpha.I = 0.8;
+
+        Beta.P = -0.3;
+        Beta.I = 0.6;
+>>>>>>> a51bf602 (kommentiert und couts bearbeitet)
 
         Lin.proportionalError = Lin.P * totalDistance;
         Lin.integralError += ( Lin.I / 2 ) * totalDistance;
@@ -133,13 +251,7 @@ namespace Robot
         return true;
     }
 
-    double MobileRobot::angleDiff(double angle1, double angle2) 
-    {
-        double diff = angle1 - angle2;
-        while (diff < -M_PI) diff += 2 * M_PI;
-        while (diff > M_PI) diff -= 2 * M_PI;
-        return diff;
-    }
+
 
     bool MobileRobot::limitControllerVariables(Twist* cmdVel, double upperLimit, double lowerLimit)
     {
@@ -301,6 +413,10 @@ namespace Robot
         diffPose.position.y = goalPose->position.y - currentOdomPose->position.y;
 
         double totalDistance = calculateTotalDistance(diffPose);
+<<<<<<< HEAD
+=======
+        //std::cout << "totalDistance: " << totalDistance << std::endl;
+>>>>>>> a51bf602 (kommentiert und couts bearbeitet)
 
         convertQuaternionsToEuler(currentOdomPose);
         double totalOrientation = goalPose->orientation.z - currentOdomPose->orientation.z;
@@ -308,7 +424,7 @@ namespace Robot
         if (totalDistance < goalPose->tolerance && (totalOrientation) < 0.1) 
         {
             sequenceNumber += 1;
-            std::cout << "Sequence Number: " << sequenceNumber << std::endl;
+            //std::cout << "Sequence Number: " << sequenceNumber << std::endl;
             arrivedEndgoal();           
         }
         else
@@ -353,7 +469,11 @@ namespace Robot
         currentOdomPose.orientation.z = jsonOdom["pose"]["pose"]["orientation"]["z"];
         currentOdomPose.orientation.w = jsonOdom["pose"]["pose"]["orientation"]["w"]; 
 
+<<<<<<< HEAD
         // std::cout<<" sequence:    " << sequenceNumber<< "         || currentOdomPose.position.x:   "<<currentOdomPose.position.x<<"         || currentOdomPose.position.y"<<currentOdomPose.position.y<<"         ||  currentOdomPose.orientation.z"<< currentOdomPose.orientation.z<<std::endl;
+=======
+        //std::cout<<" sequence:    " << sequenceNumber<< "   || position.x:   "<<currentOdomPose.position.x<<"    || position.y:   "<<currentOdomPose.position.y<<"  ||  orientation.z:   "<< currentOdomPose.orientation.z<<std::endl;
+>>>>>>> a51bf602 (kommentiert und couts bearbeitet)
 
 
         //Receiving laserscan-data
@@ -419,23 +539,125 @@ namespace Robot
         goalPose4.orientation.z = -M_PI/2; 
         goalPose4.tolerance = 0.2;
 
+<<<<<<< HEAD
 /*         if(goalPose1.index == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
         if(goalPose2.index == sequenceNumber) goTo(&goalPose2, &currentOdomPose);
         if(goalPose3.index == sequenceNumber) goTo(&goalPose3, &currentOdomPose);
         if(goalPose4.index == sequenceNumber) goTo(&goalPose4, &currentOdomPose); */
         // //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
+=======
+        goalPose5.index = 5;
+        goalPose5.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(0));
+        goalPose5.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(0));
+        goalPose5.orientation.z = convertDegreesToRadiant(90);
+        goalPose5.tolerance = 0.15;
+
+        goalPose6.index = 6;
+        goalPose6.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(45));
+        goalPose6.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(45));
+        goalPose6.orientation.z = convertDegreesToRadiant(135);
+        goalPose6.tolerance = 0.15;
+
+        goalPose7.index = 7;
+        goalPose7.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(90));
+        goalPose7.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(90));
+        goalPose7.orientation.z = convertDegreesToRadiant(180);
+        goalPose7.tolerance = 0.15;
+
+        goalPose8.index = 8;
+        goalPose8.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(135));
+        goalPose8.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(135));
+        goalPose8.orientation.z = convertDegreesToRadiant(180);
+        goalPose8.tolerance = 0.15;
+
+        goalPose9.index = 9;
+        goalPose8.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(180));
+        goalPose8.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(180));
+        goalPose8.orientation.z = convertDegreesToRadiant(180);
+        goalPose8.tolerance = 0.15;
+
+        goalPose10.index = 10;
+        goalPose10.position.x = 0;
+        goalPose10.position.y = 0;
+        goalPose10.orientation.z = convertDegreesToRadiant(180);
+        goalPose10.tolerance = 0.15;
+
+
+        if(goalPose1.index == sequenceNumber) {
+            goTo(&goalPose1, &currentOdomPose);
+            //std::cout << "current position is: " << &currentOdomPose << std::endl;
+            //std::cout << "current goal is: " << &goalPose1 << std::endl;
+            }
+        if(goalPose2.index == sequenceNumber) {
+            goTo(&goalPose2, &currentOdomPose);
+            //std::cout << "current position is: " << &currentOdomPose << std::endl;
+            //std::cout << "current goal is: " << &goalPose2 << std::endl;
+            }
+        if(goalPose3.index == sequenceNumber) {
+            goTo(&goalPose3, &currentOdomPose);
+            //std::cout << "current position is: " << &currentOdomPose << std::endl;
+            //std::cout << "current goal is: " << &goalPose3 << std::endl;
+            }
+        if(goalPose4.index == sequenceNumber) {
+            goTo(&goalPose4, &currentOdomPose);
+            //std::cout << "current position is: " << &currentOdomPose << std::endl;
+            //std::cout << "current goal is: " << &goalPose4 << std::endl;
+            }
+        if(goalPose5.index == sequenceNumber) {
+            goTo(&goalPose5, &currentOdomPose);
+            //std::cout << "current position is: " << &currentOdomPose << std::endl;
+            //std::cout << "current goal is: " << &goalPose5 << std::endl;
+            } 
+        if(goalPose6.index == sequenceNumber) {
+            goTo(&goalPose6, &currentOdomPose);
+            //std::cout << "current position is: " << &currentOdomPose << std::endl;
+            //std::cout << "current goal is: " << &goalPose6 << std::endl;
+            }
+        if(goalPose7.index == sequenceNumber) {
+            goTo(&goalPose7, &currentOdomPose);
+            //std::cout << "current position is: " << &currentOdomPose << std::endl;
+            //std::cout << "current goal is: " << &goalPose7 << std::endl;
+            }
+        if(goalPose8.index == sequenceNumber) {
+            goTo(&goalPose8, &currentOdomPose);
+            //std::cout << "current position is: " << &currentOdomPose << std::endl;
+            //std::cout << "current goal is: " << &goalPose8 << std::endl;
+            }
+        if(goalPose9.index == sequenceNumber) {
+            goTo(&goalPose9, &currentOdomPose);
+            //std::cout << "current position is: " << &currentOdomPose << std::endl;
+            //std::cout << "current goal is: " << &goalPose9 << std::endl;
+            }
+        if(goalPose10.index == sequenceNumber) {
+            goTo(&goalPose10, &currentOdomPose);
+            //std::cout << "current position is: " << &currentOdomPose << std::endl;
+            //std::cout << "current goal is: " << &goalPose10 << std::endl;
+            }
+
+  
+        //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
+>>>>>>> a51bf602 (kommentiert und couts bearbeitet)
 
     }
     
 
     bool MobileRobot::run()
     {
+<<<<<<< HEAD
         std::string input = MobileRobot::receive();
         const char* charInput = input.c_str();
         SHM myBrain(charInput);
         std::string output = myBrain.returnOutput();
         std::cout << "Output: " << output << std::endl;
         MobileRobot::process(output);
+=======
+        std::string input = MobileRobot::receive();     //calling receive function and saving data as input
+        const char* charInput = input.c_str();          //structuring input
+        SHM myBrain(charInput);                         //creating SHM class object and calling constructor -> starting shared Memory
+        std::string output = myBrain.returnOutput();    //calling result of shared memory via getter
+        //std::cout << "Output: " << output << std::endl; //outputting Output data
+        MobileRobot::process(output);                   //calling process function responsible for calculating movements and commanding the robot with the output as parameter
+>>>>>>> a51bf602 (kommentiert und couts bearbeitet)
         return true;
 
     }
@@ -524,29 +746,6 @@ TCP Client
     }
 
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-TCPServer
-*/
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-    class TCPServer {
-    public:
-        TCPServer(int port);
-        ~TCPServer();
-        
-        void acceptConnection();
-        void receiveData(char* buffer, ssize_t size);
-        void sendData(const char* data);
-
-    private:
-        int server_fd, new_socket;
-        ssize_t valread;
-        struct sockaddr_in address;
-        socklen_t addrlen;
-        int port;
-    };
 
 
 
