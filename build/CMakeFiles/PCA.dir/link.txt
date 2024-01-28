@@ -1,1 +1,1 @@
-/usr/bin/c++ -rdynamic CMakeFiles/PCA.dir/src/pca.cpp.o -o PCA  -lpython3.10 
+/usr/bin/c++ -rdynamic CMakeFiles/PCA.dir/src/pca.cpp.o -o PCA  /usr/lib/x86_64-linux-gnu/libpython3.10.so 

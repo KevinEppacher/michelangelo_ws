@@ -1,1 +1,1 @@
-/usr/bin/c++ -rdynamic CMakeFiles/server.dir/src/server.cpp.o -o server 
+/usr/bin/c++ -rdynamic CMakeFiles/server.dir/src/server.cpp.o -o server  /usr/lib/x86_64-linux-gnu/libpython3.10.so 

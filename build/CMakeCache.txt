@@ -20,9 +20,6 @@ ADOLC_INCLUDES:PATH=ADOLC_INCLUDES-NOTFOUND
 //Path to a library.
 ADOLC_LIBRARIES:FILEPATH=ADOLC_LIBRARIES-NOTFOUND
 
-//Path to a library.
-BLAS_Accelerate_LIBRARY:FILEPATH=BLAS_Accelerate_LIBRARY-NOTFOUND
-
 //Installation directory of BLAS library
 BLAS_DIR:PATH=
 
@@ -31,48 +28,6 @@ BLAS_DIR_FOUND:PATH=/usr/lib/x86_64-linux-gnu
 
 //Print some additional information during BLAS libraries detection
 BLAS_VERBOSE:BOOL=OFF
-
-//Path to a library.
-BLAS_acml_LIBRARY:FILEPATH=BLAS_acml_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_acml_mp_LIBRARY:FILEPATH=BLAS_acml_mp_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_blas_LIBRARY:FILEPATH=BLAS_blas_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_blas_LINUX_LIBRARY:FILEPATH=BLAS_blas_LINUX_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_blas_MAC_LIBRARY:FILEPATH=BLAS_blas_MAC_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_blas_WINDOWS_LIBRARY:FILEPATH=BLAS_blas_WINDOWS_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_complib.sgimath_LIBRARY:FILEPATH=BLAS_complib.sgimath_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_cxml_LIBRARY:FILEPATH=BLAS_cxml_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_dxml_LIBRARY:FILEPATH=BLAS_dxml_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_eigen_blas_LIBRARY:FILEPATH=BLAS_eigen_blas_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_eigen_blas_static_LIBRARY:FILEPATH=BLAS_eigen_blas_static_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_essl_LIBRARY:FILEPATH=BLAS_essl_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_esslsmp_LIBRARY:FILEPATH=BLAS_esslsmp_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_f77blas_LIBRARY:FILEPATH=BLAS_f77blas_LIBRARY-NOTFOUND
 
 //Path to a library.
 BLAS_goto2_LIBRARY:FILEPATH=BLAS_goto2_LIBRARY-NOTFOUND
@@ -97,21 +52,6 @@ BLAS_mkl_intel_lp64_LIBRARY:FILEPATH=BLAS_mkl_intel_lp64_LIBRARY-NOTFOUND
 
 //Path to a library.
 BLAS_openblas_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libopenblas.so
-
-//Path to a library.
-BLAS_refblas_LIBRARY:FILEPATH=BLAS_refblas_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_scsl_LIBRARY:FILEPATH=BLAS_scsl_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_sgemm_LIBRARY:FILEPATH=BLAS_sgemm_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_sunperf_LIBRARY:FILEPATH=BLAS_sunperf_LIBRARY-NOTFOUND
-
-//Path to a library.
-BLAS_vecLib_LIBRARY:FILEPATH=BLAS_vecLib_LIBRARY-NOTFOUND
 
 //Build the testing tree.
 BUILD_TESTING:BOOL=ON
@@ -719,10 +659,6 @@ FETCHCONTENT_SOURCE_DIR_EIGEN:PATH=
 FETCHCONTENT_SOURCE_DIR_JSON:PATH=
 
 //When not empty, overrides where to find pre-populated content
-// for libpca
-FETCHCONTENT_SOURCE_DIR_LIBPCA:PATH=
-
-//When not empty, overrides where to find pre-populated content
 // for matplotlib
 FETCHCONTENT_SOURCE_DIR_MATPLOTLIB:PATH=
 
@@ -734,9 +670,6 @@ FETCHCONTENT_UPDATES_DISCONNECTED_EIGEN:BOOL=OFF
 
 //Enables UPDATE_DISCONNECTED behavior just for population of json
 FETCHCONTENT_UPDATES_DISCONNECTED_JSON:BOOL=OFF
-
-//Enables UPDATE_DISCONNECTED behavior just for population of libpca
-FETCHCONTENT_UPDATES_DISCONNECTED_LIBPCA:BOOL=OFF
 
 //Enables UPDATE_DISCONNECTED behavior just for population of matplotlib
 FETCHCONTENT_UPDATES_DISCONNECTED_MATPLOTLIB:BOOL=OFF
@@ -934,42 +867,12 @@ nlohmann_json_SOURCE_DIR:STATIC=/home/cocokayya18/michelangelo_ws/build/_deps/js
 ADOLC_INCLUDES-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ADOLC_LIBRARIES
 ADOLC_LIBRARIES-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_Accelerate_LIBRARY
-BLAS_Accelerate_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: BLAS_DIR
 BLAS_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: BLAS_DIR_FOUND
 BLAS_DIR_FOUND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: BLAS_VERBOSE
 BLAS_VERBOSE-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_acml_LIBRARY
-BLAS_acml_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_acml_mp_LIBRARY
-BLAS_acml_mp_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_blas_LIBRARY
-BLAS_blas_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_blas_LINUX_LIBRARY
-BLAS_blas_LINUX_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_blas_MAC_LIBRARY
-BLAS_blas_MAC_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_blas_WINDOWS_LIBRARY
-BLAS_blas_WINDOWS_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_complib.sgimath_LIBRARY
-BLAS_complib.sgimath_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_cxml_LIBRARY
-BLAS_cxml_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_dxml_LIBRARY
-BLAS_dxml_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_eigen_blas_LIBRARY
-BLAS_eigen_blas_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_eigen_blas_static_LIBRARY
-BLAS_eigen_blas_static_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_essl_LIBRARY
-BLAS_essl_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_esslsmp_LIBRARY
-BLAS_esslsmp_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_f77blas_LIBRARY
-BLAS_f77blas_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: BLAS_goto2_LIBRARY
 BLAS_goto2_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: BLAS_mkl.h_DIRS
@@ -990,20 +893,8 @@ BLAS_openblas_LIBRARY-ADVANCED:INTERNAL=1
 BLAS_openblas_WORKS-ADVANCED:INTERNAL=1
 //Have function sgemm_
 BLAS_openblas_WORKS:INTERNAL=1
-//ADVANCED property for variable: BLAS_refblas_LIBRARY
-BLAS_refblas_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_scsl_LIBRARY
-BLAS_scsl_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_sgemm_LIBRARY
-BLAS_sgemm_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_sunperf_LIBRARY
-BLAS_sunperf_LIBRARY-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: BLAS_vecLib_LIBRARY
-BLAS_vecLib_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Boost_DIR
 Boost_DIR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_INCLUDE_DIR
-Boost_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CHOLMOD_INCLUDES
 CHOLMOD_INCLUDES-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CHOLMOD_LIBRARIES
@@ -1470,14 +1361,6 @@ SUPERLU_LIBRARIES-ADVANCED:INTERNAL=1
 UMFPACK_INCLUDES-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: UMFPACK_LIBRARIES
 UMFPACK_LIBRARIES-ADVANCED:INTERNAL=1
-//Components requested for this build tree.
-_Boost_COMPONENTS_SEARCHED:INTERNAL=
-//Last used Boost_INCLUDE_DIR value.
-_Boost_INCLUDE_DIR_LAST:INTERNAL=Boost_INCLUDE_DIR-NOTFOUND
-//Last used Boost_NAMESPACE value.
-_Boost_NAMESPACE_LAST:INTERNAL=boost
-//Last used Boost_USE_MULTITHREADED value.
-_Boost_USE_MULTITHREADED_LAST:INTERNAL=TRUE
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local
 _Python3_DEVELOPMENT_EMBED_SIGNATURE:INTERNAL=625d9e0f7a1af1ddb80bfa11fbea90e0

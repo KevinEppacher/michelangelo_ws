@@ -12,6 +12,9 @@
 //#include <SFML/Graphics.hpp>
 #include <vector>
 #include <chrono>
+#include <Eigen/Dense>
+#include <vector>
+#include "matplotlibcpp.h"
 
 
 #define RCVBUFSIZE 100000   /* Size of receive buffer */
@@ -158,6 +161,31 @@ MobileRobot
 
         private:
             nlohmann::json jsonData;
+
+    };
+
+    class PCA
+    {
+        public:
+            PCA();
+            ~PCA();
+
+            void CalculateAndPlotPCA(std::vector<double> rawLaserScan);  
+            Eigen::MatrixXd PolarToCartesian(Eigen::VectorXd laserScanData);
+            void FilterLaserscan(Eigen::MatrixXd laserScanData, int filterTolerance);
+            Eigen::VectorXd computePCA(const Eigen::MatrixXd &data);
+            void plotData(Eigen::MatrixXd laserScanData, Eigen::VectorXd PCA_vector);
+            Eigen::VectorXd getAngleDifference();
+            Eigen::MatrixXd getFilteredLeftScanData();
+            Eigen::MatrixXd getFilteredRightScanData();
+            Eigen::VectorXd getPCA_Left();
+            Eigen::VectorXd getPCA_Right();
+
+        private:
+            Eigen::MatrixXd filteredLaserScanLeftSide;
+            Eigen::MatrixXd filteredLaserScanRightSide;
+            Eigen::VectorXd PCA_Left;
+            Eigen::VectorXd PCA_Right;
 
     };
 

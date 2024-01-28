@@ -9,6 +9,36 @@ class PCA
         PCA(){};
         ~PCA(){};
 
+        void CalculateAndPlotPCA(std::vector<double> rawLaserScan)
+        {
+            //Map std::vector to eigen::vector
+            Eigen::VectorXd laser = Eigen::VectorXd::Map(&rawLaserScan[0], rawLaserScan.size());
+
+            //convert polar coordinates to cartesian coordinates
+            Eigen::MatrixXd data = this->PolarToCartesian(laser);
+
+            //Compute PCA
+            Eigen::VectorXd principal_component = this->computePCA(data);
+            //std::cout << "Principal Component of all: \n" << principal_component << std::endl;
+            //pca.plotData(data, principal_component); 
+
+            //Filter Right and Left side and calculate PCA seperately
+            this->FilterLaserscan(data, 30);
+            Eigen::MatrixXd left = this->getFilteredLeftScanData();
+            Eigen::MatrixXd right = this->getFilteredRightScanData();
+
+            Eigen::VectorXd principal_componentLeft = this->computePCA(left);
+            this->PCA_Left = principal_componentLeft;
+            //std::cout << "Principal Component Left: \n" << principal_componentLeft << std::endl;
+            //this->plotData(data, principal_componentLeft);  
+
+            Eigen::VectorXd principal_componentRight = this->computePCA(right);
+            this->PCA_Right = principal_componentRight;
+            //std::cout << "Principal Component Right: \n" << principal_componentRight << std::endl;
+            //this->plotData(data, principal_componentRight);
+        }
+
+
         Eigen::MatrixXd PolarToCartesian(Eigen::VectorXd laserScanData)
         {
             Eigen::MatrixXd cartesianLaserScanData(360,2);
@@ -124,34 +154,6 @@ class PCA
             matplotlibcpp::show();
         };
 
-        void CalculateAndPlotPCA(std::vector<double> rawLaserScan)
-        {
-            //Map std::vector to eigen::vector
-            Eigen::VectorXd laser = Eigen::VectorXd::Map(&rawLaserScan[0], rawLaserScan.size());
-
-            //convert polar coordinates to cartesian coordinates
-            Eigen::MatrixXd data = this->PolarToCartesian(laser);
-
-            //Compute PCA
-            Eigen::VectorXd principal_component = this->computePCA(data);
-            //std::cout << "Principal Component of all: \n" << principal_component << std::endl;
-            //pca.plotData(data, principal_component); 
-
-            //Filter Right and Left side and calculate PCA seperately
-            this->FilterLaserscan(data, 30);
-            Eigen::MatrixXd left = this->getFilteredLeftScanData();
-            Eigen::MatrixXd right = this->getFilteredRightScanData();
-
-            Eigen::VectorXd principal_componentLeft = this->computePCA(left);
-            this->PCA_Left = principal_componentLeft;
-            //std::cout << "Principal Component Left: \n" << principal_componentLeft << std::endl;
-            this->plotData(data, principal_componentLeft);  
-
-            Eigen::VectorXd principal_componentRight = this->computePCA(right);
-            this->PCA_Right = principal_componentRight;
-            //std::cout << "Principal Component Right: \n" << principal_componentRight << std::endl;
-            //this->plotData(data, principal_componentRight);
-        }
 
         Eigen::VectorXd getAngleDifference()
         {
@@ -161,46 +163,35 @@ class PCA
             directionVector(0) = 1;
             directionVector(1) = 0;
 
-            double dotProduct = (directionVector.dot(this->PCA_Left));
+            double dotProductLeft = (directionVector.dot(this->PCA_Left));
 
-            double magnitudeVec1 = directionVector.norm();
-            double magnitudeVec2 = this->PCA_Left.norm();
-
-            // Calculate the cosine of the angle
-            double cosAngle = dotProduct / (magnitudeVec1 * magnitudeVec2);
-
-            // Ensure the cosine value is within [-1, 1] to avoid NaN due to floating point errors
-            cosAngle = std::max(-1.0, std::min(1.0, cosAngle));
-
-            // Calculate the angle in radians
-            double angle = std::acos(cosAngle);
-
-            std::cout << "Angles: " << Thetas << std::endl;
-
-            return Thetas;
-        }
-
-        Eigen::VectorXd getAngleDifference()
-        {
-            Eigen::VectorXd Thetas(2);
-
-            Eigen::VectorXd directionVector(2);
-            directionVector(0) = 1;
-            directionVector(1) = 0;
-
-            double dotProduct = (directionVector.dot(this->PCA_Left));
-
-            double magnitudeVec1 = directionVector.norm();
-            double magnitudeVec2 = this->PCA_Left.norm();
+            double magnitudeVec1Left = directionVector.norm();
+            double magnitudeVec2Left = this->PCA_Left.norm();
 
             // Calculate the cosine of the angle
-            double cosAngle = dotProduct / (magnitudeVec1 * magnitudeVec2);
+            double cosAngleLeft = dotProductLeft / (magnitudeVec1Left * magnitudeVec2Left);
 
             // Ensure the cosine value is within [-1, 1] to avoid NaN due to floating point errors
-            cosAngle = std::max(-1.0, std::min(1.0, cosAngle));
+            cosAngleLeft = std::max(-1.0, std::min(1.0, cosAngleLeft));
 
             // Calculate the angle in radians
-            double angle = std::acos(cosAngle);
+            Thetas(0) = std::acos(cosAngleLeft);
+
+
+            double dotProductRight = (directionVector.dot(this->PCA_Right));
+
+            double magnitudeVec1Right = directionVector.norm();
+            double magnitudeVec2Right = this->PCA_Right.norm();
+
+            // Calculate the cosine of the angle
+            double cosAngleRight = dotProductRight / (magnitudeVec1Right * magnitudeVec2Right);
+
+            // Ensure the cosine value is within [-1, 1] to avoid NaN due to floating point errors
+            cosAngleRight = std::max(-1.0, std::min(1.0, cosAngleRight));
+
+            // Calculate the angle in radians
+            Thetas(1) = std::acos(cosAngleRight);
+
 
             std::cout << "Angles: " << Thetas << std::endl;
 

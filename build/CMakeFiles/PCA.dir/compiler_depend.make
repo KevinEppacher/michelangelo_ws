@@ -591,18 +591,18 @@ CMakeFiles/PCA.dir/src/pca.cpp.o: ../src/pca.cpp \
   /usr/include/python3.10/cpython/fileutils.h \
   /usr/include/python3.10/cpython/pyfpe.h \
   /usr/include/python3.10/tracemalloc.h \
-  /usr/lib/python3/dist-packages/numpy/core/include/numpy/arrayobject.h \
-  /usr/lib/python3/dist-packages/numpy/core/include/numpy/ndarrayobject.h \
-  /usr/lib/python3/dist-packages/numpy/core/include/numpy/ndarraytypes.h \
-  /usr/lib/python3/dist-packages/numpy/core/include/numpy/npy_common.h \
-  /usr/lib/python3/dist-packages/numpy/core/include/numpy/numpyconfig.h \
-  /usr/lib/python3/dist-packages/numpy/core/include/numpy/_numpyconfig.h \
-  /usr/lib/python3/dist-packages/numpy/core/include/numpy/npy_endian.h \
-  /usr/lib/python3/dist-packages/numpy/core/include/numpy/npy_cpu.h \
-  /usr/lib/python3/dist-packages/numpy/core/include/numpy/utils.h \
-  /usr/lib/python3/dist-packages/numpy/core/include/numpy/_neighborhood_iterator_imp.h \
-  /usr/lib/python3/dist-packages/numpy/core/include/numpy/__multiarray_api.h \
-  /usr/lib/python3/dist-packages/numpy/core/include/numpy/npy_interrupt.h \
+  /usr/include/python3.10/numpy/arrayobject.h \
+  /usr/include/python3.10/numpy/ndarrayobject.h \
+  /usr/include/python3.10/numpy/ndarraytypes.h \
+  /usr/include/python3.10/numpy/npy_common.h \
+  /usr/include/python3.10/numpy/numpyconfig.h \
+  /usr/include/python3.10/numpy/_numpyconfig.h \
+  /usr/include/python3.10/numpy/npy_endian.h \
+  /usr/include/python3.10/numpy/npy_cpu.h \
+  /usr/include/python3.10/numpy/utils.h \
+  /usr/include/python3.10/numpy/_neighborhood_iterator_imp.h \
+  /usr/include/python3.10/numpy/__multiarray_api.h \
+  /usr/include/python3.10/numpy/npy_interrupt.h \
   /usr/include/setjmp.h \
   /usr/include/signal.h \
   /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
@@ -656,35 +656,25 @@ CMakeFiles/PCA.dir/src/pca.cpp.o: ../src/pca.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/signum-generic.h:
 
-/usr/lib/python3/dist-packages/numpy/core/include/numpy/npy_interrupt.h:
+/usr/include/python3.10/numpy/npy_endian.h:
 
-/usr/lib/python3/dist-packages/numpy/core/include/numpy/utils.h:
+/usr/include/python3.10/numpy/_numpyconfig.h:
 
-/usr/lib/python3/dist-packages/numpy/core/include/numpy/npy_cpu.h:
+/usr/include/python3.10/numpy/numpyconfig.h:
 
-/usr/lib/python3/dist-packages/numpy/core/include/numpy/npy_endian.h:
+/usr/include/python3.10/numpy/npy_common.h:
 
-/usr/lib/python3/dist-packages/numpy/core/include/numpy/_numpyconfig.h:
-
-/usr/lib/python3/dist-packages/numpy/core/include/numpy/numpyconfig.h:
-
-/usr/lib/python3/dist-packages/numpy/core/include/numpy/npy_common.h:
-
-/usr/lib/python3/dist-packages/numpy/core/include/numpy/ndarraytypes.h:
-
-/usr/lib/python3/dist-packages/numpy/core/include/numpy/ndarrayobject.h:
-
-/usr/lib/python3/dist-packages/numpy/core/include/numpy/arrayobject.h:
+/usr/include/python3.10/numpy/ndarraytypes.h:
 
 /usr/include/python3.10/tracemalloc.h:
 
 /usr/include/python3.10/cpython/pyfpe.h:
 
-/usr/lib/python3/dist-packages/numpy/core/include/numpy/__multiarray_api.h:
-
 /usr/include/python3.10/cpython/fileutils.h:
 
 /usr/include/python3.10/cpython/pyctype.h:
+
+/usr/include/python3.10/numpy/npy_cpu.h:
 
 /usr/include/python3.10/eval.h:
 
@@ -782,8 +772,6 @@ _deps/eigen-src/Eigen/src/Core/util/ConfigureVectorization.h:
 
 /usr/include/c++/11/climits:
 
-/usr/lib/python3/dist-packages/numpy/core/include/numpy/_neighborhood_iterator_imp.h:
-
 /usr/include/c++/11/bits/sstream.tcc:
 
 /usr/include/c++/11/new:
@@ -805,6 +793,8 @@ _deps/eigen-src/Eigen/src/Core/util/ConfigureVectorization.h:
 /usr/include/python3.10/cpython/object.h:
 
 /usr/include/c++/11/ostream:
+
+/usr/include/python3.10/numpy/ndarrayobject.h:
 
 _deps/eigen-src/Eigen/src/Core/functors/StlFunctors.h:
 
@@ -923,6 +913,8 @@ _deps/eigen-src/Eigen/src/Geometry/Rotation2D.h:
 /usr/include/c++/11/bits/unordered_map.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h:
+
+/usr/include/python3.10/numpy/utils.h:
 
 /usr/include/asm-generic/errno.h:
 
@@ -1302,6 +1294,8 @@ _deps/eigen-src/Eigen/src/QR/HouseholderQR.h:
 
 /usr/include/assert.h:
 
+/usr/include/python3.10/numpy/npy_interrupt.h:
+
 /usr/include/c++/11/bits/stl_iterator_base_types.h:
 
 /usr/include/c++/11/cstdlib:
@@ -1331,6 +1325,8 @@ _deps/eigen-src/Eigen/src/QR/HouseholderQR.h:
 /usr/include/python3.10/cpython/pyerrors.h:
 
 _deps/eigen-src/Eigen/src/Core/util/IntegralConstant.h:
+
+/usr/include/python3.10/numpy/arrayobject.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h:
 
@@ -1652,6 +1648,8 @@ _deps/eigen-src/Eigen/src/Core/ArrayWrapper.h:
 
 _deps/eigen-src/Eigen/src/Core/GlobalFunctions.h:
 
+/usr/include/python3.10/numpy/_neighborhood_iterator_imp.h:
+
 /usr/include/python3.10/pystrcmp.h:
 
 _deps/eigen-src/Eigen/src/misc/Kernel.h:
@@ -1665,6 +1663,8 @@ _deps/eigen-src/Eigen/src/misc/Image.h:
 _deps/eigen-src/Eigen/src/LU/InverseImpl.h:
 
 /usr/include/x86_64-linux-gnu/sys/stat.h:
+
+/usr/include/python3.10/numpy/__multiarray_api.h:
 
 _deps/eigen-src/Eigen/Cholesky:
 

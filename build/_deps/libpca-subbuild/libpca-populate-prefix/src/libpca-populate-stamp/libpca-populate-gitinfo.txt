@@ -1,3 +1,0 @@
-repository='https://github.com/bloomen/libpca.git'
-module=''
-tag='origin'

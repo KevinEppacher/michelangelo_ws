@@ -283,23 +283,23 @@ namespace Robot
         char buffer[16000] = {};
 
         //Receiving odom-data 
-        // Robot::Pose currentOdomPose;
-        // Robot::TCPClient client(ip, 9998); 
-        // std::string odomData = client.receiveData(buffer, sizeof(buffer));
-        // Robot::JsonHandler dataHandler;
-        // nlohmann :: json jsonOdom;
+        Robot::Pose currentOdomPose;
+        Robot::TCPClient client(ip, 9998); 
+        std::string odomData = client.receiveData(buffer, sizeof(buffer));
+        Robot::JsonHandler OdomdataHandler;
+        nlohmann :: json jsonOdom;
 
-        // jsonOdom = dataHandler.extractJson(odomData);
+        jsonOdom = OdomdataHandler.extractJson(odomData);
 
-        // //Overwriting current odometry position with Sensor Odometry Position
+        //Overwriting current odometry position with Sensor Odometry Position
 
-        // currentOdomPose.position.x = jsonOdom["pose"]["pose"]["position"]["x"];
-        // currentOdomPose.position.y = jsonOdom["pose"]["pose"]["position"]["y"];
-        // currentOdomPose.position.z = jsonOdom["pose"]["pose"]["position"]["z"];
-        // currentOdomPose.orientation.x = jsonOdom["pose"]["pose"]["orientation"]["x"];
-        // currentOdomPose.orientation.y = jsonOdom["pose"]["pose"]["orientation"]["y"];
-        // currentOdomPose.orientation.z = jsonOdom["pose"]["pose"]["orientation"]["z"];
-        // currentOdomPose.orientation.w = jsonOdom["pose"]["pose"]["orientation"]["w"]; 
+        currentOdomPose.position.x = jsonOdom["pose"]["pose"]["position"]["x"];
+        currentOdomPose.position.y = jsonOdom["pose"]["pose"]["position"]["y"];
+        currentOdomPose.position.z = jsonOdom["pose"]["pose"]["position"]["z"];
+        currentOdomPose.orientation.x = jsonOdom["pose"]["pose"]["orientation"]["x"];
+        currentOdomPose.orientation.y = jsonOdom["pose"]["pose"]["orientation"]["y"];
+        currentOdomPose.orientation.z = jsonOdom["pose"]["pose"]["orientation"]["z"];
+        currentOdomPose.orientation.w = jsonOdom["pose"]["pose"]["orientation"]["w"]; 
 
         // std::cout<<" sequence:    " << sequenceNumber<< "         || currentOdomPose.position.x:   "<<currentOdomPose.position.x<<"         || currentOdomPose.position.y"<<currentOdomPose.position.y<<"         ||  currentOdomPose.orientation.z"<< currentOdomPose.orientation.z<<std::endl;
 
@@ -309,16 +309,23 @@ namespace Robot
         Robot::TCPClient laserClient(ip, 9997); 
         std::string laserscanData = laserClient.receiveData(buffer, sizeof(buffer));
 
-        std::cout << laserscanData << std::endl;
-
-        Robot::JsonHandler dataHandler;
+        Robot::JsonHandler LaserdataHandler;
         nlohmann :: json jsonScan;
 
-        jsonScan = dataHandler.extractJson(laserscanData);
+        jsonScan = LaserdataHandler.extractJson(laserscanData);
 
-        std::cout << "Json data incoming" << std::endl;
+        // std::cout << "Json data incoming" << std::endl;
 
-        std::cout << jsonScan << std::endl;
+        // std::cout << jsonScan << std::endl;
+
+        Robot::PCA pcaObject;
+
+        pcaObject.CalculateAndPlotPCA(jsonScan["ranges"]);
+
+        Eigen::VectorXd AngleDiffs = pcaObject.getAngleDifference();
+
+        std::cout << "Thetas are: " << AngleDiffs << std::endl;
+
 
 /* 
 
@@ -362,10 +369,10 @@ namespace Robot
         goalPose4.orientation.z = -M_PI/2; 
         goalPose4.tolerance = 0.2;
 
-        // if(goalPose1.index == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
-        // if(goalPose2.index == sequenceNumber) goTo(&goalPose2, &currentOdomPose);
-        // if(goalPose3.index == sequenceNumber) goTo(&goalPose3, &currentOdomPose);
-        // if(goalPose4.index == sequenceNumber) goTo(&goalPose4, &currentOdomPose);
+        if(goalPose1.index == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
+        if(goalPose2.index == sequenceNumber) goTo(&goalPose2, &currentOdomPose);
+        if(goalPose3.index == sequenceNumber) goTo(&goalPose3, &currentOdomPose);
+        if(goalPose4.index == sequenceNumber) goTo(&goalPose4, &currentOdomPose);
         // //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
 
 
@@ -560,6 +567,203 @@ JsonHandler
         {
             return jsonData;
         }
+
+
+    PCA::PCA(){};
+    PCA::~PCA(){};
+
+    void PCA::CalculateAndPlotPCA(std::vector<double> rawLaserScan)
+    {
+        //Map std::vector to eigen::vector
+        Eigen::VectorXd laser = Eigen::VectorXd::Map(&rawLaserScan[0], rawLaserScan.size());
+
+        //convert polar coordinates to cartesian coordinates
+        Eigen::MatrixXd data = this->PolarToCartesian(laser);
+
+        //Compute PCA
+        Eigen::VectorXd principal_component = this->computePCA(data);
+        //std::cout << "Principal Component of all: \n" << principal_component << std::endl;
+        //pca.plotData(data, principal_component); 
+
+        //Filter Right and Left side and calculate PCA seperately
+        this->FilterLaserscan(data, 30);
+        Eigen::MatrixXd left = this->getFilteredLeftScanData();
+        Eigen::MatrixXd right = this->getFilteredRightScanData();
+
+        Eigen::VectorXd principal_componentLeft = this->computePCA(left);
+        this->PCA_Left = principal_componentLeft;
+        //std::cout << "Principal Component Left: \n" << principal_componentLeft << std::endl;
+        //this->plotData(data, principal_componentLeft);  
+
+        Eigen::VectorXd principal_componentRight = this->computePCA(right);
+        this->PCA_Right = principal_componentRight;
+        //std::cout << "Principal Component Right: \n" << principal_componentRight << std::endl;
+        //this->plotData(data, principal_componentRight);
+    }
+
+    
+    Eigen::MatrixXd PCA::PolarToCartesian(Eigen::VectorXd laserScanData)
+    {
+        Eigen::MatrixXd cartesianLaserScanData(360,2);
+        //int theta = 1;
+
+        for (int theta = 0; theta < 360; theta++)
+        {
+            double currentRange = laserScanData[theta];
+            double thetaRadians = theta * M_PI / 180.0;
+            double x = currentRange * cos(thetaRadians);
+            double y = currentRange * sin(thetaRadians);
+            cartesianLaserScanData(theta,0) = x;
+            cartesianLaserScanData(theta,1) = y; 
+        }
+
+        //std::cout << "Cartesian laser scan: " << cartesianLaserScanData << std::endl;
+        return cartesianLaserScanData;
+        
+    };
+
+    void PCA::FilterLaserscan(Eigen::MatrixXd laserScanData, int filterTolerance)
+    {
+        int rangeSize = 2 * filterTolerance + 1; // Calculate the actual size of the range
+        Eigen::MatrixXd tempLeft(rangeSize, 2);  // Initialize tempLeft with the correct size
+
+        int leftCounter = 0;  // Counter for indexing tempLeft
+        for (int theta = 90 - filterTolerance; theta <= 90 + filterTolerance; theta++, leftCounter++)
+        {
+            if (theta >= 0 && theta < laserScanData.rows()) // Check bounds of laserScanData
+            {
+                tempLeft(leftCounter, 0) = laserScanData(theta, 0);
+                tempLeft(leftCounter, 1) = laserScanData(theta, 1);
+            }
+        }
+
+        this->filteredLaserScanLeftSide = tempLeft;
+
+        //int rangeSize = 2 * filterTolerance + 1; // Calculate the actual size of the range
+        Eigen::MatrixXd tempRight(rangeSize, 2);  // Initialize tempLeft with the correct size
+
+        int rightCounter = 0;  // Counter for indexing tempLeft
+        for (int theta = 270 - filterTolerance; theta <= 270 + filterTolerance; theta++, rightCounter++)
+        {
+            if (theta >= 0 && theta < laserScanData.rows()) // Check bounds of laserScanData
+            {
+                tempRight(rightCounter, 0) = laserScanData(theta, 0);
+                tempRight(rightCounter, 1) = laserScanData(theta, 1);
+            }
+        }
+
+        this->filteredLaserScanRightSide = tempRight;
+    };
+
+    Eigen::VectorXd PCA::computePCA(const Eigen::MatrixXd &data)
+    {
+        // Centering the data
+
+        //std::cout << "Data: " << data << std::endl;
+
+        Eigen::VectorXd mean = data.colwise().mean();
+
+        //std::cout << "Mean: " << mean << std::endl;
+
+        Eigen::MatrixXd centered = data.rowwise() - mean.transpose();
+
+        //std::cout << "Centered: " << centered << std::endl;
+
+        // Computing the covariance matrix
+        Eigen::MatrixXd cov = centered.adjoint() * centered;
+
+        //std::cout << "Covariance: " << cov << std::endl;
+
+        // Performing eigen decomposition
+        Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> eigen_solver(cov);
+
+        //std::cout << "Eigenvalues: " << eigen_solver.eigenvalues() << std::endl;
+
+
+        Eigen::MatrixXd eigenvectors = eigen_solver.eigenvectors();
+
+        //std::cout << "Eigenvectors: " << eigenvectors << std::endl;
+
+        // Extracting the principal component
+        Eigen::VectorXd principal_component = eigenvectors.rightCols(1);
+
+        return principal_component;
+    };
+
+    void PCA::plotData(Eigen::MatrixXd laserScanData, Eigen::VectorXd PCA_vector)
+    {
+        std::vector<double> x_data(laserScanData.rows()), y_data(laserScanData.rows());
+        for (int i = 0; i < laserScanData.rows(); ++i) {
+            x_data[i] = laserScanData(i, 0);
+            y_data[i] = laserScanData(i, 1);
+        }
+
+        // Plotting the laser scan data
+        matplotlibcpp::scatter(x_data, y_data);
+
+        // Calculate end points for the PCA vector for visualization
+        double scale_factor = 10.0;  // Adjust this factor to scale the PCA vector for better visualization
+        std::vector<double> pca_x = {0, scale_factor * PCA_vector(0)};
+        std::vector<double> pca_y = {0, scale_factor * PCA_vector(1)};
+
+        // Explicitly defining the start points for the quiver plot
+        std::vector<double> start_x = {0,0};
+        std::vector<double> start_y = {0,0};
+
+        // Plotting the PCA vector
+        matplotlibcpp::quiver(start_x, start_y, pca_x, pca_y);
+
+        // Show the plot
+        matplotlibcpp::show();
+    };
+
+
+    Eigen::VectorXd PCA::getAngleDifference()
+    {
+        Eigen::VectorXd Thetas(2);
+
+        Eigen::VectorXd directionVector(2);
+        directionVector(0) = 1;
+        directionVector(1) = 0;
+
+        double dotProduct = (directionVector.dot(this->PCA_Left));
+
+        double magnitudeVec1 = directionVector.norm();
+        double magnitudeVec2 = this->PCA_Left.norm();
+
+        // Calculate the cosine of the angle
+        double cosAngle = dotProduct / (magnitudeVec1 * magnitudeVec2);
+
+        // Ensure the cosine value is within [-1, 1] to avoid NaN due to floating point errors
+        cosAngle = std::max(-1.0, std::min(1.0, cosAngle));
+
+        // Calculate the angle in radians
+        double angle = std::acos(cosAngle);
+
+        std::cout << "Angles: " << Thetas << std::endl;
+
+        return Thetas;
+    }
+
+    Eigen::MatrixXd PCA::getFilteredLeftScanData()
+    {
+        return this->filteredLaserScanLeftSide;
+    };
+
+    Eigen::MatrixXd PCA::getFilteredRightScanData()
+    {
+        return this->filteredLaserScanRightSide;
+    };
+
+    Eigen::VectorXd PCA::getPCA_Left()
+    {
+        return this->PCA_Left;
+    };
+
+    Eigen::VectorXd PCA::getPCA_Right()
+    {
+        return this->PCA_Right;
+    };
 
         //COCO//
 
