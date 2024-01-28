@@ -170,7 +170,7 @@ MobileRobot
             PCA();
             ~PCA();
 
-            void CalculateAndPlotPCA(std::vector<double> rawLaserScan);  
+            void runPCA(std::vector<double> rawLaserScan);  
             Eigen::MatrixXd PolarToCartesian(Eigen::VectorXd laserScanData);
             void FilterLaserscan(Eigen::MatrixXd laserScanData, int filterTolerance);
             Eigen::VectorXd computePCA(const Eigen::MatrixXd &data);

@@ -314,13 +314,9 @@ namespace Robot
 
         jsonScan = LaserdataHandler.extractJson(laserscanData);
 
-        // std::cout << "Json data incoming" << std::endl;
-
-        // std::cout << jsonScan << std::endl;
-
         Robot::PCA pcaObject;
 
-        pcaObject.CalculateAndPlotPCA(jsonScan["ranges"]);
+        pcaObject.runPCA(jsonScan["ranges"]);
 
         Eigen::VectorXd AngleDiffs = pcaObject.getAngleDifference();
 
@@ -369,10 +365,10 @@ namespace Robot
         goalPose4.orientation.z = -M_PI/2; 
         goalPose4.tolerance = 0.2;
 
-        if(goalPose1.index == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
+/*         if(goalPose1.index == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
         if(goalPose2.index == sequenceNumber) goTo(&goalPose2, &currentOdomPose);
         if(goalPose3.index == sequenceNumber) goTo(&goalPose3, &currentOdomPose);
-        if(goalPose4.index == sequenceNumber) goTo(&goalPose4, &currentOdomPose);
+        if(goalPose4.index == sequenceNumber) goTo(&goalPose4, &currentOdomPose); */
         // //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
 
 
@@ -572,7 +568,7 @@ JsonHandler
     PCA::PCA(){};
     PCA::~PCA(){};
 
-    void PCA::CalculateAndPlotPCA(std::vector<double> rawLaserScan)
+    void PCA::runPCA(std::vector<double> rawLaserScan)
     {
         //Map std::vector to eigen::vector
         Eigen::VectorXd laser = Eigen::VectorXd::Map(&rawLaserScan[0], rawLaserScan.size());
@@ -593,7 +589,7 @@ JsonHandler
         Eigen::VectorXd principal_componentLeft = this->computePCA(left);
         this->PCA_Left = principal_componentLeft;
         //std::cout << "Principal Component Left: \n" << principal_componentLeft << std::endl;
-        //this->plotData(data, principal_componentLeft);  
+        this->plotData(data, principal_componentLeft);  
 
         Eigen::VectorXd principal_componentRight = this->computePCA(right);
         this->PCA_Right = principal_componentRight;
@@ -692,14 +688,20 @@ JsonHandler
 
     void PCA::plotData(Eigen::MatrixXd laserScanData, Eigen::VectorXd PCA_vector)
     {
+
+        matplotlibcpp::ion(); // Turn on interactive mode
+
         std::vector<double> x_data(laserScanData.rows()), y_data(laserScanData.rows());
         for (int i = 0; i < laserScanData.rows(); ++i) {
             x_data[i] = laserScanData(i, 0);
             y_data[i] = laserScanData(i, 1);
         }
 
+        matplotlibcpp::clf();
+
         // Plotting the laser scan data
         matplotlibcpp::scatter(x_data, y_data);
+        matplotlibcpp::title("PCA vector");
 
         // Calculate end points for the PCA vector for visualization
         double scale_factor = 10.0;  // Adjust this factor to scale the PCA vector for better visualization
@@ -713,8 +715,10 @@ JsonHandler
         // Plotting the PCA vector
         matplotlibcpp::quiver(start_x, start_y, pca_x, pca_y);
 
-        // Show the plot
-        matplotlibcpp::show();
+        // Show the plot and update frequently
+        //matplotlibcpp::show();
+        matplotlibcpp::draw();
+        matplotlibcpp::pause(0.01);
     };
 
 
@@ -739,7 +743,6 @@ JsonHandler
 
         // Calculate the angle in radians
         Thetas(0) = std::acos(cosAngleLeft);
-
 
         double dotProductRight = (directionVector.dot(this->PCA_Right));
 
