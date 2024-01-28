@@ -21,6 +21,7 @@
 #include <sys/shm.h>
 #include <sys/sem.h>
 #include <functional>
+#include <chrono>
 
 
 #define RCVBUFSIZE 100000   /* Size of receive buffer */
@@ -46,6 +47,8 @@ namespace Robot
     };
 
     double convertDegreesToRadiant(double degrees);
+
+
 
 
     struct Twist
@@ -140,6 +143,9 @@ MobileRobot
         double alpha = 0;
         double beta = 0;
         double dt = 0;
+        std::chrono::high_resolution_clock::time_point time;
+        std::chrono::high_resolution_clock::time_point lastTime;
+        long long getTimeMS();
     };
 
 
@@ -167,6 +173,31 @@ MobileRobot
 
     //COCO//
 
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+TCPServer
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+    class TCPServer {
+    public:
+        TCPServer(int port);
+        ~TCPServer();
+        
+        void acceptConnection();
+        void receiveData(char* buffer, ssize_t size);
+        void sendData(const char* data);
+
+    private:
+        int server_fd, new_socket;
+        ssize_t valread;
+        struct sockaddr_in address;
+        socklen_t addrlen;
+        int port;
+    };
 
     class JsonHandler
     {
