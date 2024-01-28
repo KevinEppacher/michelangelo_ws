@@ -10,16 +10,10 @@ namespace Robot
 
     MobileRobot::~MobileRobot()
     {
-/*         std::stringstream ss;
+        std::stringstream ss;
         ss << "---START---{linear: 0 , angular:   0  }___END___";
         std::string echoString = ss.str();
 
-        Robot::TCPClient client(this->ip, 9999);
-        std::cout << *linear_x << std::endl;
-        std::cout << *angular_z << std::endl; 
-        client.sendData(echoString.c_str());
-        //client.receiveData(buffer, sizeof(buffer));  
-        //client.closeTCPconnection(); */
     }
 
  
