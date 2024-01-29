@@ -26,8 +26,21 @@ FetchContent_Declare(
 # Make Eigen available for use
 FetchContent_MakeAvailable(eigen)
 
+# Declare matplotlib-cpp dependency
+FetchContent_Declare(
+  matplotlib_cpp
+  GIT_REPOSITORY https://github.com/lava/matplotlib-cpp.git
+  GIT_TAG master  # You can specify a particular commit/tag if needed
+)
+# Make matplotlib-cpp available for use
+FetchContent_MakeAvailable(matplotlib_cpp)
+
 # Find SFML package
 find_package(SFML 2.5 COMPONENTS system window graphics REQUIRED)
+
+# Find Python and NumPy
+find_package(PythonInterp 3 REQUIRED)
+find_package(PythonLibs 3 REQUIRED)
 
 # Add your executables
 add_executable(main src/main.cpp src/Robot.cpp)
@@ -40,3 +53,10 @@ target_include_directories(main PRIVATE ${eigen_SOURCE_DIR})
 
 # Link SFML with your main target
 target_link_libraries(main sfml-system sfml-window sfml-graphics)
+
+# Include Python and matplotlib-cpp headers
+include_directories(${PYTHON_INCLUDE_DIRS})
+include_directories(${matplotlib_cpp_SOURCE_DIR})
+
+# Link Python libraries with your main target
+target_link_libraries(main ${PYTHON_LIBRARIES})

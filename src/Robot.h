@@ -14,10 +14,12 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <deque>
+#include "matplotlibcpp.h"
+#include <thread>
 
 
 #define RCVBUFSIZE 100000   /* Size of receive buffer */
-
+namespace plt = matplotlibcpp;
 
 namespace Robot
 {
@@ -88,6 +90,12 @@ namespace Robot
         };
     };
 
+    struct Position
+    {
+        std::vector<double> x;
+        std::vector<double> y;
+    };
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,11 +138,21 @@ MobileRobot
         void arrivedEndgoal();
         Robot::Pose currentOdomPose;
         Robot::sensor_msgs::scan_msg scanData;
+        Parameter Lin, Alpha, Beta;
 
     private:
         char* ip;
         Robot::Pose diffPose;
         Robot::Twist cmdVel;
+        //Robot::Visualizer;
+        std::chrono::time_point<std::chrono::system_clock> start;
+        std::vector<double> zeit;
+        std::vector<double> errorBeta;
+        std::vector<double> errorAlpha;
+        std::vector<double> errorLinear;
+
+
+
         int sequenceNumber = 1;
         float robotVector[2] = { 0 , 0 };
         float distanceVector[2] = { 0 , 0 };
@@ -195,6 +213,8 @@ MobileRobot
     public:
         Visualizer();
         ~Visualizer();
+        void runMatplotlib();
+
 
         void run();
 
@@ -208,6 +228,8 @@ MobileRobot
         std::deque<std::pair<float, float>> polarPointQueue;
         sf::CircleShape pointShape;
         const int maxBufferSize = 3;
+        void updateData();
+
 
         sf::RectangleShape background; // Background shape
         sf::VertexArray axes; // Axes lines

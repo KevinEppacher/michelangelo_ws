@@ -10,6 +10,8 @@ namespace Robot
     MobileRobot::MobileRobot(char* ip):ip(ip)
     {
         //std::cout << "A Robot is born" << std::endl;
+        plt::figure_size(800, 600); // Größe des Fensters in Pixel
+        start = std::chrono::system_clock::now();
     }
 
     MobileRobot::~MobileRobot()
@@ -50,7 +52,7 @@ namespace Robot
         
         pidController(&cmdVel, PID, totalDistance, alpha, beta);
 
-        limitControllerVariables(&cmdVel, 1, -1);
+        limitControllerVariables(&cmdVel, 3, -3);
 
         publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);
 
@@ -64,22 +66,6 @@ namespace Robot
         //std::cout << "cmdVel.linear.x: " << cmdVel.linear.x << "    ||  cmdVel.angular.z:"<<cmdVel.angular.z<<std::endl;
         //std::cout << "" <<std::endl;
         return 1;
-    }
-
-    bool Robot::MobileRobot::orientationController(Robot::Pose goalPose, Robot::Pose currentOdomPose)
-    {
-        Parameter PID;  
-        convertQuaternionsToEuler(&currentOdomPose);    
-        diffPose.position.x = goalPose.position.x - currentOdomPose.position.x;
-        diffPose.position.y = goalPose.position.y - currentOdomPose.position.y; 
-        gamma = calculateGamma(diffPose);   
-        alpha = calculateAlpha(gamma, currentOdomPose); 
-        beta = calculateBeta(goalPose, gamma);  
-        pidController(&cmdVel, PID, totalDistance, alpha, beta);    
-        limitControllerVariables(&cmdVel, 1, -1);   
-        cmdVel.linear.x = 0;
-        publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);
-        return true;
     }
 
     void Robot::MobileRobot::publishCmdVel(double* linear_x, double* angular_z) 
@@ -118,21 +104,18 @@ namespace Robot
 
     bool MobileRobot::pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta)
     {        
-        Parameter Lin, Alpha, Beta;
+        Lin.P = 0.15;
+        //Lin.I = 0.01;
 
-        Lin.P = 0.2;
-        Lin.I = 0.01;
+        Alpha.P = 0.6;
+        //Alpha.I = 0.04;
 
-        Alpha.P = 0.8;
-        Alpha.I = 0.8;
-
-        Beta.P = -0.3;
-        Beta.I = 0.6;
+        Beta.P = -0.2;
+        //Beta.I = -0.06;
 
         Lin.proportionalError = Lin.P * totalDistance;
         Lin.integralError += ( Lin.I / 2 ) * totalDistance;
         Lin.error = Lin.proportionalError + Lin.integralError;
-        cmdVel->linear.x = Lin.error;
 
 
         Alpha.proportionalError = Alpha.P *  alpha;
@@ -142,7 +125,10 @@ namespace Robot
         Beta.proportionalError = Beta.P *  beta;
         Beta.integralError += (Beta.I / 2 ) * beta;
         Beta.error = Beta.proportionalError + Beta.integralError;
+
+        //error.push_back(Beta.error);
         
+        cmdVel->linear.x = Lin.error;
         cmdVel->angular.z = Alpha.error + Beta.error;
 
         return true;
@@ -194,54 +180,6 @@ namespace Robot
         currentAngle->orientation.x = euler[0];
         currentAngle->orientation.y = euler[1];
         currentAngle->orientation.z = euler[2];
-
-        return true;
-    }
-
-    double MobileRobot::calculateRoll(Pose* qA)
-    {
-        double numerator = 2 * ( qA->orientation.w * qA->orientation.y + qA->orientation.x * qA->orientation.z );
-        double denominator = 1 - 2 * (pow(qA->orientation.y, 2) + pow(qA->orientation.z, 2));
-        double rollAngle = atan2(numerator, denominator);
-        //std::cout << "Roll: numerator = " << numerator << ", denominator = " << denominator << ", rollAngle = " << rollAngle << std::endl;
-        return rollAngle;
-    }
-
-    double MobileRobot::calculatePitch(Pose* qA)
-    {
-        double sinp = 2 * (qA->orientation.w * qA->orientation.y - qA->orientation.z * qA->orientation.x);
-        double pitchAngle;
-
-        if (std::abs(sinp) >= 1) {
-            pitchAngle = std::copysign(M_PI / 2, sinp);
-            //std::cout << ", pitchAngle = " << pitchAngle << " (90 Grad verwendet)" << std::endl;
-            return pitchAngle;
-        } else {
-            pitchAngle = std::asin(sinp);
-            //std::cout << ", pitchAngle = " << pitchAngle << std::endl;
-            return pitchAngle;
-        }
-    }
-
-    double MobileRobot::calculateYaw(Pose* qA)
-    {
-        double numerator = 2 * ((qA->orientation.w * qA->orientation.z) + (qA->orientation.x * qA->orientation.y));
-        double denominator = 1 - 2 * (pow(qA->orientation.x, 2) + pow(qA->orientation.y, 2));
-        double yawAngle = atan2(numerator, denominator);
-        if (yawAngle < 0) 
-        {
-            yawAngle += 2 * M_PI;
-        }
-
-        std::cout << "Yaw: numerator = " << numerator << ", denominator = " << denominator << ", yawAngle = " << yawAngle << std::endl;
-        return yawAngle;
-    }
-
-    bool MobileRobot::calculateRobotVektor()
-    {
-        
-        robotVector[0] = 0;
-        robotVector[1] = 0;
 
         return true;
     }
@@ -318,11 +256,53 @@ namespace Robot
         nlohmann :: json jsonScan;
 
         jsonScan = LaserdataHandler.extractJson(laserscanData);
+        //std::cout << "Laserscan data: " << jsonScan << std::endl;
         scanData.range = jsonScan["ranges"].get<std::vector<float>>();
 
         // Reservieren oder Größe anpassen, um 360 Winkel zu speichern
         scanData.angle.resize(scanData.range.size());
         // Iterieren über den Bereich und füllen die Winkel
+
+        auto now = std::chrono::system_clock::now();
+
+        std::chrono::duration<double> elapsed_seconds = now - start;
+
+            // Zeit und Wert aktualisieren
+        zeit.push_back(elapsed_seconds.count());
+        errorBeta.push_back(Beta.error);
+        errorAlpha.push_back(Alpha.error);
+        errorLinear.push_back(Lin.error);
+
+
+        Position currentPosition, targetPosition;
+        currentPosition.x.push_back(currentOdomPose.position.x);
+        currentPosition.y.push_back(currentOdomPose.position.y);
+
+        //targetPosition.x.push_back(targetPosition.position.x);
+        //targetPosition.y.push_back(targetPosition.position.y);
+
+        // Jetzt kannst du deine Scatter-Plots basierend auf diesen Positionen erstellen
+        //plt::scatter(targetPosition.x, targetPosition.y, 10); // Plot der Zielposition
+
+
+        // Plot aktualisieren
+        plt::clf(); // Vorherigen Plot löschen
+        // Jeden Plot mit einem eindeutigen Label versehen
+        plt::named_plot("Beta Error", zeit, errorBeta, "r"); // "r" steht für die Farbe Rot
+        plt::named_plot("Alpha Error", zeit, errorAlpha, "g"); // "g" steht für die Farbe Grün
+        plt::named_plot("Linear Error", zeit, errorLinear, "b"); // "b" steht für die Farbe Blau
+
+        plt::scatter(currentPosition.x, currentPosition.y, 40, {{"color", "red"}}); // Große rote Punkte        
+
+        plt::xlabel("Time [s]");
+        plt::ylabel("Error Value");
+        plt::title("Error");
+        // Die Legende hinzufügen. Die Platzierung der Legende kannst du mit der `loc`-Option anpassen.
+        plt::legend();
+        plt::pause(0.0001); // Kurze Pause, um das Flackern zu reduzieren und die CPU zu schonen
+
+
+        
         for (size_t i = 0; i < scanData.range.size(); ++i) 
         {
             scanData.angle[i] = i; // i entspricht dem Winkel in Graden
@@ -332,8 +312,10 @@ namespace Robot
 
         // Iterieren über die Elemente von scanData.range
         for (const auto& scanRange : scanData.range) {
-            std::cout << "Angle "<<scanData.angle.at(2)<<"  :" << scanRange << std::endl;
+            //std::cout << "Angle "<<scanData.angle.at(2)<<"  :" << scanRange << std::endl;
         }
+
+        
         
 /*
         double poseResolution = 9;
@@ -356,8 +338,8 @@ namespace Robot
         //Overwriting current laserscan position with Sensor Laserscan Position
         Robot::Pose goalPose1, goalPose3, goalPose2, goalPose4, goalPose5, goalPose6, goalPose7, goalPose8, goalPose9, goalPose10;
         Robot::Circle circle;
-        circle.xOffset = 1.5;
-        circle.radius = 0.5;        
+        circle.xOffset = 1;
+        circle.radius = 0.25;        
 
         goalPose1.index = 1;
         goalPose1.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-180));
@@ -399,13 +381,13 @@ namespace Robot
         goalPose7.index = 7;
         goalPose7.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(90));
         goalPose7.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(90));
-        goalPose7.orientation.z = convertDegreesToRadiant(180);
+        goalPose7.orientation.z = convertDegreesToRadiant(179);
         goalPose7.tolerance = 0.15;
 
         goalPose8.index = 8;
         goalPose8.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(135));
         goalPose8.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(135));
-        goalPose8.orientation.z = convertDegreesToRadiant(180);
+        goalPose8.orientation.z = convertDegreesToRadiant(179);
         goalPose8.tolerance = 0.15;
 
         goalPose9.index = 9;
@@ -417,7 +399,7 @@ namespace Robot
         goalPose10.index = 10;
         goalPose10.position.x = 0;
         goalPose10.position.y = 0;
-        goalPose10.orientation.z = convertDegreesToRadiant(180);
+        goalPose10.orientation.z = convertDegreesToRadiant(179);
         goalPose10.tolerance = 0.15;
 
 
@@ -431,6 +413,7 @@ namespace Robot
         if(goalPose8.index == sequenceNumber) goTo(&goalPose8, &currentOdomPose);
         if(goalPose9.index == sequenceNumber) goTo(&goalPose9, &currentOdomPose);
         if(goalPose10.index == sequenceNumber) goTo(&goalPose10, &currentOdomPose);
+
 
   
         //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
@@ -710,5 +693,5 @@ Visualizer
 
 
 
-    
+
 }
