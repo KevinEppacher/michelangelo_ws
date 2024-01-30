@@ -415,10 +415,10 @@ MobileRobot
         goalPose8.tolerance = 0.20;
 
         goalPose9.index = 9;
-        goalPose8.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(180));
-        goalPose8.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(180));
-        goalPose8.orientation.z = convertDegreesToRadiant(180);
-        goalPose8.tolerance = 0.20;
+        goalPose9.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(180));
+        goalPose9.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(180));
+        goalPose9.orientation.z = convertDegreesToRadiant(180);
+        goalPose9.tolerance = 0.20;
 
         goalPose10.index = 10;
         goalPose10.position.x = 0;
@@ -565,13 +565,11 @@ TCP Client
                 if (result.find("---START---") != std::string::npos) {
                     startFound = true;
                     result = result.substr(result.find("---START---"));
-                    //std::cout << "START FOUND" << std::endl;
                 } 
             }
 
             // Check for the end marker
             if (startFound && result.find("___END___") != std::string::npos) {
-                //std::cout << "you did it" << std::endl;
                 break;
             }
         }
@@ -644,7 +642,6 @@ Json-Class
         {
             try 
             {
-                //std::cout << key << std::endl;
                 if (jsonData.contains(key)) 
                 {
                     return jsonData[key].dump(); 
@@ -942,7 +939,6 @@ sharedMemory
 
 
     SHM::SHM(const std::string& input) : input(input), output() {
-        //std::cout << "shared memory starting up\n";
         mutexID = semget(IPC_PRIVATE, 1, 0666);                                                                         //creating mutex semaphore
         shmID = shmget(IPC_PRIVATE, sizeof(struct SHM_Message), 0666 | IPC_CREAT);                                      //saving semapgore ID
         processID = fork();                                                                                             //splitting process and saving ID of child as processID
@@ -951,17 +947,14 @@ sharedMemory
             std::exit(EXIT_FAILURE);                        
         }                       
 
-        if (processID == 0) {                                                                                           //if the process is the child of the original ->It's the consumer
-            //std::cout << "Consumer started \n";                       
+        if (processID == 0) {                                                                                           //if the process is the child of the original ->It's the consumer                       
             signal(SIGINT, [](int sig) { SHM::signalHandler(sig, nullptr); });                                          //enabling structured shutdown
-            shmptr = (SHM_Message*)shmat(shmID, NULL, 0);                                                               //defining location of saved data
-            //std::cout<<"checking signal\n";                       
+            shmptr = (SHM_Message*)shmat(shmID, NULL, 0);                                                               //defining location of saved data                       
             checkSignal(mutexID);                                                                                       //only continue if semaphore is active (meaning no one accessing the data)
             output = shmptr->information;                                                                               //save the data in the specified location by the pointer as output
             setSignal(mutexID);                                                                                         //signaling via semaphore that the data can be accessed again
         }
         else {                                                                                                          //otherwise this has to be the parent/producer
-            //std::cout << "Producer started \n";
             signal(SIGINT, [](int sig) { SHM::signalHandler(sig, nullptr); });                                          //enabling structered shutdown
             shmptr = (SHM_Message*)shmat(shmID, NULL, 0);                                                               //attach shared memory at pointer location                       
             checkSignal(mutexID);                                                                                       //only continue if semaphore is active (meaning no one accessing the data)
