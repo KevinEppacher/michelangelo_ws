@@ -23,6 +23,8 @@
 #include <functional>
 #include <chrono>
 #include <iomanip>
+#include <Eigen/Eigenvalues>
+#include <matplotlibcpp.h>
 
 
 #define RCVBUFSIZE 100000   /* Size of receive buffer */

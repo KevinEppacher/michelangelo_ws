@@ -15,6 +15,7 @@ MobileRobot
     double convertDegreesToRadiant(double degrees)
     {
         return (degrees * (M_PI/180));
+
     }
 
 
@@ -912,7 +913,9 @@ sharedMemory
             signal(SIGINT, [](int sig) { SHM::signalHandler(sig, nullptr); });                                          //enabling structured shutdown
             shmptr = (SHM_Message*)shmat(shmID, NULL, 0);                                                               //defining location of saved data                       
             checkSignal(mutexID);                                                                                       //only continue if semaphore is active (meaning no one accessing the data)
+            std::cout << "Fucked Here" << std::endl;
             output = shmptr->information;                                                                               //save the data in the specified location by the pointer as output
+            std::cout << "Fucked Here" << std::endl;
             setSignal(mutexID);                                                                                         //signaling via semaphore that the data can be accessed again
         }
         else {                                                                                                          //otherwise this has to be the parent/producer
