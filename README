@@ -4,7 +4,8 @@ This project focuses on developing a comprehensive robotic control and monitorin
 Our primary objectives were to establish reliable TCP/IP communications for commanding and 
 data acquisition, use shared memory with semaphores for inter-process communication, accurately 
 calculate the robots position and orientation using laserscan and odometry data, and implement 
-a linear control program to navigate the robot on a predefined path.
+a linear control program to navigate the robot on a predefined path. The laserscan evaluation was
+performed via Principal Component Analysis (PCA), which can also be visualised with the PCA::plot() function.
 
 Installation and Setup
 
