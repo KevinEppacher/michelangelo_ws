@@ -119,7 +119,7 @@ MobileRobot
         bool limitControllerVariables(Twist* cmdVel, double upperLimit, double lowerLimit);
         bool convertQuaternionsToEuler(Pose* currentAngle);
         int goTo(Pose* goalPose, Pose* currentPose);
-        bool run();
+        void run();
         void setIP(char* ipAdress);
 
     protected:
@@ -127,15 +127,13 @@ MobileRobot
         double calculateGamma(Robot::Pose diffPose);
         double calculateAlpha(double gamma, Robot::Pose currentAngle);
         double calculateBeta(Robot::Pose goalPose, double gamma);
-        bool calculateRobotVektor();
-        bool calculateVektorFromRobotToGoal();
-        double calculateYaw(Pose* qA);
-        double calculateRoll(Pose* qA);
-        double calculatePitch(Pose* qA);
         double angleDiff(double angle1, double angle2);
-        bool orientationController(Robot::Pose goalPose, Robot::Pose currentPose);
-        Robot::Pose robotPose;
         void arrivedEndgoal();
+        void storePositions();
+        void spinOnce();
+        void plotErrors();
+
+        Robot::Pose robotPose;
         Robot::Pose currentOdomPose;
         Robot::sensor_msgs::scan_msg scanData;
         Parameter Lin, Alpha, Beta;
@@ -150,9 +148,8 @@ MobileRobot
         std::vector<double> errorBeta;
         std::vector<double> errorAlpha;
         std::vector<double> errorLinear;
-
-
-
+        Robot::Pose goalPose1, goalPose3, goalPose2, goalPose4, goalPose5, goalPose6, goalPose7, goalPose8, goalPose9, goalPose10;
+        std::vector<Robot::Pose> storedPositions;
         int sequenceNumber = 1;
         float robotVector[2] = { 0 , 0 };
         float distanceVector[2] = { 0 , 0 };

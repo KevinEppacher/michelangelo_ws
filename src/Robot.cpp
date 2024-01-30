@@ -9,24 +9,12 @@ namespace Robot
     
     MobileRobot::MobileRobot(char* ip):ip(ip)
     {
-        //std::cout << "A Robot is born" << std::endl;
         plt::figure_size(800, 600); // Größe des Fensters in Pixel
         start = std::chrono::system_clock::now();
     }
 
     MobileRobot::~MobileRobot()
     {
-        /*
-        std::cout<<"Robot was deleted"<<std::endl;
-        std::stringstream ss;
-        ss << "---START---{linear: 0 , angular:   0  }___END___";
-        std::string echoString = ss.str();
-
-        Robot::TCPClient client(this->ip, 9999);
-        client.sendData(echoString.c_str());
-        //client.receiveData(buffer, sizeof(buffer));  
-        client.closeTCPconnection(); 
-        */
         
     }
 
@@ -56,15 +44,6 @@ namespace Robot
 
         publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);
 
-        //std::cout << "" <<std::endl;
-        //std::cout << "Orientation" << currentOdomPose.orientation.z  * (180 / M_PI) <<std::endl;
-        //std::cout << "Diff Pose berechnet: X=" << diffPose.position.x << ", Y=" << diffPose.position.y << std::endl;
-        //std::cout << "Gamma berechnet: " << gamma * (180 / M_PI) << std::endl;
-        //std::cout << "Gesamtdistanz: " << calculateTotalDistance(diffPose)<< std::endl;
-        //std::cout << "Alpha berechnet: " << calculateAlpha(gamma, currentOdomPose) * (180 / M_PI) << std::endl;
-        //std::cout << "Beta berechnet: " << calculateBeta(goalPose, gamma)  * (180 / M_PI)<< std::endl;
-        //std::cout << "cmdVel.linear.x: " << cmdVel.linear.x << "    ||  cmdVel.angular.z:"<<cmdVel.angular.z<<std::endl;
-        //std::cout << "" <<std::endl;
         return 1;
     }
 
@@ -75,11 +54,9 @@ namespace Robot
         std::string echoString = ss.str();
 
         Robot::TCPClient client(this->ip, 9999);
-/*         std::cout << *linear_x << std::endl;
-        std::cout << *angular_z << std::endl; */
+
         client.sendData(echoString.c_str());
-        //client.receiveData(buffer, sizeof(buffer));  
-        //client.closeTCPconnection();
+
     }
 
     double MobileRobot::calculateTotalDistance(Robot::Pose diffPose)
@@ -125,8 +102,6 @@ namespace Robot
         Beta.proportionalError = Beta.P *  beta;
         Beta.integralError += (Beta.I / 2 ) * beta;
         Beta.error = Beta.proportionalError + Beta.integralError;
-
-        //error.push_back(Beta.error);
         
         cmdVel->linear.x = Lin.error;
         cmdVel->angular.z = Alpha.error + Beta.error;
@@ -221,7 +196,94 @@ namespace Robot
         publishCmdVel(&zero, &zero);
     }
 
-    bool MobileRobot::run()
+
+
+    void MobileRobot::storePositions()
+    {
+        Robot::Circle circle;
+        circle.xOffset = 1;
+        circle.radius = 0.25;
+
+                        goalPose1.index = 1;
+        goalPose1.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-180));
+        goalPose1.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-180));
+        goalPose1.orientation.z = convertDegreesToRadiant(0);
+        goalPose1.tolerance = 0.15;
+        storedPositions.push_back(goalPose1);
+
+        goalPose2.index = 2;
+        goalPose2.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-135));
+        goalPose2.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-135));
+        goalPose2.orientation.z = convertDegreesToRadiant(-45);
+        goalPose2.tolerance = 0.15;
+        storedPositions.push_back(goalPose2);
+
+  
+
+        goalPose3.index = 3;
+        goalPose3.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-90));
+        goalPose3.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-90));
+        goalPose3.orientation.z = convertDegreesToRadiant(0);
+        goalPose3.tolerance = 0.15;
+        storedPositions.push_back(goalPose3);
+
+
+        goalPose4.index = 4;
+        goalPose4.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-45));
+        goalPose4.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-45));
+        goalPose4.orientation.z = convertDegreesToRadiant(45);
+        goalPose4.tolerance = 0.15;
+        storedPositions.push_back(goalPose4);
+
+
+        goalPose5.index = 5;
+        goalPose5.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(0));
+        goalPose5.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(0));
+        goalPose5.orientation.z = convertDegreesToRadiant(90);
+        goalPose5.tolerance = 0.15;
+
+        goalPose6.index = 6;
+        goalPose6.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(45));
+        goalPose6.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(45));
+        goalPose6.orientation.z = convertDegreesToRadiant(135);
+        goalPose6.tolerance = 0.15;
+        storedPositions.push_back(goalPose6);
+
+
+        goalPose7.index = 7;
+        goalPose7.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(90));
+        goalPose7.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(90));
+        goalPose7.orientation.z = convertDegreesToRadiant(179);
+        goalPose7.tolerance = 0.15;
+        storedPositions.push_back(goalPose7);
+
+
+        goalPose8.index = 8;
+        goalPose8.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(135));
+        goalPose8.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(135));
+        goalPose8.orientation.z = convertDegreesToRadiant(179);
+        goalPose8.tolerance = 0.15;
+        storedPositions.push_back(goalPose8);
+
+
+        goalPose9.index = 9;
+        goalPose9.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(180));
+        goalPose9.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(180));
+        goalPose9.orientation.z = convertDegreesToRadiant(180);
+        goalPose9.tolerance = 0.15;
+        storedPositions.push_back(goalPose9);
+
+
+        goalPose10.index = 10;
+        goalPose10.position.x = 0;
+        goalPose10.position.y = 0;
+        goalPose10.orientation.z = convertDegreesToRadiant(179);
+        goalPose10.tolerance = 0.15;
+        storedPositions.push_back(goalPose9);
+
+    }
+
+    void MobileRobot::spinOnce()
     {
         //Setup for message
         //setIP(ip);
@@ -263,29 +325,25 @@ namespace Robot
         scanData.angle.resize(scanData.range.size());
         // Iterieren über den Bereich und füllen die Winkel
 
+    }
+
+
+    void MobileRobot::plotErrors()
+    {
         auto now = std::chrono::system_clock::now();
 
         std::chrono::duration<double> elapsed_seconds = now - start;
 
-            // Zeit und Wert aktualisieren
+        // Zeit und Wert aktualisieren
         zeit.push_back(elapsed_seconds.count());
         errorBeta.push_back(Beta.error);
         errorAlpha.push_back(Alpha.error);
         errorLinear.push_back(Lin.error);
 
-
         Position currentPosition, targetPosition;
         currentPosition.x.push_back(currentOdomPose.position.x);
         currentPosition.y.push_back(currentOdomPose.position.y);
 
-        //targetPosition.x.push_back(targetPosition.position.x);
-        //targetPosition.y.push_back(targetPosition.position.y);
-
-        // Jetzt kannst du deine Scatter-Plots basierend auf diesen Positionen erstellen
-        //plt::scatter(targetPosition.x, targetPosition.y, 10); // Plot der Zielposition
-
-
-        // Plot aktualisieren
         plt::clf(); // Vorherigen Plot löschen
         // Jeden Plot mit einem eindeutigen Label versehen
         plt::named_plot("Beta Error", zeit, errorBeta, "r"); // "r" steht für die Farbe Rot
@@ -297,128 +355,24 @@ namespace Robot
         plt::xlabel("Time [s]");
         plt::ylabel("Error Value");
         plt::title("Error");
-        // Die Legende hinzufügen. Die Platzierung der Legende kannst du mit der `loc`-Option anpassen.
         plt::legend();
-        plt::pause(0.0001); // Kurze Pause, um das Flackern zu reduzieren und die CPU zu schonen
+        plt::pause(0.0001);   
+    }
 
 
-        
-        for (size_t i = 0; i < scanData.range.size(); ++i) 
+
+
+    void MobileRobot::run()
+    {
+
+        spinOnce();
+ 
+        storePositions();
+      
+        for(Robot::Pose& goalPose:storedPositions)
         {
-            scanData.angle[i] = i; // i entspricht dem Winkel in Graden
-            //std::cout << "Angle:      " << scanData.angle[i] << std::endl;
+            if(goalPose.index == sequenceNumber) goTo(&goalPose, &currentOdomPose);
         }
-
-
-        // Iterieren über die Elemente von scanData.range
-        for (const auto& scanRange : scanData.range) {
-            //std::cout << "Angle "<<scanData.angle.at(2)<<"  :" << scanRange << std::endl;
-        }
-
-        
-        
-/*
-        double poseResolution = 9;
-        std::vector<Robot::Pose> circlePaths;
-
-        for (int i = 1; i <= poseResolution; i++)
-        {
-            Robot::Pose goalPose;
-            goalPose.index = i;
-        }
-
-        for (const Robot::Pose& pose : circlePaths)
-        {
-            std::cout<<"Poses: "<<pose.index<<std::endl;
-        }
-*/
-        
-        
-
-        //Overwriting current laserscan position with Sensor Laserscan Position
-        Robot::Pose goalPose1, goalPose3, goalPose2, goalPose4, goalPose5, goalPose6, goalPose7, goalPose8, goalPose9, goalPose10;
-        Robot::Circle circle;
-        circle.xOffset = 1;
-        circle.radius = 0.25;        
-
-        goalPose1.index = 1;
-        goalPose1.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-180));
-        goalPose1.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-180));
-        goalPose1.orientation.z = convertDegreesToRadiant(0);
-        goalPose1.tolerance = 0.15;
-
-        goalPose2.index = 2;
-        goalPose2.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-135));
-        goalPose2.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-135));
-        goalPose2.orientation.z = convertDegreesToRadiant(-45);
-        goalPose2.tolerance = 0.15;
-  
-
-        goalPose3.index = 3;
-        goalPose3.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-90));
-        goalPose3.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-90));
-        goalPose3.orientation.z = convertDegreesToRadiant(0);
-        goalPose3.tolerance = 0.15;
-
-        goalPose4.index = 4;
-        goalPose4.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-45));
-        goalPose4.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-45));
-        goalPose4.orientation.z = convertDegreesToRadiant(45);
-        goalPose4.tolerance = 0.15;
-
-        goalPose5.index = 5;
-        goalPose5.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(0));
-        goalPose5.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(0));
-        goalPose5.orientation.z = convertDegreesToRadiant(90);
-        goalPose5.tolerance = 0.15;
-
-        goalPose6.index = 6;
-        goalPose6.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(45));
-        goalPose6.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(45));
-        goalPose6.orientation.z = convertDegreesToRadiant(135);
-        goalPose6.tolerance = 0.15;
-
-        goalPose7.index = 7;
-        goalPose7.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(90));
-        goalPose7.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(90));
-        goalPose7.orientation.z = convertDegreesToRadiant(179);
-        goalPose7.tolerance = 0.15;
-
-        goalPose8.index = 8;
-        goalPose8.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(135));
-        goalPose8.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(135));
-        goalPose8.orientation.z = convertDegreesToRadiant(179);
-        goalPose8.tolerance = 0.15;
-
-        goalPose9.index = 9;
-        goalPose8.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(180));
-        goalPose8.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(180));
-        goalPose8.orientation.z = convertDegreesToRadiant(180);
-        goalPose8.tolerance = 0.15;
-
-        goalPose10.index = 10;
-        goalPose10.position.x = 0;
-        goalPose10.position.y = 0;
-        goalPose10.orientation.z = convertDegreesToRadiant(179);
-        goalPose10.tolerance = 0.15;
-
-
-        if(goalPose1.index == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
-        if(goalPose2.index == sequenceNumber) goTo(&goalPose2, &currentOdomPose);
-        if(goalPose3.index == sequenceNumber) goTo(&goalPose3, &currentOdomPose);
-        if(goalPose4.index == sequenceNumber) goTo(&goalPose4, &currentOdomPose); 
-        if(goalPose5.index == sequenceNumber) goTo(&goalPose5, &currentOdomPose); 
-        if(goalPose6.index == sequenceNumber) goTo(&goalPose6, &currentOdomPose);
-        if(goalPose7.index == sequenceNumber) goTo(&goalPose7, &currentOdomPose); 
-        if(goalPose8.index == sequenceNumber) goTo(&goalPose8, &currentOdomPose);
-        if(goalPose9.index == sequenceNumber) goTo(&goalPose9, &currentOdomPose);
-        if(goalPose10.index == sequenceNumber) goTo(&goalPose10, &currentOdomPose);
-
-
-  
-        //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
-
-        return true;
     }
 
 
