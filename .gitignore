@@ -1,1 +1,6 @@
-/build
+build/
+deps/
+vscode/
+Code_Example/
+shared_memory/
+testcode/

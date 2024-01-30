@@ -1,4 +1,17 @@
-Ausführen:
-cmake //PFAD ZUR CMAKELIST//
-make
-./main //ip_addresse//
+Project Overview
+
+This project focuses on developing a comprehensive robotic control and monitoring system.
+Our primary objectives were to establish reliable TCP/IP communications for commanding and 
+data acquisition, use shared memory with semaphores for inter-process communication, accurately 
+calculate the robots position and orientation using laserscan and odometry data, and implement 
+a linear control program to navigate the robot on a predefined path.
+
+Installation and Setup
+
+To install and set up the project, follow these steps:
+    1. Clone the repository
+    2. Make sure you have an empty "build" folder
+    3. Terminal-Input: cd /build
+    4. Terminal-Input: cmake ..
+    5. Terminal-Input: make
+    6. Terminal-Input: ./main [ip-adress]
