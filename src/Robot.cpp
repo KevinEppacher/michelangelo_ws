@@ -2,75 +2,79 @@
 
 namespace Robot
 {
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+MobileRobot
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //Degree to Radiant
     double convertDegreesToRadiant(double degrees)
     {
         return (degrees * (M_PI/180));
     }
-    
+
+
     MobileRobot::MobileRobot(char* ip):ip(ip){
 
     }
-    
+
 
     MobileRobot::~MobileRobot()
     {
         
     }
 
-
-
+    //Get current time in Unix-Format
     long long Robot::MobileRobot::getTimeMS(){
         auto currentTimePoint = std::chrono::high_resolution_clock::now();
         auto timeSinceEpoch = std::chrono::time_point_cast<std::chrono::milliseconds>(currentTimePoint);
         return timeSinceEpoch.time_since_epoch().count();
     }
 
- 
+
+    ////Controls the robot's movement towards a specified goal position and orientation
+    //// Arguments:
+    ////   - goalPose: Target pose of the robot, including position and orientation.
+    ////   - currentOdomPose: Current odometry pose of the robot, including position and orientation.
+    ////   - wall: Boolean flag indicating the presence of a wall or obstacle (true if present).
+    //// Returns: Boolean indicating successful execution of the function.
     bool Robot::MobileRobot::linearController(Robot::Pose goalPose, Robot::Pose currentOdomPose, bool wall)
     {
+        // Initialize PID parameters 
         Parameter PID;
 
         convertQuaternionsToEuler(&currentOdomPose);
 
         robotPose = currentOdomPose;
 
+        //Calculate distance from the current position to the goal position
         diffPose.position.x = goalPose.position.x - currentOdomPose.position.x;
         diffPose.position.y = goalPose.position.y - currentOdomPose.position.y;
-
         totalDistance = calculateTotalDistance(diffPose);
 
+        //Calculate gamma, beta and alpha error
         gamma = calculateGamma(diffPose);
-
         alpha = calculateAlpha(gamma, currentOdomPose);
-
         beta = calculateBeta(goalPose, gamma);
         
+        // Apply PID controller 
         pidController(&cmdVel, PID, totalDistance, alpha, beta, wall);
 
+        // Ensure the velocities are within specified limits to prevent the robot from moving too fast
         limitControllerVariables(&cmdVel, 3, -3);
 
+        // Send the calculated linear and angular velocities to the robot's movement system
         publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);
 
         return 1;
     }
 
-/*     bool Robot::MobileRobot::orientationController(Robot::Pose goalPose, Robot::Pose currentOdomPose){
-        /*
-        std::cout<<"Robot was deleted"<<std::endl;
-        std::stringstream ss;
-        ss << "---START---{linear: 0 , angular:   0  }___END___";
-        std::string echoString = ss.str();
 
-        Robot::TCPClient client(this->ip, 9999);
-        client.sendData(echoString.c_str());
-        //client.receiveData(buffer, sizeof(buffer));  
-        client.closeTCPconnection(); 
-       return true;
-    } */
-    
-
-
-
+    //TCP/IP Publisher method
     void Robot::MobileRobot::publishCmdVel(double* linear_x, double* angular_z) 
     {
         std::stringstream ss;
@@ -82,28 +86,36 @@ namespace Robot
         client.sendData(echoString.c_str());
     }
 
+
+    //Methods to calculate distance
     double MobileRobot::calculateTotalDistance(Robot::Pose diffPose)
     {
         return (sqrt(pow(diffPose.position.x,2) + pow(diffPose.position.y, 2)));
     }
 
+
+    //Methods to calculate Gamma-Error
     double MobileRobot::calculateGamma(Robot::Pose diffPose)
     {
         return (atan2(diffPose.position.y, diffPose.position.x));
     }
 
+
+    //Methods to calculate Alpha-Error
     double MobileRobot::calculateAlpha(double gamma, Robot::Pose currentOdomPose)
     {
         return (angleDiff(gamma , currentOdomPose.orientation.z));
     }
 
+
+    //Methods to calculate Beta-Error
     double MobileRobot::calculateBeta(Robot::Pose goalPose, double gamma)
     {
         return (angleDiff(goalPose.orientation.z , gamma));
     }
 
 
-
+    //Computes the shortest angular difference between two angles
     double MobileRobot::angleDiff(double angle1, double angle2) 
     {
         double diff = angle1 - angle2;
@@ -112,48 +124,57 @@ namespace Robot
         return diff;
     }
 
-
-
-
-
+    //// PID_Controller method
+    //// Arguments:
+    ////   - cmdVel: Pointer to a Twist structure for storing computed velocities
+    ////   - PID - A Parameter structure containing PID parameters (not used in this implementation)
+    ////   - totalDistance: The distance between the robot and its goal
+    ////   - alpha: The angular difference between the robot's orientation and the direction to the goal
+    ////   - beta: The angular difference between the goal orientation and the direction to the goal
+    ////   - wall: A boolean flag indicating whether wall following behavior should be considered
     bool MobileRobot::pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta, bool wall = false)
-    {        
+    {
+        // Initialization of PID parameters for linear, alpha, and beta components
         Parameter Lin, Alpha, Beta;
         Lin.P = 0.15;
         //Lin.I = 0.01;
-
         Alpha.P = 0.4;
         //Alpha.I = 0.01;
-
         Beta.P = -0.4;
         //Beta.I = -0.01;
 
+        // Calculate proportional, integral, and total errors for linear motion
         Lin.proportionalError = Lin.P * totalDistance;
         Lin.integralError += ( Lin.I / 2 ) * totalDistance;
         Lin.error = Lin.proportionalError + Lin.integralError;
         cmdVel->linear.x = Lin.error;
 
-
+        // Calculate proportional, integral, and total errors for alpha
         Alpha.proportionalError = Alpha.P *  alpha;
         Alpha.integralError += (Alpha.I / 2 ) * alpha;
         Alpha.error = Alpha.proportionalError + Alpha.integralError;
 
+        // Calculate proportional, integral, and total errors for beta
         Beta.proportionalError = Beta.P *  beta;
         Beta.integralError += (Beta.I / 2 ) * beta;
         Beta.error = Beta.proportionalError + Beta.integralError;
 
+        // Adjust angular velocity based on wall-following flag
         if (wall == true)
         {
+            // Incorporate error angles from PCA when wall following is true
             cmdVel->angular.z = (Alpha.error + Beta.error)*0.9 + this->PCA_Angles(0)*0.05 + this->PCA_Angles(1)*0.05;    
         }
-        
-        cmdVel->angular.z = Alpha.error + Beta.error;
+
+        // Set angular velocity based on alpha and beta errors when wall following is false
+        else {
+            cmdVel->angular.z = Alpha.error + Beta.error;
+        }
 
         return true;
     }
 
-
-
+    //Check and limit linear and angular velocity
     bool MobileRobot::limitControllerVariables(Twist* cmdVel, double upperLimit, double lowerLimit)
     {
         if (cmdVel->linear.x > upperLimit)
@@ -179,6 +200,7 @@ namespace Robot
         return true;
     }
 
+    //Convert Quaternions to Euler Angles
     bool MobileRobot::convertQuaternionsToEuler(Pose* currentAngle)
     {
         Eigen::Quaterniond q;
@@ -196,13 +218,15 @@ namespace Robot
         return true;
     }
 
-    double MobileRobot::calculateRoll(Pose* qA)
+
+/*     double MobileRobot::calculateRoll(Pose* qA)
     {
         double numerator = 2 * ( qA->orientation.w * qA->orientation.y + qA->orientation.x * qA->orientation.z );
         double denominator = 1 - 2 * (pow(qA->orientation.y, 2) + pow(qA->orientation.z, 2));
         double rollAngle = atan2(numerator, denominator);
         return rollAngle;
     }
+
 
     double MobileRobot::calculatePitch(Pose* qA)
     {
@@ -218,6 +242,7 @@ namespace Robot
         }
     }
 
+
     double MobileRobot::calculateYaw(Pose* qA)
     {
         double numerator = 2 * ((qA->orientation.w * qA->orientation.z) + (qA->orientation.x * qA->orientation.y));
@@ -230,42 +255,52 @@ namespace Robot
 
         //std::cout << "Yaw: numerator = " << numerator << ", denominator = " << denominator << ", yawAngle = " << yawAngle << std::endl;
         return yawAngle;
-    }
+    } */
 
-    bool MobileRobot::calculateRobotVektor()
+
+/*     bool MobileRobot::calculateRobotVektor()
     {
         
         robotVector[0] = 0;
         robotVector[1] = 0;
 
         return true;
-    }
+    } */
+
 
     void MobileRobot::setIP(char* ipAdress)
     {
         this->ip = ipAdress;
     };
 
+
+    ////Function to initialize Robot movement to the goal
+    //// Arguments:
+    ////   - goalPose - Pointer to a Pose struct representing the target position and orientation.
+    ////   - currentOdomPose - Pointer to a Pose struct representing the robot's current position and orientation from odometry.
+    ////   - wall - A boolean flag indicating whether wall detection is enabled (true) or not (false).
     int MobileRobot::goTo(Pose* goalPose, Pose* currentOdomPose, bool wall = false)
     {
         Pose diffPose;
+
+        // Calculate the positional difference between the current position and the goal
         diffPose.position.x = goalPose->position.x - currentOdomPose->position.x;
         diffPose.position.y = goalPose->position.y - currentOdomPose->position.y;
 
+        // Calculate the total distance to the goal
         double totalDistance = calculateTotalDistance(diffPose);
 
         convertQuaternionsToEuler(currentOdomPose);
         double totalOrientation = goalPose->orientation.z - currentOdomPose->orientation.z;
 
+        // Check if the robot is within the tolerance distance of the goal
         if (totalDistance < goalPose->tolerance) 
         {
-            sequenceNumber += 1;
-            std::cout << "Sequence Number: " << sequenceNumber << std::endl;
-            arrivedEndgoal();           
+            sequenceNumber += 1;        // Increment the sequence number for the next goal
+            arrivedEndgoal();           // Call the function to handle arriving at the goal       
         }
-        else if (wall == true)
+        else if (wall == true)          // If wall detection is enabled
         {
-            std::cout << "here we are" << std::endl;
             linearController(*goalPose, *currentOdomPose, wall);
         }
         {
@@ -275,12 +310,15 @@ namespace Robot
         return goalPose->index;
     }
 
+    //Set velocities to 0, if goal is reached
     void MobileRobot::arrivedEndgoal()
     {
         double zero=0;
         publishCmdVel(&zero, &zero);
     }
 
+
+    //Sensor-Data receiver function
     std::string MobileRobot::receive(int port)      //responsible for receiving data from sensor and robot
     {
         char buffer[16000] = {};            //predefined max storage space
@@ -291,6 +329,7 @@ namespace Robot
     }
 
 
+    //Sensor-Data processing function
     void MobileRobot::process(std::string odomData, std::string laserscanData)     //responsible for processing data and giving move commands
     {
         //Setup for parsing odom-data
@@ -302,7 +341,6 @@ namespace Robot
         jsonOdom = OdomdataHandler.extractJson(odomData);   //extracting string into json
 
         //Overwriting current odometry position with Sensor Odometry Position
-
         currentOdomPose.position.x = jsonOdom["pose"]["pose"]["position"]["x"];
         currentOdomPose.position.y = jsonOdom["pose"]["pose"]["position"]["y"];
         currentOdomPose.position.z = jsonOdom["pose"]["pose"]["position"]["z"];
@@ -322,7 +360,7 @@ namespace Robot
         pca.runPCA(jsonScan["ranges"], 30);
         this->PCA_Angles = pca.getAngleDifference();
         
-        //Defining Goal-Positions
+        //Initialising and defining Goal-Positions
         Robot::Pose goalPose1, goalPose3, goalPose2, goalPose4, goalPose5, goalPose6, goalPose7, goalPose8, goalPose9, goalPose10;
         Robot::Circle circle;
         circle.xOffset = 1.5;
@@ -339,7 +377,6 @@ namespace Robot
         goalPose2.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-135));
         goalPose2.orientation.z = convertDegreesToRadiant(-45);
         goalPose2.tolerance = 0.20;
-  
 
         goalPose3.index = 3;
         goalPose3.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-90));
@@ -423,67 +460,91 @@ namespace Robot
     }
     
 
+    
     bool MobileRobot::run()
     {
-        //receive and process odom data
-        std::string input = MobileRobot::receive(9998);     //calling receive function and saving data as input
-        const char* charInput = input.c_str();          //structuring input
-        SHM myBrain(charInput);                         //creating SHM class object and calling constructor -> starting shared Memory
-        std::string odomOutput = myBrain.returnOutput();    //calling result of shared memory via getter
+        //receive and process sensor data
+        std::string input = MobileRobot::receive(9998);         	//calling receive function and saving data as input
         std::string laserScan = MobileRobot::receive(9997);
-        MobileRobot::process(input, laserScan);                   //calling process function responsible for calculating movements and commanding the robot with the output as parameter
+        const char* charInput = input.c_str();                      //structuring input
+        SHM myBrain(charInput);                                     //creating SHM class object and calling constructor -> starting shared Memory
+        std::string odomOutput = myBrain.returnOutput();            //calling result of shared memory via getter
+        MobileRobot::process(input, laserScan);                     //calling process function responsible for calculating movements and commanding the robot with the output as parameter
         return true;
     }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+MobileRobot
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
 TCP Client
 */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
 
+
+
+    //// Constructor for the TCPClient class
+    //// Arguments:
+    ////   - serverIP - The IP address of the server to connect to as a C-style string
+    ////   - port - The port number to connect to on the server
     TCPClient::TCPClient(const char* serverIP, int port)
     {
+        // Create a new socket. AF_INET indicates IPv4, SOCK_STREAM indicates TCP
         client_fd = socket(AF_INET, SOCK_STREAM, 0);
+
+        // Check if socket creation was successful
         if (client_fd < 0) {
             printf("\n Socket creation error \n");
-            exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);                                                             // Exit if socket creation failed
         }
 
+        // Set the family type of the IP address (IPv4)
         serv_addr.sin_family = AF_INET;
+        // Convert the port number from host byte order to network byte order
         serv_addr.sin_port = htons(port);
 
+        // Convert the server IP address from text to binary form
         if (inet_pton(AF_INET, serverIP, &serv_addr.sin_addr) <= 0) {
             printf("\nInvalid address/ Address not supported \n");
-            exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);                                                             // Exit if IP address is invalid
         }
 
+        // Establish a connection to the server
         if (connect(client_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0) {
             printf("\nConnection Failed \n");
-            exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);                                                             // Exit if connection to server fails
         }
-
     }
+
 
     TCPClient::~TCPClient() 
     {
-        //std::cout<<"Client wurde geschlossen111"<<std::endl;
         close(client_fd);
     }
 
-    void TCPClient::closeTCPconnection()
+
+/*     void TCPClient::closeTCPconnection()
     {
         close(client_fd);
-    }
+    } */
 
+
+    //Send data ia TCP/IP
     void TCPClient::sendData(const char* data) 
     {
         send(client_fd, data, strlen(data), 0);
-        //std::cout << "Message sent: " << data << std::endl;
         close(client_fd);
     }
 
-
+    //Receive data via TCP/IP
     std::string TCPClient::receiveData(char* buffer, ssize_t size) 
     {
         std::string result;
@@ -519,6 +580,12 @@ TCP Client
 
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+TCP Client
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -528,35 +595,40 @@ Json-Class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
 
-    JsonHandler::JsonHandler()
-        {
-            //std::cout << "Json handler has risen from the depth of unexistence into existence" << std::endl;
-        }
 
-    JsonHandler::~JsonHandler()
-        {
-            //std::cout << "JsonHandler destroyed" << std::endl;
-        }
+    JsonHandler::JsonHandler(){}
 
+
+    JsonHandler::~JsonHandler(){}
+
+
+    // Extracts a JSON object from a raw string of data
     nlohmann::json JsonHandler::extractJson(std::string rawData)
         {
             std::string jsonStr;
+
+            // Delimiters to identify the start and end of the JSON data in the raw string
             std::string startDelimiter = "---START---";
             std::string endDelimiter = "___END___";
 
+            // Check if the start delimiter is found in rawData
             if (rawData.find(startDelimiter) != std::string::npos)
             {
+                // Calculate the starting position of JSON data after the start delimiter
                 std::size_t startPos = rawData.find(startDelimiter) + startDelimiter.length();
+                // Find the ending position of the JSON data using the end delimiter
                 std::size_t endPos = rawData.find(endDelimiter, startPos);
+                // Extract the JSON string from rawData
                 jsonStr = rawData.substr(startPos, endPos - startPos);
             }
 
             try 
             {
+                // Parse the extracted JSON string into a json object
                 JsonHandler::jsonData = nlohmann::json::parse(jsonStr);
-                //std::cout << "Parsing finished correctly" << std::endl;
             } 
             
+            // Catch block to handle any parsing errors
             catch (nlohmann::json::parse_error& e) 
             {
                 std::cerr << "JSON parse error: " << e.what() << '\n';
@@ -566,6 +638,8 @@ Json-Class
             return jsonData;
         }
 
+
+    //Output Value to the corresponding key, if existing
     std::string JsonHandler::JsonOutputter(const std::string key)
         {
             try 
@@ -588,6 +662,7 @@ Json-Class
             }
         }
 
+    //Convert string to raw string
     std::string JsonHandler::StringtoRaw(std::string normalString)
         {
             std::ostringstream oss;
@@ -596,14 +671,15 @@ Json-Class
             return oss.str();
         }
 
-    nlohmann::json JsonHandler::get_jsonData()
+
+/*     nlohmann::json JsonHandler::get_jsonData()
         {
             return jsonData;
-        }
+        } */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
-JsonClass
+Json-Class
 */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -616,24 +692,23 @@ PCA
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
     PCA::PCA(){};
     PCA::~PCA(){};
 
+
+    //Run PCA calculation and plotting
     void PCA::runPCA(std::vector<double> rawLaserScan, int ScanSample)
     {
-
-
         //Map std::vector to eigen::vector
         Eigen::VectorXd laser = Eigen::VectorXd::Map(&rawLaserScan[0], rawLaserScan.size());
 
         //convert polar coordinates to cartesian coordinates
         Eigen::MatrixXd data = this->PolarToCartesian(laser);
 
-        //Compute PCA
+/*         //Compute PCA
         Eigen::VectorXd principal_component = this->computePCA(data);
-        //std::cout << "Principal Component of all: \n" << principal_component << std::endl;
-        //pca.plotData(data, principal_component); 
-
+ */
         //Filter Right and Left side and calculate PCA seperately
         this->FilterLaserscan(data, ScanSample);
         Eigen::MatrixXd left = this->getFilteredLeftScanData();
@@ -641,17 +716,13 @@ PCA
 
         Eigen::VectorXd principal_componentLeft = this->computePCA(left);
         this->PCA_Left = principal_componentLeft;
-        //std::cout << "Principal Component Left: \n" << principal_componentLeft << std::endl;
-        //this->plotData(data, principal_componentLeft);  
-        //std::thread plot1(std::bind(&PCA::plotData, this, data, principal_componentLeft));
 
         Eigen::VectorXd principal_componentRight = this->computePCA(right);
         this->PCA_Right = principal_componentRight;
-        //std::cout << "Principal Component Right: \n" << principal_componentRight << std::endl;
         this->plotData(data, principal_componentLeft, principal_componentRight, ScanSample);
     }
 
-    
+    //Polar-Coordinates to Cartesian-Coordinates Converter
     Eigen::MatrixXd PCA::PolarToCartesian(Eigen::VectorXd laserScanData)
     {
         Eigen::MatrixXd cartesianLaserScanData(360,2);
@@ -667,11 +738,10 @@ PCA
             cartesianLaserScanData(theta,1) = y; 
         }
 
-        //std::cout << "Cartesian laser scan: " << cartesianLaserScanData << std::endl;
         return cartesianLaserScanData;
-        
     };
 
+    //Method to filter Laserscan-Data
     void PCA::FilterLaserscan(Eigen::MatrixXd laserScanData, int filterTolerance)
     {
         int rangeSize = 2 * filterTolerance + 1; // Calculate the actual size of the range
@@ -689,7 +759,7 @@ PCA
 
         this->filteredLaserScanLeftSide = tempLeft;
 
-        //int rangeSize = 2 * filterTolerance + 1; // Calculate the actual size of the range
+
         Eigen::MatrixXd tempRight(rangeSize, 2);  // Initialize tempLeft with the correct size
 
         int rightCounter = 0;  // Counter for indexing tempLeft
@@ -705,34 +775,20 @@ PCA
         this->filteredLaserScanRightSide = tempRight;
     };
 
+    //PCA calculation
     Eigen::VectorXd PCA::computePCA(const Eigen::MatrixXd &data)
     {
         // Centering the data
 
-        //std::cout << "Data: " << data << std::endl;
-
         Eigen::VectorXd mean = data.colwise().mean();
-
-        //std::cout << "Mean: " << mean << std::endl;
-
         Eigen::MatrixXd centered = data.rowwise() - mean.transpose();
-
-        //std::cout << "Centered: " << centered << std::endl;
 
         // Computing the covariance matrix
         Eigen::MatrixXd cov = centered.adjoint() * centered;
 
-        //std::cout << "Covariance: " << cov << std::endl;
-
         // Performing eigen decomposition
         Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> eigen_solver(cov);
-
-        //std::cout << "Eigenvalues: " << eigen_solver.eigenvalues() << std::endl;
-
-
         Eigen::MatrixXd eigenvectors = eigen_solver.eigenvectors();
-
-        //std::cout << "Eigenvectors: " << eigenvectors << std::endl;
 
         // Extracting the principal component
         Eigen::VectorXd principal_component = eigenvectors.rightCols(1);
@@ -740,24 +796,23 @@ PCA
         return principal_component;
     };
 
-
+    //Plot-Function to visualize Laserscan-Data and PCA-Vectors
     void PCA::plotData(Eigen::MatrixXd laserScanData, Eigen::VectorXd PCA_vectorLeft, Eigen::VectorXd PCA_vectorRight, int filterTolerance )
     {
-
         matplotlibcpp::ion(); // Turn on interactive mode
 
+        //Convert Eigen::VectorXd to std::vector
         std::vector<double> x_data(laserScanData.rows()), y_data(laserScanData.rows());
         for (int i = 0; i < laserScanData.rows(); ++i) {
             x_data[i] = laserScanData(i, 0);
             y_data[i] = laserScanData(i, 1);
         }
 
+        //Get offset to correct PCA_Vector position
         double offsetRechts = this->filteredLaserScanLeftSide.mean()*2;
         double offsetLinks = this->filteredLaserScanRightSide.mean()*2;
 
-        // std::cout << "Offset Rechts: " << offsetRechts << std::endl;
-        // std::cout << "Offset Links: " << offsetLinks << std::endl;
-
+        //clear plot window
         matplotlibcpp::clf();
 
         // Plotting the laser scan data
@@ -765,7 +820,7 @@ PCA
         matplotlibcpp::title("PCA vector");
 
         // Calculate end points for the PCA vector for visualization
-        double scale_factor = 10.0;  // Adjust this factor to scale the PCA vector for better visualization
+        double scale_factor = 10.0;                                                            // Adjust this factor to scale the PCA vector for better visualization
 
 
         std::vector<double> pca_xLeft = {0, scale_factor * PCA_vectorLeft(0)};
@@ -788,7 +843,6 @@ PCA
         std::vector<double> start_yPCARight = {0,offsetRechts};
 
         // Plotting the PCA vector
-
         std::map<std::string, std::string> keywordDirection;
         keywordDirection["color"] = "r";
 
@@ -800,22 +854,24 @@ PCA
         matplotlibcpp::quiver(start_x, start_y, directionVectorX, directionVectorY, keywordDirection);
 
         // Show the plot and update frequently
-        //matplotlibcpp::show();
         matplotlibcpp::draw();
         matplotlibcpp::pause(0.01);
     };
 
-
+    //Calculate Angle between Direction of the Robot and PCA
     Eigen::VectorXd PCA::getAngleDifference()
     {
         Eigen::VectorXd Thetas(2);
 
+        //Define direction vector
         Eigen::VectorXd directionVector(2);
         directionVector(0) = 1;
         directionVector(1) = 0;
 
+        //Multiply both vectors together
         double dotProductLeft = (directionVector.dot(this->PCA_Left));
 
+        //Calculate magnitude of both vectors
         double magnitudeVec1Left = directionVector.norm();
         double magnitudeVec2Left = this->PCA_Left.norm();
 
@@ -828,45 +884,45 @@ PCA
         // Calculate the angle in radians
         Thetas(0) = std::acos(cosAngleLeft);
 
+        //Same procedure for the right side
         double dotProductRight = (directionVector.dot(this->PCA_Right));
 
         double magnitudeVec1Right = directionVector.norm();
         double magnitudeVec2Right = this->PCA_Right.norm();
 
-        // Calculate the cosine of the angle
         double cosAngleRight = dotProductRight / (magnitudeVec1Right * magnitudeVec2Right);
 
-        // Ensure the cosine value is within [-1, 1] to avoid NaN due to floating point errors
         cosAngleRight = std::max(-1.0, std::min(1.0, cosAngleRight));
 
-        // Calculate the angle in radians
         Thetas(1) = std::acos(cosAngleRight);
-
-
-        //std::cout << "Angles: " << Thetas << std::endl;
 
         return Thetas;
     }
+
 
     Eigen::MatrixXd PCA::getFilteredLeftScanData()
     {
         return this->filteredLaserScanLeftSide;
     };
 
+
     Eigen::MatrixXd PCA::getFilteredRightScanData()
     {
         return this->filteredLaserScanRightSide;
     };
+
 
     Eigen::VectorXd PCA::getPCA_Left()
     {
         return this->PCA_Left;
     };
 
+
     Eigen::VectorXd PCA::getPCA_Right()
     {
         return this->PCA_Right;
     };
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -877,92 +933,85 @@ PCA
 
 
 
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
 sharedMemory
 */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 
-SHM::SHM(const std::string& input) : input(input), output() {
-    //std::cout << "shared memory starting up\n";
-    mutexID = semget(IPC_PRIVATE, 1, 0666);                                                 //creating mutex semaphore
-    shmID = shmget(IPC_PRIVATE, sizeof(struct SHM_Message), 0666 | IPC_CREAT);              //saving semapgore ID
-    processID = fork();                                                                     //splitting process and saving ID of child as processID
-    if (semctl(mutexID, 0, SETVAL, 1) == -1) {                                              //initialising semaphore as active
-        std::cout << "semctl SETVAL failed!\n shutting down...\n" << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
 
-    if (processID == 0) {                                                                   //if the process is the child of the original ->It's the consumer
-        //std::cout << "Consumer started \n";
-        signal(SIGINT, [](int sig) { SHM::signalHandler(sig, nullptr); });                  //enabling structured shutdown
-        shmptr = (SHM_Message*)shmat(shmID, NULL, 0);                                       //defining location of saved data
-        //std::cout<<"checking signal\n";
-        checkSignal(mutexID);                                                               //only continue if semaphore is active (meaning no one accessing the data)
-        output = shmptr->information;                                                       //save the data in the specified location by the pointer as output
-        setSignal(mutexID);                                                                 //signaling via semaphore that the data can be accessed again
-        //std::cout << "semaphore successful \n output is: " << output;
-    } else {                                                                                //otherwise this has to be the parent/producer
-        //std::cout << "Producer started \n";
-        signal(SIGINT, [](int sig) { SHM::signalHandler(sig, nullptr); });                  //enabling structered shutdown
-        shmptr = (SHM_Message*)shmat(shmID, NULL, 0);                                       //attach shared memory at pointer location
-        //std::cout<<"checking signal\n";
-        checkSignal(mutexID);                                                               //only continue if semaphore is active (meaning no one accessing the data)
-        strncpy(shmptr->information, input.c_str(), sizeof(shmptr->information) - 1);        setSignal(mutexID);    //saving input vriable as string into the shared memory storage
-        //std::cout << "semaphore successful \n input was: " << input;
-        waitpid(processID, 0 , 0);                                                           //wait until the child is completed until continue
-        kill(processID, SIGTERM);                                                            //stop the child process
-    }
-    }
 
-    SHM::~SHM() {                                                                                   //deconstructor
-        shmdt(shmptr);                                                                              //shared memory storage is deleted
+
+    SHM::SHM(const std::string& input) : input(input), output() {
+        //std::cout << "shared memory starting up\n";
+        mutexID = semget(IPC_PRIVATE, 1, 0666);                                                                         //creating mutex semaphore
+        shmID = shmget(IPC_PRIVATE, sizeof(struct SHM_Message), 0666 | IPC_CREAT);                                      //saving semapgore ID
+        processID = fork();                                                                                             //splitting process and saving ID of child as processID
+        if (semctl(mutexID, 0, SETVAL, 1) == -1) {                                                                      //initialising semaphore as active
+            std::cout << "semctl SETVAL failed!\n shutting down...\n" << std::endl;                     
+            std::exit(EXIT_FAILURE);                        
+        }                       
+
+        if (processID == 0) {                                                                                           //if the process is the child of the original ->It's the consumer
+            //std::cout << "Consumer started \n";                       
+            signal(SIGINT, [](int sig) { SHM::signalHandler(sig, nullptr); });                                          //enabling structured shutdown
+            shmptr = (SHM_Message*)shmat(shmID, NULL, 0);                                                               //defining location of saved data
+            //std::cout<<"checking signal\n";                       
+            checkSignal(mutexID);                                                                                       //only continue if semaphore is active (meaning no one accessing the data)
+            output = shmptr->information;                                                                               //save the data in the specified location by the pointer as output
+            setSignal(mutexID);                                                                                         //signaling via semaphore that the data can be accessed again
+        }
+        else {                                                                                                          //otherwise this has to be the parent/producer
+            //std::cout << "Producer started \n";
+            signal(SIGINT, [](int sig) { SHM::signalHandler(sig, nullptr); });                                          //enabling structered shutdown
+            shmptr = (SHM_Message*)shmat(shmID, NULL, 0);                                                               //attach shared memory at pointer location                       
+            checkSignal(mutexID);                                                                                       //only continue if semaphore is active (meaning no one accessing the data)
+            strncpy(shmptr->information, input.c_str(), sizeof(shmptr->information) - 1);        setSignal(mutexID);    //saving input vriable as string into the shared memory storage
+            waitpid(processID, 0 , 0);                                                                                  //wait until the child is completed until continue
+            kill(processID, SIGTERM);                                                                                   //stop the child process
+        }
     }
 
 
-    void SHM::checkSignal(int semid){                                                               //defining checkSignal function
-    struct sembuf check = {0, -1, SEM_UNDO};                                                     //needed for checking semaphores
-    //std::cout<< "check done\n";   
-        if (semop(semid, &check, 1) == -1){                                                         //in case the semaphore is invalid shutdown programm
+    SHM::~SHM() {                                                                                   
+        shmdt(shmptr);                                                                                                  //shared memory storage is deleted
+    }                   
+                    
+                    
+    void SHM::checkSignal(int semid){                                                                                   //defining checkSignal function
+    struct sembuf check = {0, -1, SEM_UNDO};                                                                            //needed for checking semaphores                       
+        if (semop(semid, &check, 1) == -1){                                                                             //in case the semaphore is invalid shutdown programm
             std::cout << "semaphore check failed!\n shutting down...\n" << std::endl;
             std::exit(EXIT_FAILURE);
         }
     }
 
-    void SHM::setSignal(int semid){                                                                 //defining setSignal function
-    struct sembuf set = {0, 1, SEM_UNDO};                                                        //needed for setting semaphores
-        if (semop(semid, &set, 1) == -1){                                                           //in case the semaphore is invalid shutdown the programm
+
+    void SHM::setSignal(int semid){                                                                                     //defining setSignal function
+    struct sembuf set = {0, 1, SEM_UNDO};                                                                               //needed for setting semaphores
+        if (semop(semid, &set, 1) == -1){                                                                               //in case the semaphore is invalid shutdown the programm
             std::cout << "semaphore set failed!\n shutting down...\n" << std::endl;
             std::exit(EXIT_FAILURE);
         }
     }
 
 
-    void SHM::signalHandler(int sig, SHM* instance) {                                               //enables clean termination of processes
-        if (sig == SIGINT) { 
-        /* Robot::Twist cmdVel;                                                                       //if strg+c is pressed
-            cmdVel.linear.x = 0;
-            cmdVel.angular.z = 0;
-            Robot::MobileRobot turtle;
-            turtle.publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);*/
-            
-            if (instance->processID == 0) {  // Consumer process                                    //which process has to be killed
-                std::cout << "Consumer shutting down \n";                                           //Consumer/ Child doesnt has to be shut down since Producer/Parent kills Child
-            } else {
-                std::cout << "Producer shutting down \n";                                           
-                std::cout << "Producer killing consumer\n";
-                kill(instance->processID, SIGINT);                                                   //Producer kills child process
-                wait(NULL);
-                std::cout << "Producer removing semaphores\n";                                         //deleting semaphores
-                semctl(instance->mutexID, -1, IPC_RMID);
-                std::cout << "Producer detaching and removing shared memory\n";
-                if (shmdt(instance->shmptr) == -1) {                                                   //deleting shared memory 
-                    std::cout << "shmdt failed\n";
-                    exit(EXIT_FAILURE);                          
-                }
-                if (shmctl(instance->shmID, IPC_RMID, 0) == -1) {                                      //reseting shared memory
+    void SHM::signalHandler(int sig, SHM* instance) {                                                                   //enables clean termination of processes
+        if (sig == SIGINT) {                
+            if (instance->processID == 0) {  // Consumer process                                                        //which process has to be killed
+                std::cout << "Consumer shutting down \n";                                                               //Consumer/ Child doesnt has to be shut down since Producer/Parent kills Child
+            } else {                
+                std::cout << "Producer shutting down \n";                                                           
+                std::cout << "Producer killing consumer\n";             
+                kill(instance->processID, SIGINT);                                                                      //Producer kills child process
+                wait(NULL);             
+                std::cout << "Producer removing semaphores\n";                                                          //deleting semaphores
+                semctl(instance->mutexID, -1, IPC_RMID);                
+                std::cout << "Producer detaching and removing shared memory\n";             
+                if (shmdt(instance->shmptr) == -1) {                                                                    //deleting shared memory 
+                    std::cout << "shmdt failed\n";              
+                    exit(EXIT_FAILURE);                                         
+                }               
+                if (shmctl(instance->shmID, IPC_RMID, 0) == -1) {                                                       //reseting shared memory
                     std::cout << "shmctl(IPC_RMID) failed\n";
                     exit(EXIT_FAILURE);
                 }
@@ -971,14 +1020,12 @@ SHM::SHM(const std::string& input) : input(input), output() {
         }
     }
 
-    std::string SHM::returnOutput() {                                                                   //getter for output of shared Memory
+
+    std::string SHM::returnOutput() {                                                                                   //getter for output of shared Memory
         return output;
-    /*
-
-                                                                all hail the turtlebot 
-
-    */
     }
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*

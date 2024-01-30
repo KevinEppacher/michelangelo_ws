@@ -8,8 +8,6 @@ int main(int argc, char **argv)
 {
     Robot::MobileRobot turtle(argv[1]);
 
-    // Receive the same string back from the server
-    std::cout << "starting loop: "; /* Setup to print the echoed string */
     while (true)
     {
         turtle.run();       //starts Robot process
