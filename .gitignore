@@ -1,1 +1,7 @@
-build/
+/build
+/vscode
+/shared_memory
+/Code_Example
+/src/27.01 inProgress.zip
+/src/safe.zip
+/testcode
