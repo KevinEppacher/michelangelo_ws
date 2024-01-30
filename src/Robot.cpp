@@ -936,9 +936,6 @@ SHM::SHM(const std::string& input) : input(input), output() {
         //std::cout << "semaphore successful \n input was: " << input;
         waitpid(processID, 0 , 0);
         kill(processID, SIGTERM);
-
-
-
     }
 }
 SHM::~SHM() {
