@@ -133,15 +133,12 @@ MobileRobot
         Robot::Pose diffPose;
         double totalDistance = 0;
         double gamma = 0;
-<<<<<<< HEAD
-=======
         double alpha = 0;
         double beta = 0;
         double dt = 0;
         std::chrono::high_resolution_clock::time_point time;
         std::chrono::high_resolution_clock::time_point lastTime;
         long long getTimeMS();
->>>>>>> a51bf602 (kommentiert und couts bearbeitet)
     };
 
 
@@ -199,8 +196,6 @@ MobileRobot
         unsigned short scanPort = 9997;     /* Echo server port */
 
 
-<<<<<<< HEAD
-=======
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -240,7 +235,6 @@ TCPServer
 
         private:
             nlohmann::json jsonData;
->>>>>>> a51bf602 (kommentiert und couts bearbeitet)
 
     };
 
