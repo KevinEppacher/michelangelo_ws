@@ -100,13 +100,6 @@ Struct definitions
         double derivativeError = 0;
     };
 
-    struct Circle
-    {
-        double xOffset = 0;
-        double yOffset = 0;
-        double radius = 1;
-    };
-
     struct sensor_msgs
     {
         struct scan_msg
