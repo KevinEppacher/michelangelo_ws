@@ -28,13 +28,7 @@ find_package(Python3 COMPONENTS Interpreter Development NumPy REQUIRED)
 message(STATUS "Python3 include dirs: ${Python3_INCLUDE_DIRS}")
 
 add_executable(main src/main.cpp src/Robot.cpp)
-add_executable(server src/server.cpp)
-add_executable(PCA src/pca.cpp)
 
 target_include_directories(main PRIVATE ${eigen_SOURCE_DIR} ${matplotlib_SOURCE_DIR} ${Python3_INCLUDE_DIRS} ${Python3_NumPy_INCLUDE_DIRS})
-target_include_directories(server PRIVATE ${eigen_SOURCE_DIR} ${Python3_INCLUDE_DIRS} ${Python3_NumPy_INCLUDE_DIRS})
-target_include_directories(PCA PRIVATE ${eigen_SOURCE_DIR} ${matplotlib_SOURCE_DIR} ${Python3_INCLUDE_DIRS} ${Python3_NumPy_INCLUDE_DIRS})
 
 target_link_libraries(main PRIVATE nlohmann_json::nlohmann_json Python3::Python Python3::NumPy)
-target_link_libraries(server PRIVATE nlohmann_json::nlohmann_json Python3::Python Python3::NumPy)
-target_link_libraries(PCA PRIVATE nlohmann_json::nlohmann_json Python3::Python Python3::NumPy)
