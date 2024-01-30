@@ -1,12 +1,4 @@
 #include "Robot.h"
-#include <iostream>
-#include <sstream> 
-#include <thread>
-#include <atomic>
-#include <iostream>
-#include <sstream> 
-#include <thread>
-#include <atomic>
 
 int main(int argc, char **argv)
 {
