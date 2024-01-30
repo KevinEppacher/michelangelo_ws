@@ -110,11 +110,11 @@ MobileRobot
         MobileRobot(){};
         ~MobileRobot();
         void publishCmdVel(double* linear_x, double* angular_z);
-        bool linearController(Robot::Pose goalPose, Robot::Pose currentPose);
-        bool pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta);
+        bool linearController(Robot::Pose goalPose, Robot::Pose currentPose, bool wall);
+        bool pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta, bool wall);
         bool limitControllerVariables(Twist* cmdVel, double upperLimit, double lowerLimit);
         bool convertQuaternionsToEuler(Pose* currentAngle);
-        int goTo(Pose* goalPose, Pose* currentPose);
+        int goTo(Pose* goalPose, Pose* currentPose, bool wall);
         bool run();
         void setIP(char* ipAdress);
 
@@ -148,6 +148,7 @@ MobileRobot
         double alpha = 0;
         double beta = 0;
         double dt = 0;
+        Eigen::VectorXd PCA_Angles;
         std::chrono::high_resolution_clock::time_point time;
         std::chrono::high_resolution_clock::time_point lastTime;
         long long getTimeMS();

@@ -26,7 +26,7 @@ namespace Robot
     }
 
  
-    bool Robot::MobileRobot::linearController(Robot::Pose goalPose, Robot::Pose currentOdomPose)
+    bool Robot::MobileRobot::linearController(Robot::Pose goalPose, Robot::Pose currentOdomPose, bool wall)
     {
         Parameter PID;
 
@@ -45,7 +45,7 @@ namespace Robot
 
         beta = calculateBeta(goalPose, gamma);
         
-        pidController(&cmdVel, PID, totalDistance, alpha, beta);
+        pidController(&cmdVel, PID, totalDistance, alpha, beta, wall);
 
         limitControllerVariables(&cmdVel, 3, -3);
 
@@ -65,7 +65,6 @@ namespace Robot
         client.sendData(echoString.c_str());
         //client.receiveData(buffer, sizeof(buffer));  
         client.closeTCPconnection(); 
-        */
        return true;
     } */
     
@@ -117,31 +116,36 @@ namespace Robot
 
 
 
-    bool MobileRobot::pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta)
+    bool MobileRobot::pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta, bool wall = false)
     {        
         Parameter Lin, Alpha, Beta;
         Lin.P = 0.15;
         //Lin.I = 0.01;
 
-        Alpha.P = 0.6;
-        //Alpha.I = 0.04;
+        Alpha.P = 0.4;
+        //Alpha.I = 0.01;
 
-        Beta.P = -0.2;
-        //Beta.I = -0.06;
+        Beta.P = -0.4;
+        //Beta.I = -0.01;
 
         Lin.proportionalError = Lin.P * totalDistance;
         Lin.integralError += ( Lin.I / 2 ) * totalDistance;
-        Lin.error = Lin.proportionalError; // + Lin.integralError;
+        Lin.error = Lin.proportionalError + Lin.integralError;
         cmdVel->linear.x = Lin.error;
 
 
         Alpha.proportionalError = Alpha.P *  alpha;
         Alpha.integralError += (Alpha.I / 2 ) * alpha;
-        Alpha.error = Alpha.proportionalError; //+ Alpha.integralError;
+        Alpha.error = Alpha.proportionalError + Alpha.integralError;
 
         Beta.proportionalError = Beta.P *  beta;
         Beta.integralError += (Beta.I / 2 ) * beta;
-        Beta.error = Beta.proportionalError; // + Beta.integralError;
+        Beta.error = Beta.proportionalError + Beta.integralError;
+
+        if (wall == true)
+        {
+            cmdVel->angular.z = (Alpha.error + Beta.error)*0.9 + this->PCA_Angles(0)*0.05 + this->PCA_Angles(1)*0.05;    
+        }
         
         cmdVel->angular.z = Alpha.error + Beta.error;
 
@@ -197,7 +201,6 @@ namespace Robot
         double numerator = 2 * ( qA->orientation.w * qA->orientation.y + qA->orientation.x * qA->orientation.z );
         double denominator = 1 - 2 * (pow(qA->orientation.y, 2) + pow(qA->orientation.z, 2));
         double rollAngle = atan2(numerator, denominator);
-        //std::cout << "Roll: numerator = " << numerator << ", denominator = " << denominator << ", rollAngle = " << rollAngle << std::endl;
         return rollAngle;
     }
 
@@ -208,14 +211,11 @@ namespace Robot
 
         if (std::abs(sinp) >= 1) {
             pitchAngle = std::copysign(M_PI / 2, sinp);
-            //std::cout << ", pitchAngle = " << pitchAngle << " (90 Grad verwendet)" << std::endl;
             return pitchAngle;
         } else {
             pitchAngle = std::asin(sinp);
-            //std::cout << ", pitchAngle = " << pitchAngle << std::endl;
             return pitchAngle;
         }
-        //sike
     }
 
     double MobileRobot::calculateYaw(Pose* qA)
@@ -228,7 +228,7 @@ namespace Robot
             yawAngle += 2 * M_PI;
         }
 
-        std::cout << "Yaw: numerator = " << numerator << ", denominator = " << denominator << ", yawAngle = " << yawAngle << std::endl;
+        //std::cout << "Yaw: numerator = " << numerator << ", denominator = " << denominator << ", yawAngle = " << yawAngle << std::endl;
         return yawAngle;
     }
 
@@ -246,7 +246,7 @@ namespace Robot
         this->ip = ipAdress;
     };
 
-    int MobileRobot::goTo(Pose* goalPose, Pose* currentOdomPose)
+    int MobileRobot::goTo(Pose* goalPose, Pose* currentOdomPose, bool wall = false)
     {
         Pose diffPose;
         diffPose.position.x = goalPose->position.x - currentOdomPose->position.x;
@@ -257,15 +257,19 @@ namespace Robot
         convertQuaternionsToEuler(currentOdomPose);
         double totalOrientation = goalPose->orientation.z - currentOdomPose->orientation.z;
 
-        if (totalDistance < goalPose->tolerance ) 
+        if (totalDistance < goalPose->tolerance) 
         {
             sequenceNumber += 1;
-            //std::cout << "Sequence Number: " << sequenceNumber << std::endl;
+            std::cout << "Sequence Number: " << sequenceNumber << std::endl;
             arrivedEndgoal();           
         }
-        else
+        else if (wall == true)
         {
-            linearController(*goalPose, *currentOdomPose);
+            std::cout << "here we are" << std::endl;
+            linearController(*goalPose, *currentOdomPose, wall);
+        }
+        {
+            linearController(*goalPose, *currentOdomPose, wall);
         }
     
         return goalPose->index;
@@ -289,6 +293,8 @@ namespace Robot
 
     void MobileRobot::process(std::string odomData, std::string laserscanData)     //responsible for processing data and giving move commands
     {
+        //Setup for parsing odom-data
+
         Robot::Pose currentOdomPose;
         Robot::JsonHandler OdomdataHandler;
         nlohmann :: json jsonOdom;                      //initialising json handler
@@ -305,29 +311,18 @@ namespace Robot
         currentOdomPose.orientation.z = jsonOdom["pose"]["pose"]["orientation"]["z"];
         currentOdomPose.orientation.w = jsonOdom["pose"]["pose"]["orientation"]["w"]; 
 
-        //std::cout<<" sequence:    " << sequenceNumber<< "   || position.x:   "<<currentOdomPose.position.x<<"    || position.y:   "<<currentOdomPose.position.y<<"  ||  orientation.z:   "<< currentOdomPose.orientation.z<<std::endl;
 
-        //Receiving laserscan-data 
+        //Setup for parsing laser-data
         Robot::JsonHandler LaserdataHandler;
         nlohmann :: json jsonScan;
-
         jsonScan = LaserdataHandler.extractJson(laserscanData);
 
+        //Calculating PCA with sample of 60 Angles
         Robot::PCA pca;
         pca.runPCA(jsonScan["ranges"], 30);
-        Eigen::VectorXd errorAngles = pca.getAngleDifference();
-
-        // Parameter placeholder;
-        // Robot::Twist cmdVel2;
-
-        // pidController(&cmdVel2, placeholder, 0, errorAngles(0), 0);
-        // std::cout << "First controller" << cmdVel2.angular.z << std::endl;
-
-        // pidController(&cmdVel2, placeholder, 0, errorAngles(1), 0);
-        // std::cout <<  "Second controller" << cmdVel2.angular.z << std::endl;
-
+        this->PCA_Angles = pca.getAngleDifference();
         
-        //Overwriting current laserscan position with Sensor Laserscan Position
+        //Defining Goal-Positions
         Robot::Pose goalPose1, goalPose3, goalPose2, goalPose4, goalPose5, goalPose6, goalPose7, goalPose8, goalPose9, goalPose10;
         Robot::Circle circle;
         circle.xOffset = 1.5;
@@ -337,118 +332,94 @@ namespace Robot
         goalPose1.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-180));
         goalPose1.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-180));
         goalPose1.orientation.z = convertDegreesToRadiant(0);
-        goalPose1.tolerance = 0.15;
+        goalPose1.tolerance = 0.20;
 
         goalPose2.index = 2;
         goalPose2.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-135));
         goalPose2.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-135));
         goalPose2.orientation.z = convertDegreesToRadiant(-45);
-        goalPose2.tolerance = 0.15;
+        goalPose2.tolerance = 0.20;
   
 
         goalPose3.index = 3;
         goalPose3.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-90));
         goalPose3.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-90));
         goalPose3.orientation.z = convertDegreesToRadiant(0);
-        goalPose3.tolerance = 0.15;
+        goalPose3.tolerance = 0.20;
 
         goalPose4.index = 4;
         goalPose4.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-45));
         goalPose4.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-45));
         goalPose4.orientation.z = convertDegreesToRadiant(45);
-        goalPose4.tolerance = 0.15;
+        goalPose4.tolerance = 0.20;
 
         goalPose5.index = 5;
         goalPose5.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(0));
         goalPose5.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(0));
         goalPose5.orientation.z = convertDegreesToRadiant(90);
-        goalPose5.tolerance = 0.15;
+        goalPose5.tolerance = 0.20;
 
         goalPose6.index = 6;
         goalPose6.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(45));
         goalPose6.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(45));
         goalPose6.orientation.z = convertDegreesToRadiant(135);
-        goalPose6.tolerance = 0.15;
+        goalPose6.tolerance = 0.20;
 
         goalPose7.index = 7;
         goalPose7.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(90));
         goalPose7.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(90));
         goalPose7.orientation.z = convertDegreesToRadiant(180);
-        goalPose7.tolerance = 0.15;
+        goalPose7.tolerance = 0.20;
 
         goalPose8.index = 8;
         goalPose8.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(135));
         goalPose8.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(135));
         goalPose8.orientation.z = convertDegreesToRadiant(180);
-        goalPose8.tolerance = 0.15;
+        goalPose8.tolerance = 0.20;
 
         goalPose9.index = 9;
         goalPose8.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(180));
         goalPose8.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(180));
         goalPose8.orientation.z = convertDegreesToRadiant(180);
-        goalPose8.tolerance = 0.15;
+        goalPose8.tolerance = 0.20;
 
         goalPose10.index = 10;
         goalPose10.position.x = 0;
         goalPose10.position.y = 0;
         goalPose10.orientation.z = convertDegreesToRadiant(180);
-        goalPose10.tolerance = 0.15;
+        goalPose10.tolerance = 0.20;
 
-
+        //Sending Robot to Goal-Position
         if(goalPose1.index == sequenceNumber) {
-            goTo(&goalPose1, &currentOdomPose);
-            //std::cout << "current position is: " << &currentOdomPose << std::endl;
-            //std::cout << "current goal is: " << &goalPose1 << std::endl;
+            goTo(&goalPose1, &currentOdomPose, true);
             }
         if(goalPose2.index == sequenceNumber) {
             goTo(&goalPose2, &currentOdomPose);
-            //std::cout << "current position is: " << &currentOdomPose << std::endl;
-            //std::cout << "current goal is: " << &goalPose2 << std::endl;
             }
         if(goalPose3.index == sequenceNumber) {
             goTo(&goalPose3, &currentOdomPose);
-            //std::cout << "current position is: " << &currentOdomPose << std::endl;
-            //std::cout << "current goal is: " << &goalPose3 << std::endl;
             }
         if(goalPose4.index == sequenceNumber) {
             goTo(&goalPose4, &currentOdomPose);
-            //std::cout << "current position is: " << &currentOdomPose << std::endl;
-            //std::cout << "current goal is: " << &goalPose4 << std::endl;
             }
         if(goalPose5.index == sequenceNumber) {
             goTo(&goalPose5, &currentOdomPose);
-            //std::cout << "current position is: " << &currentOdomPose << std::endl;
-            //std::cout << "current goal is: " << &goalPose5 << std::endl;
             } 
         if(goalPose6.index == sequenceNumber) {
             goTo(&goalPose6, &currentOdomPose);
-            //std::cout << "current position is: " << &currentOdomPose << std::endl;
-            //std::cout << "current goal is: " << &goalPose6 << std::endl;
             }
         if(goalPose7.index == sequenceNumber) {
             goTo(&goalPose7, &currentOdomPose);
-            //std::cout << "current position is: " << &currentOdomPose << std::endl;
-            //std::cout << "current goal is: " << &goalPose7 << std::endl;
             }
         if(goalPose8.index == sequenceNumber) {
             goTo(&goalPose8, &currentOdomPose);
-            //std::cout << "current position is: " << &currentOdomPose << std::endl;
-            //std::cout << "current goal is: " << &goalPose8 << std::endl;
             }
         if(goalPose9.index == sequenceNumber) {
             goTo(&goalPose9, &currentOdomPose);
-            //std::cout << "current position is: " << &currentOdomPose << std::endl;
-            //std::cout << "current goal is: " << &goalPose9 << std::endl;
             }
         if(goalPose10.index == sequenceNumber) {
             goTo(&goalPose10, &currentOdomPose);
-            //std::cout << "current position is: " << &currentOdomPose << std::endl;
-            //std::cout << "current goal is: " << &goalPose10 << std::endl;
             }
-
-  
-        //if((goalPose1.index + 4) == sequenceNumber) goTo(&goalPose1, &currentOdomPose);
-
     }
     
 
@@ -459,9 +430,7 @@ namespace Robot
         const char* charInput = input.c_str();          //structuring input
         SHM myBrain(charInput);                         //creating SHM class object and calling constructor -> starting shared Memory
         std::string odomOutput = myBrain.returnOutput();    //calling result of shared memory via getter
-        //std::cout << "Output: " << output << std::endl; //outputting Output data
         std::string laserScan = MobileRobot::receive(9997);
-        //MobileRobot::process(odomOutput, laserScan);
         MobileRobot::process(input, laserScan);                   //calling process function responsible for calculating movements and commanding the robot with the output as parameter
         return true;
     }
@@ -554,7 +523,7 @@ TCP Client
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
-JsonHandler
+Json-Class
 */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
@@ -631,6 +600,20 @@ JsonHandler
         {
             return jsonData;
         }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+JsonClass
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+PCA
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     PCA::PCA(){};
@@ -772,8 +755,8 @@ JsonHandler
         double offsetRechts = this->filteredLaserScanLeftSide.mean()*2;
         double offsetLinks = this->filteredLaserScanRightSide.mean()*2;
 
-        std::cout << "Offset Rechts: " << offsetRechts << std::endl;
-        std::cout << "Offset Links: " << offsetLinks << std::endl;
+        // std::cout << "Offset Rechts: " << offsetRechts << std::endl;
+        // std::cout << "Offset Links: " << offsetLinks << std::endl;
 
         matplotlibcpp::clf();
 
@@ -885,7 +868,17 @@ JsonHandler
         return this->PCA_Right;
     };
 
-        //COCO//
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+PCA
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
 sharedMemory
@@ -985,10 +978,12 @@ SHM::SHM(const std::string& input) : input(input), output() {
                                                                 all hail the turtlebot 
 
     */
-}
+    }
 
-
-    
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+sharedMemory
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
 };
