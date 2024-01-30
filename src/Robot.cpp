@@ -211,61 +211,20 @@ MobileRobot
 
         Eigen::Vector3d euler = q.toRotationMatrix().eulerAngles(0, 1, 2);
 
+        // Normalize angles to be within the range [-π, π]
+        euler = euler.unaryExpr([](double angle) -> double {
+            // Adjust angles to be within the range [-π, π]
+            while (angle > M_PI) angle -= 2 * M_PI;
+            while (angle < -M_PI) angle += 2 * M_PI;
+            return angle;
+        });
+
         currentAngle->orientation.x = euler[0];
         currentAngle->orientation.y = euler[1];
         currentAngle->orientation.z = euler[2];
 
         return true;
     }
-
-
-/*     double MobileRobot::calculateRoll(Pose* qA)
-    {
-        double numerator = 2 * ( qA->orientation.w * qA->orientation.y + qA->orientation.x * qA->orientation.z );
-        double denominator = 1 - 2 * (pow(qA->orientation.y, 2) + pow(qA->orientation.z, 2));
-        double rollAngle = atan2(numerator, denominator);
-        return rollAngle;
-    }
-
-
-    double MobileRobot::calculatePitch(Pose* qA)
-    {
-        double sinp = 2 * (qA->orientation.w * qA->orientation.y - qA->orientation.z * qA->orientation.x);
-        double pitchAngle;
-
-        if (std::abs(sinp) >= 1) {
-            pitchAngle = std::copysign(M_PI / 2, sinp);
-            return pitchAngle;
-        } else {
-            pitchAngle = std::asin(sinp);
-            return pitchAngle;
-        }
-    }
-
-
-    double MobileRobot::calculateYaw(Pose* qA)
-    {
-        double numerator = 2 * ((qA->orientation.w * qA->orientation.z) + (qA->orientation.x * qA->orientation.y));
-        double denominator = 1 - 2 * (pow(qA->orientation.x, 2) + pow(qA->orientation.y, 2));
-        double yawAngle = atan2(numerator, denominator);
-        if (yawAngle < 0) 
-        {
-            yawAngle += 2 * M_PI;
-        }
-
-        //std::cout << "Yaw: numerator = " << numerator << ", denominator = " << denominator << ", yawAngle = " << yawAngle << std::endl;
-        return yawAngle;
-    } */
-
-
-/*     bool MobileRobot::calculateRobotVektor()
-    {
-        
-        robotVector[0] = 0;
-        robotVector[1] = 0;
-
-        return true;
-    } */
 
 
     void MobileRobot::setIP(char* ipAdress)
@@ -363,8 +322,8 @@ MobileRobot
         //Initialising and defining Goal-Positions
         Robot::Pose goalPose1, goalPose3, goalPose2, goalPose4, goalPose5, goalPose6, goalPose7, goalPose8, goalPose9, goalPose10;
         Robot::Circle circle;
-        circle.xOffset = 1.5;
-        circle.radius = 0.5;        
+        circle.xOffset = 1.0;
+        circle.radius = 0.3;        
 
         goalPose1.index = 1;
         goalPose1.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-180));
@@ -425,6 +384,8 @@ MobileRobot
         goalPose10.position.y = 0;
         goalPose10.orientation.z = convertDegreesToRadiant(180);
         goalPose10.tolerance = 0.20;
+
+        std::cout << "Current Goal-Number: " << std::endl;
 
         //Sending Robot to Goal-Position
         if(goalPose1.index == sequenceNumber) {
