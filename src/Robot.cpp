@@ -14,17 +14,6 @@ namespace Robot
 
     MobileRobot::~MobileRobot()
     {
-        /*
-        std::cout<<"Robot was deleted"<<std::endl;
-        std::stringstream ss;
-        ss << "---START---{linear: 0 , angular:   0  }___END___";
-        std::string echoString = ss.str();
-
-        Robot::TCPClient client(this->ip, 9999);
-        client.sendData(echoString.c_str());
-        //client.receiveData(buffer, sizeof(buffer));  
-        client.closeTCPconnection(); 
-        */
         
     }
 
@@ -45,15 +34,6 @@ namespace Robot
 
         robotPose = currentOdomPose;
 
-        time = std::chrono::high_resolution_clock::time_point(std::chrono::milliseconds(getTimeMS()));
-        //std::cout<<time << std::endl;
-        auto timeDiff = time-lastTime;
-        if((timeDiff >= std::chrono::milliseconds(1000))){
-            lastTime = time;
-            printf("current position:   x=%.2f  y=%.2f\n", robotPose.position.x, robotPose.position.y);
-            printf("current goal  is:   x=%.2f  y=%.2f\n\n", goalPose.position.x, goalPose.position.y);
-        }
-
         diffPose.position.x = goalPose.position.x - currentOdomPose.position.x;
         diffPose.position.y = goalPose.position.y - currentOdomPose.position.y;
 
@@ -71,19 +51,10 @@ namespace Robot
 
         publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);
 
-        //std::cout << "" <<std::endl;
-        //std::cout << "Orientation" << currentOdomPose.orientation.z  * (180 / M_PI) <<std::endl;
-        //std::cout << "Diff Pose berechnet: X=" << diffPose.position.x << ", Y=" << diffPose.position.y << std::endl;
-        //std::cout << "Gamma berechnet: " << gamma * (180 / M_PI) << std::endl;
-        //std::cout << "Gesamtdistanz: " << calculateTotalDistance(diffPose)<< std::endl;
-        //std::cout << "Alpha berechnet: " << calculateAlpha(gamma, currentOdomPose) * (180 / M_PI) << std::endl;
-        //std::cout << "Beta berechnet: " << calculateBeta(goalPose, gamma)  * (180 / M_PI)<< std::endl;
-        //std::cout << "cmdVel.linear.x: " << cmdVel.linear.x << "    ||  cmdVel.angular.z:"<<cmdVel.angular.z<<std::endl;
-        //std::cout << "" <<std::endl;
         return 1;
     }
 
-    bool Robot::MobileRobot::orientationController(Robot::Pose goalPose, Robot::Pose currentOdomPose){
+/*     bool Robot::MobileRobot::orientationController(Robot::Pose goalPose, Robot::Pose currentOdomPose){
         /*
         std::cout<<"Robot was deleted"<<std::endl;
         std::stringstream ss;
@@ -96,7 +67,7 @@ namespace Robot
         client.closeTCPconnection(); 
         */
        return true;
-    }
+    } */
     
 
 
@@ -108,11 +79,8 @@ namespace Robot
         std::string echoString = ss.str();
 
         Robot::TCPClient client(this->ip, 9999);
-/*         std::cout << *linear_x << std::endl;
-        std::cout << *angular_z << std::endl; */
+
         client.sendData(echoString.c_str());
-        //client.receiveData(buffer, sizeof(buffer));  
-        //client.closeTCPconnection();
     }
 
     double MobileRobot::calculateTotalDistance(Robot::Pose diffPose)
@@ -159,20 +127,20 @@ namespace Robot
         //Alpha.I = 0.04;
 
         Beta.P = -0.2;
-        Beta.I = -0.06;
+        //Beta.I = -0.06;
 
         Lin.proportionalError = Lin.P * totalDistance;
-        //Lin.integralError += ( Lin.I / 2 ) * totalDistance;
+        Lin.integralError += ( Lin.I / 2 ) * totalDistance;
         Lin.error = Lin.proportionalError; // + Lin.integralError;
         cmdVel->linear.x = Lin.error;
 
 
         Alpha.proportionalError = Alpha.P *  alpha;
-        //Alpha.integralError += (Alpha.I / 2 ) * alpha;
+        Alpha.integralError += (Alpha.I / 2 ) * alpha;
         Alpha.error = Alpha.proportionalError; //+ Alpha.integralError;
 
         Beta.proportionalError = Beta.P *  beta;
-        //Beta.integralError += (Beta.I / 2 ) * beta;
+        Beta.integralError += (Beta.I / 2 ) * beta;
         Beta.error = Beta.proportionalError; // + Beta.integralError;
         
         cmdVel->angular.z = Alpha.error + Beta.error;
@@ -285,7 +253,6 @@ namespace Robot
         diffPose.position.y = goalPose->position.y - currentOdomPose->position.y;
 
         double totalDistance = calculateTotalDistance(diffPose);
-        //std::cout << "totalDistance: " << totalDistance << std::endl;
 
         convertQuaternionsToEuler(currentOdomPose);
         double totalOrientation = goalPose->orientation.z - currentOdomPose->orientation.z;
@@ -340,23 +307,18 @@ namespace Robot
 
         //std::cout<<" sequence:    " << sequenceNumber<< "   || position.x:   "<<currentOdomPose.position.x<<"    || position.y:   "<<currentOdomPose.position.y<<"  ||  orientation.z:   "<< currentOdomPose.orientation.z<<std::endl;
 
-        //Receiving laserscan-data
-        //Robot::Pose currentLaserscanPose; 
+        //Receiving laserscan-data 
         Robot::JsonHandler LaserdataHandler;
         nlohmann :: json jsonScan;
 
         jsonScan = LaserdataHandler.extractJson(laserscanData);
 
-        //std::cout << "Laserscan before json: \n" << laserscanData << std::endl;
-        //std::cout << "Laserscan: \n" << jsonScan << std::endl;
-
-
         Robot::PCA pca;
         pca.runPCA(jsonScan["ranges"], 30);
         Eigen::VectorXd errorAngles = pca.getAngleDifference();
 
-        Parameter placeholder;
-        Robot::Twist cmdVel2;
+        // Parameter placeholder;
+        // Robot::Twist cmdVel2;
 
         // pidController(&cmdVel2, placeholder, 0, errorAngles(0), 0);
         // std::cout << "First controller" << cmdVel2.angular.z << std::endl;
