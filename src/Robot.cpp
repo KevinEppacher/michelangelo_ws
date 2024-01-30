@@ -2,22 +2,57 @@
 
 namespace Robot
 {
-    
-    MobileRobot::MobileRobot()
+    double convertDegreesToRadiant(double degrees)
     {
-        //std::cout << "A Robot is born" << std::endl;
+        return (degrees * (M_PI/180));
     }
+    
+    MobileRobot::MobileRobot(char* ip):ip(ip){
+
+    }
+    
 
     MobileRobot::~MobileRobot()
     {
+        /*
+        std::cout<<"Robot was deleted"<<std::endl;
+        std::stringstream ss;
+        ss << "---START---{linear: 0 , angular:   0  }___END___";
+        std::string echoString = ss.str();
+
+        Robot::TCPClient client(this->ip, 9999);
+        client.sendData(echoString.c_str());
+        //client.receiveData(buffer, sizeof(buffer));  
+        client.closeTCPconnection(); 
+        */
         
     }
-    
 
+
+
+    long long Robot::MobileRobot::getTimeMS(){
+        auto currentTimePoint = std::chrono::high_resolution_clock::now();
+        auto timeSinceEpoch = std::chrono::time_point_cast<std::chrono::milliseconds>(currentTimePoint);
+        return timeSinceEpoch.time_since_epoch().count();
+    }
+
+ 
+    bool Robot::MobileRobot::linearController(Robot::Pose goalPose, Robot::Pose currentOdomPose)
+    {
+        Parameter PID;
 
         convertQuaternionsToEuler(&currentOdomPose);
 
         robotPose = currentOdomPose;
+
+        time = std::chrono::high_resolution_clock::time_point(std::chrono::milliseconds(getTimeMS()));
+        //std::cout<<time << std::endl;
+        auto timeDiff = time-lastTime;
+        if((timeDiff >= std::chrono::milliseconds(1000))){
+            lastTime = time;
+            printf("current position:   x=%.2f  y=%.2f\n", robotPose.position.x, robotPose.position.y);
+            printf("current goal  is:   x=%.2f  y=%.2f\n\n", goalPose.position.x, goalPose.position.y);
+        }
 
         diffPose.position.x = goalPose.position.x - currentOdomPose.position.x;
         diffPose.position.y = goalPose.position.y - currentOdomPose.position.y;
@@ -32,7 +67,7 @@ namespace Robot
         
         pidController(&cmdVel, PID, totalDistance, alpha, beta);
 
-        limitControllerVariables(&cmdVel, 1, -1);
+        limitControllerVariables(&cmdVel, 3, -3);
 
         publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);
 
@@ -48,21 +83,23 @@ namespace Robot
         return 1;
     }
 
-    bool Robot::MobileRobot::orientationController(Robot::Pose goalPose, Robot::Pose currentOdomPose)
-    {
-        Parameter PID;  
-        convertQuaternionsToEuler(&currentOdomPose);    
-        diffPose.position.x = goalPose.position.x - currentOdomPose.position.x;
-        diffPose.position.y = goalPose.position.y - currentOdomPose.position.y; 
-        gamma = calculateGamma(diffPose);   
-        alpha = calculateAlpha(gamma, currentOdomPose); 
-        beta = calculateBeta(goalPose, gamma);  
-        pidController(&cmdVel, PID, totalDistance, alpha, beta);    
-        limitControllerVariables(&cmdVel, 1, -1);   
-        cmdVel.linear.x = 0;
-        publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);
-        return true;
+    bool Robot::MobileRobot::orientationController(Robot::Pose goalPose, Robot::Pose currentOdomPose){
+        /*
+        std::cout<<"Robot was deleted"<<std::endl;
+        std::stringstream ss;
+        ss << "---START---{linear: 0 , angular:   0  }___END___";
+        std::string echoString = ss.str();
+
+        Robot::TCPClient client(this->ip, 9999);
+        client.sendData(echoString.c_str());
+        //client.receiveData(buffer, sizeof(buffer));  
+        client.closeTCPconnection(); 
+        */
+       return true;
     }
+    
+
+
 
     void Robot::MobileRobot::publishCmdVel(double* linear_x, double* angular_z) 
     {
@@ -99,28 +136,44 @@ namespace Robot
     }
 
 
-        Lin.P = 0.1;
-        Lin.I = 0.01;
 
-        Alpha.P = 0.8;
-        Alpha.I = 0.01;
+    double MobileRobot::angleDiff(double angle1, double angle2) 
+    {
+        double diff = angle1 - angle2;
+        while (diff < -M_PI) diff += 2 * M_PI;
+        while (diff > M_PI) diff -= 2 * M_PI;
+        return diff;
+    }
 
-        Beta.P = 0.05;
-        //Beta.I = 0.6;
+
+
+
+
+    bool MobileRobot::pidController(Twist* cmdVel, Parameter PID, double totalDistance, double alpha, double beta)
+    {        
+        Parameter Lin, Alpha, Beta;
+        Lin.P = 0.15;
+        //Lin.I = 0.01;
+
+        Alpha.P = 0.6;
+        //Alpha.I = 0.04;
+
+        Beta.P = -0.2;
+        Beta.I = -0.06;
 
         Lin.proportionalError = Lin.P * totalDistance;
-        Lin.integralError += ( Lin.I / 2 ) * totalDistance;
-        Lin.error = Lin.proportionalError + Lin.integralError;
+        //Lin.integralError += ( Lin.I / 2 ) * totalDistance;
+        Lin.error = Lin.proportionalError; // + Lin.integralError;
         cmdVel->linear.x = Lin.error;
 
 
         Alpha.proportionalError = Alpha.P *  alpha;
-        Alpha.integralError += (Alpha.I / 2 ) * alpha;
-        Alpha.error = Alpha.proportionalError + Alpha.integralError;
+        //Alpha.integralError += (Alpha.I / 2 ) * alpha;
+        Alpha.error = Alpha.proportionalError; //+ Alpha.integralError;
 
         Beta.proportionalError = Beta.P *  beta;
-        Beta.integralError += (Beta.I / 2 ) * beta;
-        Beta.error = Beta.proportionalError + Beta.integralError;
+        //Beta.integralError += (Beta.I / 2 ) * beta;
+        Beta.error = Beta.proportionalError; // + Beta.integralError;
         
         cmdVel->angular.z = Alpha.error + Beta.error;
 
@@ -194,64 +247,7 @@ namespace Robot
             //std::cout << ", pitchAngle = " << pitchAngle << std::endl;
             return pitchAngle;
         }
-        //I KOMM NED WEIDAAAA
-        //shared Memory setup comes in here
-        Socket::msgqid = msgget(IPC_PRIVATE, 0660);
-
-        if (msgqid == -1) {
-            std::cerr << "msgget failed\n";
-            exit(EXIT_FAILURE);
-   }
-
-        Socket::child_pid = fork();
-        if (Socket::child_pid < 0) { /* error occurred */
-            std::cerr << "Fork Failed\n";
-            exit(-1);
-   }
-
-            //maybe woanders hin!
-   if (Socket::child_pid == 0) // child process - the consumer
-   { 
-      signal (SIGINT, consumerHandler);  // catch SIGINT
-      std::cout << "I am the child\n";
-
-      // consuming loop
-      while (true)
-      {
-        std::cout << "Consumer attempting to read message\n";
-	 	Message consMsg; 
-
-	 // receive message - should test for error
-	    msgrcv(Socket::msgqid, &consMsg, sizeof(int), PROD_MSG, 0);
-        std::cout << "Consumer read: " << consMsg.data << std::endl;
-        sleep(0.1);  // 0.1s
-      }  // end consuming loop
-   }  // end consumer code
-   else  // parent process - the producer
-   { 
-        signal (SIGINT, Socket::producerHandler);  // catch SIGINT
-        std::cout << "I am the producer\n";
-
-        // producing loop
-        while (true)
-      {
-            std::cout << "Producer attempting write\n";
-            Message prodMsg;
-            prodMsg.type = PROD_MSG;
-            prodMsg.data = 0;//INSERT MESSAGE HERE !!!!!!
-
-            // send message - should test for error
-            msgsnd(Socket::msgqid, &prodMsg, sizeof(int), 0);
-            std::cout << "Producer sent: " << prodMsg.data << std::endl;
-            sleep(0.1);  // 0.1s
-      }  // end producing loop
-   }  // end producer code
-
-//STOP maybe woanders hin
-
-
-
-
+        //sike
     }
 
     double MobileRobot::calculateYaw(Pose* qA)
@@ -289,11 +285,12 @@ namespace Robot
         diffPose.position.y = goalPose->position.y - currentOdomPose->position.y;
 
         double totalDistance = calculateTotalDistance(diffPose);
+        //std::cout << "totalDistance: " << totalDistance << std::endl;
 
         convertQuaternionsToEuler(currentOdomPose);
         double totalOrientation = goalPose->orientation.z - currentOdomPose->orientation.z;
 
-        if (totalDistance < goalPose->tolerance && (totalOrientation) < 0.1) 
+        if (totalDistance < goalPose->tolerance ) 
         {
             sequenceNumber += 1;
             //std::cout << "Sequence Number: " << sequenceNumber << std::endl;
@@ -313,23 +310,23 @@ namespace Robot
         publishCmdVel(&zero, &zero);
     }
 
-    std::string MobileRobot::receive()
+    std::string MobileRobot::receive(int port)      //responsible for receiving data from sensor and robot
     {
-        char buffer[16000] = {};
+        char buffer[16000] = {};            //predefined max storage space
         //Receiving odom-data 
-        Robot::TCPClient odomClient(ip, 9998); 
-        std::string odomData = odomClient.receiveData(buffer, sizeof(buffer));
-        return odomData;
+        Robot::TCPClient Client(ip, port);  
+        std::string SensorData = Client.receiveData(buffer, sizeof(buffer));      //receiving data from the robot and saving it
+        return SensorData;                                                            //returning data to run function
     }
 
 
-    void MobileRobot::process(std::string odomData)
+    void MobileRobot::process(std::string odomData, std::string laserscanData)     //responsible for processing data and giving move commands
     {
         Robot::Pose currentOdomPose;
         Robot::JsonHandler OdomdataHandler;
-        nlohmann :: json jsonOdom;
+        nlohmann :: json jsonOdom;                      //initialising json handler
 
-        jsonOdom = OdomdataHandler.extractJson(odomData);
+        jsonOdom = OdomdataHandler.extractJson(odomData);   //extracting string into json
 
         //Overwriting current odometry position with Sensor Odometry Position
 
@@ -341,71 +338,63 @@ namespace Robot
         currentOdomPose.orientation.z = jsonOdom["pose"]["pose"]["orientation"]["z"];
         currentOdomPose.orientation.w = jsonOdom["pose"]["pose"]["orientation"]["w"]; 
 
-        // std::cout<<" sequence:    " << sequenceNumber<< "         || currentOdomPose.position.x:   "<<currentOdomPose.position.x<<"         || currentOdomPose.position.y"<<currentOdomPose.position.y<<"         ||  currentOdomPose.orientation.z"<< currentOdomPose.orientation.z<<std::endl;
-
+        //std::cout<<" sequence:    " << sequenceNumber<< "   || position.x:   "<<currentOdomPose.position.x<<"    || position.y:   "<<currentOdomPose.position.y<<"  ||  orientation.z:   "<< currentOdomPose.orientation.z<<std::endl;
 
         //Receiving laserscan-data
-        /*
-        Robot::Pose currentLaserscanPose;
-        Robot::TCPClient laserClient(ip, 9997); 
-        std::string laserscanData = laserClient.receiveData(buffer, sizeof(buffer));
-
+        //Robot::Pose currentLaserscanPose; 
         Robot::JsonHandler LaserdataHandler;
         nlohmann :: json jsonScan;
 
         jsonScan = LaserdataHandler.extractJson(laserscanData);
 
-        Robot::PCA pcaObject;
-
-        pcaObject.runPCA(jsonScan["ranges"]);
-
-        Eigen::VectorXd AngleDiffs = pcaObject.getAngleDifference();
-
-        std::cout << "Thetas are: " << AngleDiffs << std::endl;
+        //std::cout << "Laserscan before json: \n" << laserscanData << std::endl;
+        //std::cout << "Laserscan: \n" << jsonScan << std::endl;
 
 
-/* 
+        Robot::PCA pca;
+        pca.runPCA(jsonScan["ranges"], 30);
+        Eigen::VectorXd errorAngles = pca.getAngleDifference();
+
+        Parameter placeholder;
+        Robot::Twist cmdVel2;
+
+        // pidController(&cmdVel2, placeholder, 0, errorAngles(0), 0);
+        // std::cout << "First controller" << cmdVel2.angular.z << std::endl;
+
+        // pidController(&cmdVel2, placeholder, 0, errorAngles(1), 0);
+        // std::cout <<  "Second controller" << cmdVel2.angular.z << std::endl;
 
         
         //Overwriting current laserscan position with Sensor Laserscan Position
-
-        currentLaserscanPose.position.x = jsonScan["pose"]["pose"]["position"]["x"];
-        currentLaserscanPose.position.y = jsonScan["pose"]["pose"]["position"]["y"];
-        currentLaserscanPose.position.z = jsonScan["pose"]["pose"]["position"]["z"];
-        currentLaserscanPose.orientation.x = jsonScan["pose"]["pose"]["orientation"]["x"];
-        currentLaserscanPose.orientation.y = jsonScan["pose"]["pose"]["orientation"]["y"];
-        currentLaserscanPose.orientation.z = jsonScan["pose"]["pose"]["orientation"]["z"];
-        currentLaserscanPose.orientation.w = jsonScan["pose"]["pose"]["orientation"]["w"]; 
-
-        std::cout<<" sequence:    " << sequenceNumber<< "         || currentOdomPose.position.x:   "<<currentLaserscanPose.position.x<<"         || currentOdomPose.position.y"<<currentLaserscanPose.position.y<<"         ||  currentOdomPose.orientation.z"<< currentLaserscanPose.orientation.z<<std::endl; */
-
-        Robot::Pose goalPose1, goalPose3, goalPose2, goalPose4;
+        Robot::Pose goalPose1, goalPose3, goalPose2, goalPose4, goalPose5, goalPose6, goalPose7, goalPose8, goalPose9, goalPose10;
+        Robot::Circle circle;
+        circle.xOffset = 1.5;
+        circle.radius = 0.5;        
 
         goalPose1.index = 1;
-        goalPose1.position.x = 1.0;
-        goalPose1.position.y = 0.0;
-        goalPose1.orientation.z = 0;
-        goalPose1.tolerance = 0.2;
+        goalPose1.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-180));
+        goalPose1.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-180));
+        goalPose1.orientation.z = convertDegreesToRadiant(0);
+        goalPose1.tolerance = 0.15;
 
         goalPose2.index = 2;
-        goalPose2.position.x = 1.0;
-        goalPose2.position.y = 1.0;
-        goalPose2.orientation.z = 0;
-        goalPose2.tolerance = 0.2;
+        goalPose2.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-135));
+        goalPose2.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-135));
+        goalPose2.orientation.z = convertDegreesToRadiant(-45);
+        goalPose2.tolerance = 0.15;
+  
 
         goalPose3.index = 3;
-        goalPose3.position.x = 0;
-        goalPose3.position.y = 1.0;
-        goalPose3.orientation.z = 0;
-        goalPose3.orientation.z = M_PI/2;
-        goalPose3.tolerance = 0.2;
+        goalPose3.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-90));
+        goalPose3.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-90));
+        goalPose3.orientation.z = convertDegreesToRadiant(0);
+        goalPose3.tolerance = 0.15;
 
         goalPose4.index = 4;
-        goalPose4.position.x = 0;
-        goalPose4.position.y = 0;
-        goalPose3.orientation.z = 0;
-        goalPose4.orientation.z = -M_PI/2; 
-        goalPose4.tolerance = 0.2;
+        goalPose4.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(-45));
+        goalPose4.position.y = circle.yOffset + circle.radius * sin(convertDegreesToRadiant(-45));
+        goalPose4.orientation.z = convertDegreesToRadiant(45);
+        goalPose4.tolerance = 0.15;
 
         goalPose5.index = 5;
         goalPose5.position.x = circle.xOffset + circle.radius * cos(convertDegreesToRadiant(0));
@@ -503,16 +492,17 @@ namespace Robot
 
     bool MobileRobot::run()
     {
-        std::string input = MobileRobot::receive();     //calling receive function and saving data as input
+        //receive and process odom data
+        std::string input = MobileRobot::receive(9998);     //calling receive function and saving data as input
         const char* charInput = input.c_str();          //structuring input
         SHM myBrain(charInput);                         //creating SHM class object and calling constructor -> starting shared Memory
-        std::string output = myBrain.returnOutput();    //calling result of shared memory via getter
+        std::string odomOutput = myBrain.returnOutput();    //calling result of shared memory via getter
         //std::cout << "Output: " << output << std::endl; //outputting Output data
-        MobileRobot::process(output);                   //calling process function responsible for calculating movements and commanding the robot with the output as parameter
+        std::string laserScan = MobileRobot::receive(9997);
+        //MobileRobot::process(odomOutput, laserScan);
+        MobileRobot::process(input, laserScan);                   //calling process function responsible for calculating movements and commanding the robot with the output as parameter
         return true;
-
     }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -684,8 +674,10 @@ JsonHandler
     PCA::PCA(){};
     PCA::~PCA(){};
 
-    void PCA::runPCA(std::vector<double> rawLaserScan)
+    void PCA::runPCA(std::vector<double> rawLaserScan, int ScanSample)
     {
+
+
         //Map std::vector to eigen::vector
         Eigen::VectorXd laser = Eigen::VectorXd::Map(&rawLaserScan[0], rawLaserScan.size());
 
@@ -698,19 +690,20 @@ JsonHandler
         //pca.plotData(data, principal_component); 
 
         //Filter Right and Left side and calculate PCA seperately
-        this->FilterLaserscan(data, 30);
+        this->FilterLaserscan(data, ScanSample);
         Eigen::MatrixXd left = this->getFilteredLeftScanData();
         Eigen::MatrixXd right = this->getFilteredRightScanData();
 
         Eigen::VectorXd principal_componentLeft = this->computePCA(left);
         this->PCA_Left = principal_componentLeft;
         //std::cout << "Principal Component Left: \n" << principal_componentLeft << std::endl;
-        this->plotData(data, principal_componentLeft);  
+        //this->plotData(data, principal_componentLeft);  
+        //std::thread plot1(std::bind(&PCA::plotData, this, data, principal_componentLeft));
 
         Eigen::VectorXd principal_componentRight = this->computePCA(right);
         this->PCA_Right = principal_componentRight;
         //std::cout << "Principal Component Right: \n" << principal_componentRight << std::endl;
-        //this->plotData(data, principal_componentRight);
+        this->plotData(data, principal_componentLeft, principal_componentRight, ScanSample);
     }
 
     
@@ -802,7 +795,8 @@ JsonHandler
         return principal_component;
     };
 
-    void PCA::plotData(Eigen::MatrixXd laserScanData, Eigen::VectorXd PCA_vector)
+
+    void PCA::plotData(Eigen::MatrixXd laserScanData, Eigen::VectorXd PCA_vectorLeft, Eigen::VectorXd PCA_vectorRight, int filterTolerance )
     {
 
         matplotlibcpp::ion(); // Turn on interactive mode
@@ -813,6 +807,12 @@ JsonHandler
             y_data[i] = laserScanData(i, 1);
         }
 
+        double offsetRechts = this->filteredLaserScanLeftSide.mean()*2;
+        double offsetLinks = this->filteredLaserScanRightSide.mean()*2;
+
+        std::cout << "Offset Rechts: " << offsetRechts << std::endl;
+        std::cout << "Offset Links: " << offsetLinks << std::endl;
+
         matplotlibcpp::clf();
 
         // Plotting the laser scan data
@@ -821,15 +821,38 @@ JsonHandler
 
         // Calculate end points for the PCA vector for visualization
         double scale_factor = 10.0;  // Adjust this factor to scale the PCA vector for better visualization
-        std::vector<double> pca_x = {0, scale_factor * PCA_vector(0)};
-        std::vector<double> pca_y = {0, scale_factor * PCA_vector(1)};
+
+
+        std::vector<double> pca_xLeft = {0, scale_factor * PCA_vectorLeft(0)};
+        std::vector<double> pca_yLeft = {0, scale_factor * PCA_vectorLeft(1)};
+
+        std::vector<double> pca_xRight = {0, scale_factor * PCA_vectorRight(0)};
+        std::vector<double> pca_yRight = {0, scale_factor * PCA_vectorRight(1)};
+
+        std::vector<double> directionVectorX = {scale_factor, 0};
+        std::vector<double> directionVectorY = {0, 0};
 
         // Explicitly defining the start points for the quiver plot
         std::vector<double> start_x = {0,0};
         std::vector<double> start_y = {0,0};
 
+        std::vector<double> start_xPCALeft = {0,0};
+        std::vector<double> start_yPCALeft = {0,offsetLinks};
+
+        std::vector<double> start_xPCARight = {0,0};
+        std::vector<double> start_yPCARight = {0,offsetRechts};
+
         // Plotting the PCA vector
-        matplotlibcpp::quiver(start_x, start_y, pca_x, pca_y);
+
+        std::map<std::string, std::string> keywordDirection;
+        keywordDirection["color"] = "r";
+
+        std::map<std::string, std::string> keywordPCA;
+        keywordPCA["color"] = "b";
+
+        matplotlibcpp::quiver(start_xPCALeft, start_yPCALeft, pca_xLeft, pca_yLeft, keywordPCA);
+        matplotlibcpp::quiver(start_xPCARight, start_yPCARight, pca_xRight, pca_yRight, keywordPCA);
+        matplotlibcpp::quiver(start_x, start_y, directionVectorX, directionVectorY, keywordDirection);
 
         // Show the plot and update frequently
         //matplotlibcpp::show();
@@ -875,7 +898,7 @@ JsonHandler
         Thetas(1) = std::acos(cosAngleRight);
 
 
-        std::cout << "Angles: " << Thetas << std::endl;
+        //std::cout << "Angles: " << Thetas << std::endl;
 
         return Thetas;
     }
@@ -909,95 +932,101 @@ sharedMemory
  
 SHM::SHM(const std::string& input) : input(input), output() {
     //std::cout << "shared memory starting up\n";
-    mutexID = semget(IPC_PRIVATE, 1, 0666);
-    shmID = shmget(IPC_PRIVATE, sizeof(struct SHM_Message), 0666 | IPC_CREAT);
-    processID = fork();
-    if (semctl(mutexID, 0, SETVAL, 1) == -1) {
+    mutexID = semget(IPC_PRIVATE, 1, 0666);                                                 //creating mutex semaphore
+    shmID = shmget(IPC_PRIVATE, sizeof(struct SHM_Message), 0666 | IPC_CREAT);              //saving semapgore ID
+    processID = fork();                                                                     //splitting process and saving ID of child as processID
+    if (semctl(mutexID, 0, SETVAL, 1) == -1) {                                              //initialising semaphore as active
         std::cout << "semctl SETVAL failed!\n shutting down...\n" << std::endl;
         std::exit(EXIT_FAILURE);
-}
+    }
 
-    if (processID == 0) {  // Consumer process
+    if (processID == 0) {                                                                   //if the process is the child of the original ->It's the consumer
         //std::cout << "Consumer started \n";
-        signal(SIGINT, [](int sig) { SHM::signalHandler(sig, nullptr); });  // Modified this line
-        shmptr = (SHM_Message*)shmat(shmID, NULL, 0);
+        signal(SIGINT, [](int sig) { SHM::signalHandler(sig, nullptr); });                  //enabling structured shutdown
+        shmptr = (SHM_Message*)shmat(shmID, NULL, 0);                                       //defining location of saved data
         //std::cout<<"checking signal\n";
-        checkSignal(mutexID);
-        output = shmptr->information;
-        setSignal(mutexID);
+        checkSignal(mutexID);                                                               //only continue if semaphore is active (meaning no one accessing the data)
+        output = shmptr->information;                                                       //save the data in the specified location by the pointer as output
+        setSignal(mutexID);                                                                 //signaling via semaphore that the data can be accessed again
         //std::cout << "semaphore successful \n output is: " << output;
-    } else {
+    } else {                                                                                //otherwise this has to be the parent/producer
         //std::cout << "Producer started \n";
-        signal(SIGINT, [](int sig) { SHM::signalHandler(sig, nullptr); });  // Modified this line
-        shmptr = (SHM_Message*)shmat(shmID, NULL, 0);
+        signal(SIGINT, [](int sig) { SHM::signalHandler(sig, nullptr); });                  //enabling structered shutdown
+        shmptr = (SHM_Message*)shmat(shmID, NULL, 0);                                       //attach shared memory at pointer location
         //std::cout<<"checking signal\n";
-        checkSignal(mutexID);
-        strncpy(shmptr->information, input.c_str(), sizeof(shmptr->information) - 1);        setSignal(mutexID);
+        checkSignal(mutexID);                                                               //only continue if semaphore is active (meaning no one accessing the data)
+        strncpy(shmptr->information, input.c_str(), sizeof(shmptr->information) - 1);        setSignal(mutexID);    //saving input vriable as string into the shared memory storage
         //std::cout << "semaphore successful \n input was: " << input;
-        waitpid(processID, 0 , 0);
-        kill(processID, SIGTERM);
+        waitpid(processID, 0 , 0);                                                           //wait until the child is completed until continue
+        kill(processID, SIGTERM);                                                            //stop the child process
     }
-}
-SHM::~SHM() {
-    shmdt(shmptr);
     }
 
-
-void SHM::checkSignal(int semid){
-   struct sembuf check = {0, -1, SEM_UNDO};
-   //std::cout<< "check done\n";
-    if (semop(semid, &check, 1) == -1){
-        std::cout << "semaphore check failed!\n shutting down...\n" << std::endl;
-        std::exit(EXIT_FAILURE);
+    SHM::~SHM() {                                                                                   //deconstructor
+        shmdt(shmptr);                                                                              //shared memory storage is deleted
     }
-}
-
-void SHM::setSignal(int semid){
-   struct sembuf set = {0, 1, SEM_UNDO};
-    if (semop(semid, &set, 1) == -1){
-        std::cout << "semaphore set failed!\n shutting down...\n" << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-}
 
 
-void SHM::signalHandler(int sig, SHM* instance) {                                               //enables clean termination of processes
-    if (sig == SIGINT) { 
-       /* Robot::Twist cmdVel;                                                                       //if strg+c is pressed
-        cmdVel.linear.x = 0;
-        cmdVel.angular.z = 0;
-        Robot::MobileRobot turtle;
-        turtle.publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);*/
-        
-        if (instance->processID == 0) {  // Consumer process                                    //which process has to be killed
-            std::cout << "Consumer shutting down \n";                                           //Consumer/ Child doesnt has to be shut down since Producer/Parent kills Child
-        } else {
-            std::cout << "Producer shutting down \n";
-            std::cout << "Producer killing consumer\n";
-            kill(instance->processID, SIGINT);
-            wait(NULL);
-            std::cout << "Producer removing semaphores\n";
-            semctl(instance->mutexID, -1, IPC_RMID);
-            std::cout << "Producer detaching and removing shared memory\n";
-            if (shmdt(instance->shmptr) == -1) {
-                std::cout << "shmdt failed\n";
-                exit(EXIT_FAILURE);
-            }
-            if (shmctl(instance->shmID, IPC_RMID, 0) == -1) {
-                std::cout << "shmctl(IPC_RMID) failed\n";
-                exit(EXIT_FAILURE);
-            }
+    void SHM::checkSignal(int semid){                                                               //defining checkSignal function
+    struct sembuf check = {0, -1, SEM_UNDO};                                                     //needed for checking semaphores
+    //std::cout<< "check done\n";   
+        if (semop(semid, &check, 1) == -1){                                                         //in case the semaphore is invalid shutdown programm
+            std::cout << "semaphore check failed!\n shutting down...\n" << std::endl;
+            std::exit(EXIT_FAILURE);
         }
-        exit(EXIT_SUCCESS);
     }
-}
 
-std::string SHM::returnOutput() {
-    return output;
+    void SHM::setSignal(int semid){                                                                 //defining setSignal function
+    struct sembuf set = {0, 1, SEM_UNDO};                                                        //needed for setting semaphores
+        if (semop(semid, &set, 1) == -1){                                                           //in case the semaphore is invalid shutdown the programm
+            std::cout << "semaphore set failed!\n shutting down...\n" << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+    }
+
+
+    void SHM::signalHandler(int sig, SHM* instance) {                                               //enables clean termination of processes
+        if (sig == SIGINT) { 
+        /* Robot::Twist cmdVel;                                                                       //if strg+c is pressed
+            cmdVel.linear.x = 0;
+            cmdVel.angular.z = 0;
+            Robot::MobileRobot turtle;
+            turtle.publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);*/
+            
+            if (instance->processID == 0) {  // Consumer process                                    //which process has to be killed
+                std::cout << "Consumer shutting down \n";                                           //Consumer/ Child doesnt has to be shut down since Producer/Parent kills Child
+            } else {
+                std::cout << "Producer shutting down \n";                                           
+                std::cout << "Producer killing consumer\n";
+                kill(instance->processID, SIGINT);                                                   //Producer kills child process
+                wait(NULL);
+                std::cout << "Producer removing semaphores\n";                                         //deleting semaphores
+                semctl(instance->mutexID, -1, IPC_RMID);
+                std::cout << "Producer detaching and removing shared memory\n";
+                if (shmdt(instance->shmptr) == -1) {                                                   //deleting shared memory 
+                    std::cout << "shmdt failed\n";
+                    exit(EXIT_FAILURE);                          
+                }
+                if (shmctl(instance->shmID, IPC_RMID, 0) == -1) {                                      //reseting shared memory
+                    std::cout << "shmctl(IPC_RMID) failed\n";
+                    exit(EXIT_FAILURE);
+                }
+            }
+            exit(EXIT_SUCCESS);
+        }
+    }
+
+    std::string SHM::returnOutput() {                                                                   //getter for output of shared Memory
+        return output;
+    /*
+
+                                                                all hail the turtlebot 
+
+    */
 }
 
 
     
 
     
-}
+};

@@ -5,17 +5,15 @@
 #include <cstring>
 #include <unistd.h>
 #include <sys/socket.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/ipc.h>
-#include <sys/msg.h>
 #include <arpa/inet.h> 
 #include <netinet/in.h>
 #include <nlohmann/json.hpp>
 #include <Eigen/Geometry> 
-//#include <SFML/Graphics.hpp>
 #include <vector>
 #include <chrono>
+#include <Eigen/Dense>
+#include <vector>
+#include "matplotlibcpp.h"
 #include <stdlib.h> 
 #include <signal.h>
 #include <sys/types.h>
@@ -27,6 +25,8 @@
 #include <functional>
 #include <chrono>
 #include <iomanip>
+#include <thread>
+//#include <SFML/Graphics.hpp>
 
 
 #define RCVBUFSIZE 100000   /* Size of receive buffer */
@@ -50,6 +50,8 @@ namespace Robot
         Position position;
         Orientation orientation;
     };
+
+    double convertDegreesToRadiant(double degrees);
 
 
 
@@ -83,6 +85,13 @@ namespace Robot
         double derivativeError = 0;
     };
 
+    struct Circle
+    {
+        double xOffset = 0;
+        double yOffset = 0;
+        double radius = 1;
+    };
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +106,8 @@ MobileRobot
     class MobileRobot
     {
     public:
-        MobileRobot();
+        MobileRobot(char* ip);
+        MobileRobot(){};
         ~MobileRobot();
         void publishCmdVel(double* linear_x, double* angular_z);
         bool linearController(Robot::Pose goalPose, Robot::Pose currentPose);
@@ -105,7 +115,7 @@ MobileRobot
         bool limitControllerVariables(Twist* cmdVel, double upperLimit, double lowerLimit);
         bool convertQuaternionsToEuler(Pose* currentAngle);
         int goTo(Pose* goalPose, Pose* currentPose);
-        bool run(char* ip);
+        bool run();
         void setIP(char* ipAdress);
 
 
@@ -123,14 +133,16 @@ MobileRobot
         bool orientationController(Robot::Pose goalPose, Robot::Pose currentPose);
         Robot::Pose robotPose;
         void arrivedEndgoal();
-        void process(std::string odomData);
-        std::string receive();
+        void process(std::string odomData, std::string laserscanData);
+        std::string receive(int port);
 
     private:
-        double scanMsg;
-        double odomMsg;
-        double cmdVelMsg;
+        char* ip;
         Robot::Pose diffPose;
+        Robot::Twist cmdVel;
+        int sequenceNumber = 1;
+        float robotVector[2] = { 0 , 0 };
+        float distanceVector[2] = { 0 , 0 };
         double totalDistance = 0;
         double gamma = 0;
         double alpha = 0;
@@ -145,35 +157,8 @@ MobileRobot
     class TCPClient: public MobileRobot
     {
     public:
-        Socket(const char *serverIP, const char *echoString, unsigned short echoServPort = 7);
-        ~Socket();
-        void establishConnection();
-        void sendAndReceiveData();
-        unsigned int getEchoStringLen() const;
-        int getSock() const;
-        char *getEchoBuffer();
-        void sendData();
-        void receiveData();
-        //const int totalBytesRcvd = 0;
-        //int bytesRcvd, totalBytesRcvd; /* Bytes read in single recv() and total bytes read */
-
-
-        //memory stuff
-        void producerHandler (int sig);  // Signal handler for the producer
-        void consumerHandler (int sig);  // Signal handler for the consumer
-
-        struct Message           // Format of the messages
-        {
-            int type;            // message type, required
-            int data;             // item is an int, can by anything
-        };
-        enum MessageType { PROD_MSG=1, CONS_MSG };
-        // CONS_MSG is not used in this program, since the consumer doesn't
-        // send messages to the producer.  Can also have more than 2 types
-        // of messages if needed.
-
-        int msgqid;                // Message queue id
-        pid_t child_pid;           // Result of fork(); global for sig handler
+        TCPClient(const char* serverIP, int port);
+        TCPClient(){};
         
         ~TCPClient();
 
@@ -184,16 +169,14 @@ MobileRobot
         std::string receiveData(char* buffer, ssize_t size);
 
     private:
-        int sock;                        /* Socket descriptor */
-        struct sockaddr_in echoServAddr; /* Echo server address */
-        const char *servIP;               /* Server IP address (dotted quad) */
-        const char *echoString;           /* String to send to the echo server */
-        unsigned int echoStringLen;      /* Length of the string to echo */
-        char echoBuffer[RCVBUFSIZE];     /* Buffer for echo string */
-        int bytesRcvd, totalBytesRcvd;   /* Bytes read in single recv() and total bytes read */
-        unsigned short echoServPort;     /* Echo server port */
-        unsigned short odomPort = 9998;     /* Echo server port */
-        unsigned short scanPort = 9997;     /* Echo server port */
+        int client_fd;
+        ssize_t valread;
+        struct sockaddr_in serv_addr;
+        
+
+    };
+
+    //COCO//
 
 
 
@@ -238,6 +221,32 @@ TCPServer
 
     };
 
+    class PCA
+    {
+        public:
+            PCA();
+            ~PCA();
+
+            void runPCA(std::vector<double> rawLaserScan, int ScanSample);  
+            Eigen::MatrixXd PolarToCartesian(Eigen::VectorXd laserScanData);
+            void FilterLaserscan(Eigen::MatrixXd laserScanData, int filterTolerance);
+            Eigen::VectorXd computePCA(const Eigen::MatrixXd &data);
+            void plotData(Eigen::MatrixXd laserScanData, Eigen::VectorXd PCA_vector, Eigen::VectorXd PCA_vectorRight, int filterTolerance);
+            Eigen::VectorXd getAngleDifference();
+            Eigen::MatrixXd getFilteredLeftScanData();
+            Eigen::MatrixXd getFilteredRightScanData();
+            Eigen::VectorXd getPCA_Left();
+            Eigen::VectorXd getPCA_Right();
+
+        private:
+            Eigen::MatrixXd filteredLaserScanLeftSide;
+            Eigen::MatrixXd filteredLaserScanRightSide;
+            Eigen::VectorXd PCA_Left;
+            Eigen::VectorXd PCA_Right;
+
+    };
+
+    //COCO//
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -246,30 +255,30 @@ shared Memory
 */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      
-    class SHM {
-    public:
-        SHM(const std::string& input);
-        ~SHM();
-        
-        std::string returnOutput();
-        int processID;
-        bool shutdown = false;
+class SHM {
+public:
+    SHM(const std::string& input);
+    ~SHM();
+    
+    std::string returnOutput();
+    int processID;
+    bool shutdown = false;
 
-    private:
-        struct SHM_Message {
-            char information[16000];
-        };
-
-        void checkSignal(int semid);
-        void setSignal(int semid);
-        static void signalHandler(int sig, SHM* instance);
-
-        int mutexID;
-        int shmID;
-        SHM_Message* shmptr;
-
-        std::string input;
-        std::string output;
+private:
+    struct SHM_Message {
+        char information[16000];
     };
+
+    void checkSignal(int semid);
+    void setSignal(int semid);
+    static void signalHandler(int sig, SHM* instance);
+
+    int mutexID;
+    int shmID;
+    SHM_Message* shmptr;
+
+    std::string input;
+    std::string output;
+};
 }
 #endif // ROBOT_H
