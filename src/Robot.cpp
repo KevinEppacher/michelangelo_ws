@@ -65,7 +65,7 @@ MobileRobot
         pidController(&cmdVel, PID, totalDistance, alpha, beta, wall);
 
         // Ensure the velocities are within specified limits to prevent the robot from moving too fast
-        limitControllerVariables(&cmdVel, 3, -3);
+        limitControllerVariables(&cmdVel, 2, -2);
 
         // Send the calculated linear and angular velocities to the robot's movement system
         publishCmdVel(&cmdVel.linear.x, &cmdVel.angular.z);
