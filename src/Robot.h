@@ -246,30 +246,30 @@ shared Memory
 */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      
-class SHM {
-public:
-    SHM(const std::string& input);
-    ~SHM();
-    
-    std::string returnOutput();
-    int processID;
-    bool shutdown = false;
+    class SHM {
+    public:
+        SHM(const std::string& input);
+        ~SHM();
+        
+        std::string returnOutput();
+        int processID;
+        bool shutdown = false;
 
-private:
-    struct SHM_Message {
-        char information[16000];
+    private:
+        struct SHM_Message {
+            char information[16000];
+        };
+
+        void checkSignal(int semid);
+        void setSignal(int semid);
+        static void signalHandler(int sig, SHM* instance);
+
+        int mutexID;
+        int shmID;
+        SHM_Message* shmptr;
+
+        std::string input;
+        std::string output;
     };
-
-    void checkSignal(int semid);
-    void setSignal(int semid);
-    static void signalHandler(int sig, SHM* instance);
-
-    int mutexID;
-    int shmID;
-    SHM_Message* shmptr;
-
-    std::string input;
-    std::string output;
-};
 }
 #endif // ROBOT_H
